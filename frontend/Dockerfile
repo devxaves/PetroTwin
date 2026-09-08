@@ -8,6 +8,7 @@ RUN npm ci
 # Copy source and build
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV DOCKER_BUILD=1
 RUN npm run build
 
 # Production runner image
