@@ -107,31 +107,26 @@ export default function StatusPage() {
         : "error";
 
   return (
-    <div className="min-h-screen grid-bg">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800">
       {/* ── Top Navigation Bar ───────────────────────────────── */}
-      <header className="border-b border-[var(--color-border-dim)] bg-[var(--color-surface-primary)]">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <header className="border-b border-slate-200/90 bg-white/90 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {/* Logo mark — stylized TT */}
-            <div className="flex items-center gap-2">
+            {/* Logo mark */}
+            <div className="flex items-center gap-3">
               <div
-                className="w-8 h-8 rounded flex items-center justify-center text-xs font-bold tracking-tight"
-                style={{
-                  fontFamily: "var(--font-data)",
-                  background: "linear-gradient(135deg, var(--color-accent-dim), var(--color-accent))",
-                  color: "var(--color-background)",
-                }}
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold bg-orange-50 border border-orange-200 text-orange-600 shadow-inner"
+                style={{ fontFamily: "var(--font-data)" }}
               >
                 TT
               </div>
               <div>
                 <h1
-                  className="text-sm font-semibold text-[var(--color-foreground)] tracking-wide"
-                  style={{ fontFamily: "var(--font-data)" }}
+                  className="text-sm font-bold text-slate-900 tracking-wide font-display"
                 >
                   THERMOTWIN
                 </h1>
-                <p className="text-[0.6rem] text-[var(--color-status-idle)] tracking-widest uppercase">
+                <p className="text-[0.65rem] text-slate-400 font-mono tracking-widest uppercase">
                   Infrastructure Control
                 </p>
               </div>
@@ -143,8 +138,7 @@ export default function StatusPage() {
               <StatusIndicator state={overallStatus} size="sm" />
             </div>
             <div
-              className="text-xs text-[var(--color-status-idle)]"
-              style={{ fontFamily: "var(--font-data)" }}
+              className="text-xs text-slate-500 font-mono bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200"
               data-testid="session-uptime"
             >
               SESSION {uptime}
@@ -154,24 +148,23 @@ export default function StatusPage() {
       </header>
 
       {/* ── Main Content Grid ────────────────────────────────── */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-6">
         {/* Page title row */}
-        <div className="flex items-end justify-between mb-8">
+        <div className="flex items-end justify-between">
           <div>
             <h2
-              className="text-2xl font-bold tracking-tight text-[var(--color-foreground)]"
+              className="text-2xl font-extrabold tracking-tight text-slate-900 font-display"
             >
-              System Status
+              System Telemetry Status
             </h2>
-            <p className="text-sm text-[var(--color-status-idle)] mt-1">
-              Real-time infrastructure health monitoring
+            <p className="text-sm text-slate-500 mt-0.5">
+              Real-time cluster infrastructure and microservice heartbeat
             </p>
           </div>
           <div className="text-right">
-            <div className="data-label mb-1">Last Poll</div>
+            <div className="text-[10px] uppercase font-mono text-slate-400 font-semibold mb-0.5">Last Poll</div>
             <div
-              className="text-sm text-[var(--color-foreground)]"
-              style={{ fontFamily: "var(--font-data)" }}
+              className="text-xs font-mono font-bold text-slate-700 bg-white px-2.5 py-1 rounded border border-slate-200"
               data-testid="last-checked"
             >
               {state.lastChecked
@@ -182,60 +175,68 @@ export default function StatusPage() {
         </div>
 
         {/* ── Status Panels ── asymmetric grid ────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* ── Overall System Status — wide panel ──────────── */}
           <div className="lg:col-span-8">
-            <SystemPanel title="System Overview" code="SYS-001">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-6">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <span className="font-bold uppercase tracking-wider text-slate-900 font-display text-xs">
+                  System Overview
+                </span>
+                <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+                  SYS-001
+                </span>
+              </div>
+
               <div className="flex flex-col gap-6">
                 {/* Main status row */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-16 h-16 rounded-lg flex items-center justify-center border ${
+                      className={`w-14 h-14 rounded-xl flex items-center justify-center border ${
                         overallStatus === "ok"
-                          ? "border-[var(--color-status-ok-dim)] bg-[var(--color-status-ok-dim)]/20"
+                          ? "border-emerald-200 bg-emerald-50"
                           : overallStatus === "error"
-                            ? "border-[var(--color-status-error-dim)] bg-[var(--color-status-error-dim)]/20"
+                            ? "border-rose-200 bg-rose-50"
                             : overallStatus === "warn"
-                              ? "border-[var(--color-status-warn-dim)] bg-[var(--color-status-warn-dim)]/20"
-                              : "border-[var(--color-border-medium)] bg-[var(--color-surface-overlay)]"
+                              ? "border-amber-200 bg-amber-50"
+                              : "border-slate-200 bg-slate-50"
                       }`}
                     >
                       <StatusIndicator state={overallStatus} size="lg" />
                     </div>
                     <div>
-                      <div className="text-lg font-semibold" data-testid="overall-status-text">
+                      <div className="text-base font-bold text-slate-900 font-display" data-testid="overall-status-text">
                         {overallStatus === "ok" && "All Systems Operational"}
                         {overallStatus === "error" && "Connection Failure"}
                         {overallStatus === "warn" && "Partial Degradation"}
-                        {overallStatus === "loading" && "Initializing..."}
+                        {overallStatus === "loading" && "Initializing telemetry..."}
                       </div>
-                      <div className="text-sm text-[var(--color-status-idle)] mt-0.5">
-                        {state.errorMessage ?? "Infrastructure services responding normally"}
+                      <div className="text-xs text-slate-500 mt-0.5 font-sans">
+                        {state.errorMessage ?? "All coupled microservices responding within nominal thresholds (<20ms)"}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Service grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {/* Database */}
                   <div
-                    className="flex items-center justify-between px-4 py-3 rounded border border-[var(--color-border-dim)] bg-[var(--color-surface-raised)]"
+                    className="flex items-center justify-between px-4 py-3 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:border-orange-200 transition"
                     data-testid="db-status-card"
                   >
                     <div className="flex items-center gap-3">
                       <StatusIndicator state={dbState} size="sm" />
                       <div>
-                        <div className="text-sm font-medium">PostgreSQL</div>
-                        <div className="text-[0.65rem] text-[var(--color-status-idle)] tracking-wide uppercase">
-                          TimescaleDB
+                        <div className="text-xs font-bold text-slate-800">PostgreSQL</div>
+                        <div className="text-[0.65rem] text-slate-400 tracking-wide uppercase font-mono">
+                          TimescaleDB Core
                         </div>
                       </div>
                     </div>
                     <div
-                      className="text-xs text-[var(--color-border-bright)]"
-                      style={{ fontFamily: "var(--font-data)" }}
+                      className="text-xs font-mono font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200"
                     >
                       :5432
                     </div>
@@ -243,38 +244,45 @@ export default function StatusPage() {
 
                   {/* Redis */}
                   <div
-                    className="flex items-center justify-between px-4 py-3 rounded border border-[var(--color-border-dim)] bg-[var(--color-surface-raised)]"
+                    className="flex items-center justify-between px-4 py-3 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:border-orange-200 transition"
                     data-testid="redis-status-card"
                   >
                     <div className="flex items-center gap-3">
                       <StatusIndicator state={redisState} size="sm" />
                       <div>
-                        <div className="text-sm font-medium">Redis</div>
-                        <div className="text-[0.65rem] text-[var(--color-status-idle)] tracking-wide uppercase">
-                          Cache Layer
+                        <div className="text-xs font-bold text-slate-800">Redis</div>
+                        <div className="text-[0.65rem] text-slate-400 tracking-wide uppercase font-mono">
+                          Fast In-Memory Cache
                         </div>
                       </div>
                     </div>
                     <div
-                      className="text-xs text-[var(--color-border-bright)]"
-                      style={{ fontFamily: "var(--font-data)" }}
+                      className="text-xs font-mono font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200"
                     >
                       :6379
                     </div>
                   </div>
                 </div>
               </div>
-            </SystemPanel>
+            </div>
           </div>
 
           {/* ── Telemetry Sidebar — narrow panel ───────────── */}
           <div className="lg:col-span-4 flex flex-col gap-4">
-            <SystemPanel title="Telemetry" code="TEL-001">
+            <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="font-bold uppercase tracking-wider text-slate-900 font-display text-xs">
+                  Telemetry Poll
+                </span>
+                <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+                  TEL-001
+                </span>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <DataReadout
                   label="Poll Count"
                   value={String(state.pollCount).padStart(4, "0")}
-                  valueColor="var(--color-accent)"
+                  valueColor="#ea580c"
                 />
                 <DataReadout
                   label="Interval"
@@ -285,9 +293,9 @@ export default function StatusPage() {
                   value={state.health?.status?.toUpperCase() ?? "—"}
                   valueColor={
                     state.health?.status === "ok"
-                      ? "var(--color-status-ok)"
+                      ? "#16a34a"
                       : state.health?.status === "degraded"
-                        ? "var(--color-status-warn)"
+                        ? "#d97706"
                         : undefined
                   }
                 />
@@ -296,30 +304,42 @@ export default function StatusPage() {
                   value={uptime}
                 />
               </div>
-            </SystemPanel>
+            </div>
 
-            <SystemPanel title="Endpoint" code="API-001">
+            <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-3">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="font-bold uppercase tracking-wider text-slate-900 font-display text-xs">
+                  Active Endpoint
+                </span>
+                <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+                  API-001
+                </span>
+              </div>
               <div className="flex flex-col gap-2">
-                <div className="data-label">Target</div>
+                <div className="text-[10px] uppercase font-mono text-slate-400 font-medium">Target Health URI</div>
                 <code
-                  className="text-xs px-3 py-2 rounded bg-[var(--color-surface-overlay)] text-[var(--color-accent)] border border-[var(--color-border-dim)] block break-all"
-                  style={{ fontFamily: "var(--font-data)" }}
+                  className="text-xs px-3 py-2 rounded-lg bg-slate-50 text-orange-600 font-bold border border-slate-200 block break-all font-mono"
                   data-testid="api-endpoint"
                 >
                   GET /health
                 </code>
-                <div className="flex items-center justify-between mt-2">
-                  <div className="data-label">Response</div>
+                <div className="flex items-center justify-between mt-1">
+                  <div className="text-[10px] uppercase font-mono text-slate-400 font-medium">Response Code</div>
                   <div
-                    className="text-xs"
+                    className="text-xs font-mono font-bold px-2 py-0.5 rounded"
                     style={{
-                      fontFamily: "var(--font-data)",
                       color:
                         state.connection === "connected"
-                          ? "var(--color-status-ok)"
+                          ? "#16a34a"
                           : state.connection === "error"
-                            ? "var(--color-status-error)"
-                            : "var(--color-status-idle)",
+                            ? "#dc2626"
+                            : "#64748b",
+                      backgroundColor:
+                        state.connection === "connected"
+                          ? "#f0fdf4"
+                          : state.connection === "error"
+                            ? "#fef2f2"
+                            : "#f8fafc",
                     }}
                     data-testid="response-status"
                   >
@@ -331,18 +351,17 @@ export default function StatusPage() {
                   </div>
                 </div>
               </div>
-            </SystemPanel>
+            </div>
           </div>
         </div>
 
         {/* ── Bottom Bar ──────────────────────────────────────── */}
-        <footer className="mt-8 pt-4 border-t border-[var(--color-border-dim)] flex items-center justify-between">
-          <div className="text-[0.6rem] text-[var(--color-status-idle)] tracking-widest uppercase">
-            ThermoTwin v0.1.0 — Infrastructure Monitor
+        <footer className="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between">
+          <div className="text-[0.65rem] text-slate-400 font-mono uppercase tracking-wider">
+            ThermoTwin v0.1.0 &bull; Infrastructure Health Engine
           </div>
           <div
-            className="text-[0.6rem] text-[var(--color-border-bright)]"
-            style={{ fontFamily: "var(--font-data)" }}
+            className="text-[0.65rem] text-slate-400 font-mono"
           >
             {new Date().toLocaleDateString("en-US", {
               year: "numeric",

@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════
    ThermoTwin Landing Page — landing.module.css
-   Styles specific to the marketing/landing page.
+   Styles specific to the marketing/landing page (Light Industrial theme).
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Section reveal on scroll ──────────────────────────────────── */
@@ -43,10 +43,11 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: rgba(11, 17, 32, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid #1e293b;
-  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  padding: 0.875rem 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
 }
 
 .landingNavInner {
@@ -60,21 +61,21 @@
 /* ── Hero layout ──────────────────────────────────────────────── */
 
 .hero {
-  min-height: 100vh;
+  min-height: 90vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.1fr 0.9fr;
   align-items: center;
-  gap: 3rem;
+  gap: 3.5rem;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 6rem 1.5rem 4rem;
+  padding: 7rem 1.5rem 4rem;
 }
 
 @media (max-width: 768px) {
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding: 5rem 1rem 3rem;
+    padding: 6rem 1rem 3rem;
     gap: 2rem;
   }
 }
@@ -82,16 +83,17 @@
 .heroText {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
 .heroVisual {
   width: 100%;
-  height: 380px;
-  border: 1px solid #1e293b;
-  border-radius: 4px;
+  height: 390px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
   overflow: hidden;
-  background: #080c14;
+  background: #ffffff;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
 }
 
 @media (max-width: 768px) {
@@ -120,8 +122,8 @@
 .problemGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: start;
+  gap: 3.5rem;
+  align-items: center;
 }
 
 @media (max-width: 768px) {
@@ -136,7 +138,7 @@
 .howItWorksGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
 @media (max-width: 768px) {
@@ -146,35 +148,44 @@
 }
 
 .featurePanel {
-  background: #0d1321;
-  border: 1px solid #1e293b;
-  border-radius: 4px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featurePanel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.06);
 }
 
 .featurePanelHeader {
-  font-family: var(--font-data, "JetBrains Mono", monospace);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-family: var(--font-jakarta, sans-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #94a3b8;
-  padding: 0.75rem 1rem 0.5rem;
-  border-bottom: 1px solid #1e293b;
+  color: #1e293b;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  background: #fafafa;
 }
 
 .featurePanelBody {
-  padding: 1rem;
+  padding: 1.25rem;
   flex: 1;
 }
 
 .featurePanelVisual {
   height: 200px;
   overflow: hidden;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid #f1f5f9;
   position: relative;
+  background: #ffffff;
 }
 
 /* Scale down the real component renders to fit the panel */
@@ -190,13 +201,13 @@
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 @media (max-width: 768px) {
   .metricsGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 }
 
@@ -213,44 +224,50 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: #d97706;
-  color: #080c14;
-  font-family: var(--font-data, "JetBrains Mono", monospace);
+  background: #ea580c;
+  color: #ffffff;
+  font-family: var(--font-jakarta, sans-serif);
   font-weight: 700;
   font-size: 0.875rem;
-  border-radius: 4px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s ease;
+  box-shadow: 0 2px 8px -1px rgba(234, 88, 12, 0.35);
+  transition: all 0.15s ease;
 }
 
 .ctaButton:hover {
-  background: #f59e0b;
+  background: #c2410c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -1px rgba(234, 88, 12, 0.45);
 }
 
 .ctaButton:focus-visible {
-  outline: 2px solid #0891b2;
+  outline: 2px solid #ea580c;
   outline-offset: 2px;
 }
 
 .ctaButtonSecondary {
   composes: ctaButton;
-  background: transparent;
-  color: #cbd5e1;
-  border: 1px solid #1e293b;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .ctaButtonSecondary:hover {
-  background: #1c2a3f;
-  border-color: #2d3a52;
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
 }
 
 /* ── Footer ──────────────────────────────────────────────────── */
 
 .footer {
-  border-top: 1px solid #1e293b;
-  padding: 2rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  padding: 2.5rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
+  background: transparent;
 }

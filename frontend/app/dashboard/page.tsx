@@ -23,63 +23,66 @@ export default function FieldOverviewPage() {
   }, [wells]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#080c14]">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc]">
       <Header />
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-6 flex flex-col gap-6">
         {/* Field Summary Metrics Bar */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 rounded bg-[#0d1321] border border-[#1e293b] flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Total Monitored Wells</span>
-            <span className="text-2xl font-bold font-mono text-slate-100" data-testid="total-wells-count">
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-1 border-l-4 border-l-slate-400 hover-card-lift">
+            <span className="text-[10px] font-mono uppercase text-slate-500 font-semibold tracking-wider">Total Monitored Wells</span>
+            <span className="text-3xl font-bold font-mono text-slate-900" data-testid="total-wells-count">
               {wells ? wells.length : 8}
             </span>
-            <span className="text-[11px] text-emerald-400 font-mono">100% Telemetry Active</span>
+            <span className="text-[11px] text-emerald-600 font-mono font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              100% Telemetry Active
+            </span>
           </div>
 
-          <div className="p-4 rounded bg-[#0d1321] border border-[#1e293b] flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Field Oil Production</span>
-            <span className="text-2xl font-bold font-mono text-amber-400" data-testid="field-production-rate">
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-1 border-l-4 border-l-orange-500 hover-card-lift">
+            <span className="text-[10px] font-mono uppercase text-slate-500 font-semibold tracking-wider">Field Oil Production</span>
+            <span className="text-3xl font-bold font-mono text-orange-600" data-testid="field-production-rate">
               {wells
                 ? wells
                     .reduce((sum, w) => sum + (w.latest_production?.oil_rate_bopd ?? 0), 0)
                     .toFixed(1)
                 : "284.5"}{" "}
-              <span className="text-xs font-normal text-slate-400">BOPD</span>
+              <span className="text-xs font-medium text-slate-500">BOPD</span>
             </span>
-            <span className="text-[11px] text-slate-400 font-mono">Cold Lake Clearwater Sand</span>
+            <span className="text-[11px] text-slate-500 font-mono">Cold Lake Clearwater Sand</span>
           </div>
 
-          <div className="p-4 rounded bg-[#0d1321] border border-[#1e293b] flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Active CSS Steam Phase</span>
-            <span className="text-2xl font-bold font-mono text-cyan-400">
-              3 <span className="text-xs font-normal text-slate-400">Wells Injecting</span>
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-1 border-l-4 border-l-sky-500 hover-card-lift">
+            <span className="text-[10px] font-mono uppercase text-slate-500 font-semibold tracking-wider">Active CSS Steam Phase</span>
+            <span className="text-3xl font-bold font-mono text-sky-600">
+              3 <span className="text-xs font-medium text-slate-500">Wells Injecting</span>
             </span>
-            <span className="text-[11px] text-slate-400 font-mono">Average SOR: 2.7 t/bbl</span>
+            <span className="text-[11px] text-slate-500 font-mono">Average SOR: 2.7 t/bbl</span>
           </div>
 
-          <div className="p-4 rounded bg-[#0d1321] border border-[#1e293b] flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400">Mechanical Risk Flags</span>
-            <span className="text-2xl font-bold font-mono text-rose-400">
-              2 <span className="text-xs font-normal text-slate-400">Wells &gt; 50 pts</span>
+          <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-1 border-l-4 border-l-rose-500 hover-card-lift">
+            <span className="text-[10px] font-mono uppercase text-slate-500 font-semibold tracking-wider">Mechanical Risk Flags</span>
+            <span className="text-3xl font-bold font-mono text-rose-600">
+              2 <span className="text-xs font-medium text-slate-500">Wells &gt; 50 pts</span>
             </span>
-            <span className="text-[11px] text-rose-400/80 font-mono">Action Recommended</span>
+            <span className="text-[11px] text-rose-600/90 font-mono font-medium">Action Recommended</span>
           </div>
         </div>
 
         {/* Wells Table Section */}
-        <div className="p-5 rounded bg-[#0d1321] border border-[#1e293b] flex flex-col gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e293b] pb-3">
+        <div className="p-6 rounded-xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
             <div>
-              <h1 className="text-sm font-bold uppercase tracking-wider text-slate-100">
+              <h1 className="text-base font-bold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
                 Well Fleet Overview
               </h1>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 font-medium">
                 Live heavy-oil thermal recovery and SRP mechanical operating states.
               </p>
             </div>
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-              <ArrowUpDown className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-500 bg-slate-50 px-2.5 py-1 rounded border border-slate-200/80">
+              <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
               <span>Sorted by Rod-Float Risk (Descending)</span>
             </div>
           </div>
@@ -87,8 +90,8 @@ export default function FieldOverviewPage() {
           {/* Loading State */}
           {isLoading && (
             <div className="py-12 flex flex-col items-center justify-center gap-3" data-testid="loading-state">
-              <div className="hmi-spinner" />
-              <div className="text-xs font-mono text-slate-400">
+              <div className="w-6 h-6 border-2 border-orange-200 border-t-orange-600 rounded-full animate-spin" />
+              <div className="text-xs font-mono text-slate-500">
                 Querying field telemetry and reservoir states...
               </div>
             </div>
@@ -97,10 +100,10 @@ export default function FieldOverviewPage() {
           {/* Error State */}
           {isError && (
             <div
-              className="p-4 rounded bg-rose-950/40 border border-rose-800 text-rose-300 text-xs font-mono flex items-center gap-3"
+              className="p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-xs font-mono flex items-center gap-3"
               data-testid="error-state"
             >
-              <AlertCircle className="w-5 h-5 shrink-0" />
+              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
               <div>
                 <div className="font-bold">Failed to load well fleet data</div>
                 <div>{(error as Error)?.message}</div>
@@ -110,10 +113,10 @@ export default function FieldOverviewPage() {
 
           {/* Data Table */}
           {!isLoading && !isError && (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-lg border border-slate-200/80">
               <table className="w-full text-left font-mono text-xs" data-testid="wells-table">
                 <thead>
-                  <tr className="border-b border-[#1e293b] text-[11px] text-slate-400 uppercase bg-[#080c14]/50">
+                  <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] text-slate-600 uppercase font-semibold">
                     <th className="py-3 px-4">Well ID</th>
                     <th className="py-3 px-4">Current Production</th>
                     <th className="py-3 px-4">Temp / Viscosity</th>
@@ -123,11 +126,10 @@ export default function FieldOverviewPage() {
                     <th className="py-3 px-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1e293b]/60">
+                <tbody className="divide-y divide-slate-100 bg-white">
                   {sortedWells.map((well, idx) => {
                     const prod = well.latest_production;
                     const temp = prod?.temperature_c ?? 55;
-                    // Approximate risk logic per well for field table
                     const estimatedRisk = Math.min(
                       95,
                       Math.max(15, Math.round(110 - temp * 0.9 + (idx % 3) * 12))
@@ -150,70 +152,70 @@ export default function FieldOverviewPage() {
                     return (
                       <tr
                         key={well.well_id}
-                        className="hover:bg-[#131b2e] transition-colors group cursor-pointer"
+                        className="hover:bg-slate-50/80 transition-colors group cursor-pointer"
                         data-testid={`well-row-${well.well_id}`}
                       >
-                        <td className="py-3 px-4">
+                        <td className="py-3.5 px-4">
                           <Link
                             href={`/wells/${well.well_id}`}
-                            className="flex items-center gap-2 font-bold text-slate-100 group-hover:text-cyan-400"
+                            className="flex items-center gap-2 font-bold text-slate-900 group-hover:text-orange-600 transition"
                           >
-                            <span className="w-2 h-2 rounded-full bg-cyan-500" />
-                            <span>{well.well_id}</span>
+                            <span className="w-2 h-2 rounded-full bg-orange-500" />
+                            <span className="font-['Space_Grotesk'] text-sm">{well.well_id}</span>
                           </Link>
-                          <div className="text-[10px] text-slate-500 font-sans">
+                          <div className="text-[10px] text-slate-500 font-sans mt-0.5">
                             {well.name}
                           </div>
                         </td>
 
-                        <td className="py-3 px-4 text-slate-200 font-semibold">
+                        <td className="py-3.5 px-4 text-slate-800 font-semibold">
                           {prod ? (
                             <div>
-                              <span>{prod.oil_rate_bopd.toFixed(1)} BOPD</span>
-                              <div className="text-[10px] text-slate-400 font-normal">
+                              <span className="text-slate-900">{prod.oil_rate_bopd.toFixed(1)} BOPD</span>
+                              <div className="text-[10px] text-slate-500 font-normal">
                                 Water Cut: {(prod.water_cut * 100).toFixed(0)}%
                               </div>
                             </div>
                           ) : (
-                            <span className="text-slate-500">—</span>
+                            <span className="text-slate-400">—</span>
                           )}
                         </td>
 
-                        <td className="py-3 px-4 text-slate-300">
-                          <div>{temp.toFixed(1)} °C</div>
-                          <div className="text-[10px] text-cyan-400/80">
+                        <td className="py-3.5 px-4 text-slate-700">
+                          <div className="font-medium">{temp.toFixed(1)} °C</div>
+                          <div className="text-[10px] text-sky-600 font-semibold">
                             ~{(Math.exp(12 - temp * 0.05)).toFixed(0)} cP
                           </div>
                         </td>
 
-                        <td className="py-3 px-4" data-testid={`risk-cell-${well.well_id}`}>
+                        <td className="py-3.5 px-4" data-testid={`risk-cell-${well.well_id}`}>
                           <RiskGauge score={estimatedRisk} compact />
                         </td>
 
-                        <td className="py-3 px-4 text-slate-300">
-                          <span className="px-2 py-0.5 rounded bg-[#131b2e] border border-slate-700 text-[11px]">
+                        <td className="py-3.5 px-4 text-slate-700">
+                          <span className="px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200/80 text-[11px] font-medium text-slate-700">
                             {cssPhase}
                           </span>
                         </td>
 
-                        <td className="py-3 px-4 text-slate-300 text-[11px]">
+                        <td className="py-3.5 px-4 text-slate-700 text-[11px]">
                           <span
-                            className={
+                            className={`font-medium ${
                               estimatedRisk >= 60
-                                ? "text-rose-400"
+                                ? "text-rose-600"
                                 : estimatedRisk >= 35
-                                ? "text-amber-400"
-                                : "text-slate-400"
-                            }
+                                ? "text-amber-600"
+                                : "text-slate-600"
+                            }`}
                           >
                             {topIssue}
                           </span>
                         </td>
 
-                        <td className="py-3 px-4 text-right">
+                        <td className="py-3.5 px-4 text-right">
                           <Link
                             href={`/wells/${well.well_id}`}
-                            className="inline-flex items-center gap-1 px-3 py-1 rounded bg-[#1a2540] hover:bg-cyan-900/60 border border-cyan-800 text-cyan-300 text-xs font-semibold transition"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-orange-50 hover:bg-orange-500 text-orange-700 hover:text-white border border-orange-200 hover:border-orange-500 text-xs font-semibold transition duration-150 shadow-2xs"
                             data-testid={`view-twin-${well.well_id}`}
                           >
                             <span>Open Twin</span>

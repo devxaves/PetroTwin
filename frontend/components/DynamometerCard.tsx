@@ -89,36 +89,36 @@ export function DynamometerCard({
     classificationLabel.toLowerCase().includes("float") ||
     classificationLabel.toLowerCase().includes("fluid pound");
   const badgeColor = isNormal
-    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
     : isRodFloat
-    ? "bg-rose-500/10 text-rose-400 border-rose-500/30"
-    : "bg-amber-500/10 text-amber-400 border-amber-500/30";
+    ? "bg-rose-50 text-rose-700 border-rose-200"
+    : "bg-amber-50 text-amber-700 border-amber-200";
 
   return (
     <div
-      className="p-4 rounded bg-[#0d1321] border border-[#1e293b] flex flex-col gap-3"
+      className="p-5 rounded-xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-3"
       data-testid="dynamometer-card-container"
     >
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-xs font-semibold tracking-wider uppercase text-slate-300">
+          <div className="text-xs font-bold tracking-wider uppercase text-slate-800 font-['Space_Grotesk']">
             Surface Dynamometer Card
           </div>
-          <div className="text-[11px] font-mono text-slate-400">
+          <div className="text-[11px] font-mono text-slate-500">
             {cardPoints.length} points acquired
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <span
-            className={`text-xs px-2.5 py-1 rounded font-mono font-semibold uppercase border ${badgeColor}`}
+            className={`text-xs px-2.5 py-1 rounded-md font-mono font-bold uppercase border ${badgeColor}`}
             data-testid="dyna-classification-badge"
           >
             {classificationLabel}
           </span>
           {confidence !== undefined && (
             <span
-              className="text-xs px-2 py-1 rounded bg-[#131b2e] border border-slate-700 font-mono text-cyan-400"
+              className="text-xs px-2.5 py-1 rounded-md bg-orange-50 border border-orange-200 font-mono font-semibold text-orange-700"
               data-testid="dyna-confidence-badge"
             >
               {(confidence * 100).toFixed(1)}% ML Conf
@@ -127,7 +127,7 @@ export function DynamometerCard({
         </div>
       </div>
 
-      <div className="relative overflow-x-auto">
+      <div className="relative overflow-x-auto rounded-lg border border-slate-200/80 bg-slate-50/50 p-2">
         <svg
           viewBox={`0 0 ${width} ${height}`}
           className="w-full h-auto max-h-[360px] select-none font-mono"
@@ -139,8 +139,8 @@ export function DynamometerCard({
             y={paddingTop}
             width={plotWidth}
             height={plotHeight}
-            fill="#080c14"
-            stroke="#1e293b"
+            fill="#ffffff"
+            stroke="#e2e8f0"
             strokeWidth="1"
           />
 
@@ -154,8 +154,8 @@ export function DynamometerCard({
                   y1={y}
                   x2={paddingLeft + plotWidth}
                   y2={y}
-                  stroke="#1a2540"
-                  strokeDasharray="3 3"
+                  stroke="#edf2f7"
+                  strokeDasharray="4 4"
                 />
                 <text
                   x={paddingLeft - 8}
@@ -163,6 +163,7 @@ export function DynamometerCard({
                   textAnchor="end"
                   fill="#64748b"
                   fontSize="10"
+                  fontWeight="500"
                 >
                   {Math.round(yVal).toLocaleString()}
                 </text>
@@ -180,8 +181,8 @@ export function DynamometerCard({
                   y1={paddingTop}
                   x2={x}
                   y2={paddingTop + plotHeight}
-                  stroke="#1a2540"
-                  strokeDasharray="3 3"
+                  stroke="#edf2f7"
+                  strokeDasharray="4 4"
                 />
                 <text
                   x={x}
@@ -189,6 +190,7 @@ export function DynamometerCard({
                   textAnchor="middle"
                   fill="#64748b"
                   fontSize="10"
+                  fontWeight="500"
                 >
                   {xVal.toFixed(1)}
                 </text>
@@ -201,7 +203,7 @@ export function DynamometerCard({
             x={paddingLeft + plotWidth / 2}
             y={height - 10}
             textAnchor="middle"
-            fill="#94a3b8"
+            fill="#475569"
             fontSize="11"
             fontWeight="bold"
           >
@@ -212,19 +214,19 @@ export function DynamometerCard({
             x={18}
             y={paddingTop + plotHeight / 2}
             textAnchor="middle"
-            fill="#94a3b8"
+            fill="#475569"
             fontSize="11"
             fontWeight="bold"
           >
             Polished Rod Load (lbs)
           </text>
 
-          {/* Dynamometer closed curve polyline */}
+          {/* Dynamometer closed curve polyline - vibrant safety orange */}
           <polyline
             points={pointsString}
-            fill="none"
-            stroke="#38bdf8"
-            strokeWidth="2.5"
+            fill="rgba(234, 88, 12, 0.05)"
+            stroke="#ea580c"
+            strokeWidth="3"
             strokeLinejoin="round"
             strokeLinecap="round"
             data-testid="dyna-polyline"
@@ -235,10 +237,10 @@ export function DynamometerCard({
             <circle
               cx={scaleX(cardPoints[0].position)}
               cy={scaleY(cardPoints[0].load)}
-              r="4"
-              fill="#22c55e"
-              stroke="#080c14"
-              strokeWidth="1.5"
+              r="4.5"
+              fill="#ea580c"
+              stroke="#ffffff"
+              strokeWidth="2"
             />
           )}
         </svg>

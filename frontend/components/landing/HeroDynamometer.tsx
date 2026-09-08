@@ -118,19 +118,23 @@ export function HeroDynamometer({ className = "" }: HeroDynamometerProps) {
       ctx.save();
       ctx.scale(dpr, dpr);
 
-      // Background
-      ctx.fillStyle = "#080c14";
+      // Background - Crisp White
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, width, height);
 
+      // Plot area background
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(pad.left, pad.top, plotW, plotH);
+
       // Plot area border
-      ctx.strokeStyle = "#1e293b";
+      ctx.strokeStyle = "#e2e8f0";
       ctx.lineWidth = 1;
       ctx.strokeRect(pad.left, pad.top, plotW, plotH);
 
       // Grid lines
-      ctx.strokeStyle = "#1a2540";
-      ctx.lineWidth = 0.5;
-      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = "#edf2f7";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
       for (let i = 1; i < 5; i++) {
         const gy = pad.top + (plotH * i) / 5;
         ctx.beginPath();
@@ -156,12 +160,12 @@ export function HeroDynamometer({ className = "" }: HeroDynamometerProps) {
         };
       });
 
-      // Draw the trace with glow
-      // Outer glow
-      ctx.shadowColor = morphT > 0.5 ? "#dc262680" : "#0891b280";
-      ctx.shadowBlur = 12;
-      ctx.strokeStyle = morphT > 0.5 ? "#dc2626" : "#0891b2";
-      ctx.lineWidth = 2.5;
+      // Draw the trace with warm safety orange & electric cyan
+      // Outer subtle stroke
+      ctx.shadowColor = morphT > 0.5 ? "rgba(234, 88, 12, 0.4)" : "rgba(14, 165, 233, 0.35)";
+      ctx.shadowBlur = 10;
+      ctx.strokeStyle = morphT > 0.5 ? "#ea580c" : "#0284c7";
+      ctx.lineWidth = 3;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.beginPath();
@@ -172,11 +176,11 @@ export function HeroDynamometer({ className = "" }: HeroDynamometerProps) {
       ctx.closePath();
       ctx.stroke();
 
-      // Inner bright line (no shadow)
+      // Inner bright highlight
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
-      ctx.strokeStyle = morphT > 0.5 ? "#f87171" : "#38bdf8";
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = morphT > 0.5 ? "#f97316" : "#38bdf8";
+      ctx.lineWidth = 2;
       ctx.beginPath();
       points.forEach((p, i) => {
         if (i === 0) ctx.moveTo(p.x, p.y);
@@ -186,43 +190,47 @@ export function HeroDynamometer({ className = "" }: HeroDynamometerProps) {
       ctx.stroke();
 
       // Start point marker
-      ctx.fillStyle = "#22c55e";
+      ctx.fillStyle = "#ea580c";
       ctx.beginPath();
-      ctx.arc(points[0].x, points[0].y, 4, 0, Math.PI * 2);
+      ctx.arc(points[0].x, points[0].y, 4.5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "#080c14";
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
       ctx.stroke();
 
       // Axis labels
       ctx.fillStyle = "#64748b";
-      ctx.font = "10px 'JetBrains Mono', monospace";
+      ctx.font = "500 11px 'JetBrains Mono', monospace";
       ctx.textAlign = "center";
-      ctx.fillText("Polished Rod Position (in)", pad.left + plotW / 2, height - 8);
+      ctx.fillText("Polished Rod Position (in)", pad.left + plotW / 2, height - 10);
 
       ctx.save();
-      ctx.translate(14, pad.top + plotH / 2);
+      ctx.translate(16, pad.top + plotH / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.textAlign = "center";
       ctx.fillText("Polished Rod Load (lbs)", 0, 0);
       ctx.restore();
 
       // Classification label
-      const label = morphT > 0.5 ? "ROD FLOAT" : "NORMAL";
-      const labelColor = morphT > 0.5 ? "#f87171" : "#22c55e";
-      ctx.fillStyle = "#0d1321";
-      ctx.strokeStyle = morphT > 0.5 ? "#7f1d1d" : "#166534";
+      const label = morphT > 0.5 ? "ROD FLOAT (FAULT)" : "NORMAL OPERATION";
+      const labelColor = morphT > 0.5 ? "#c2410c" : "#0369a1";
+      const labelBg = morphT > 0.5 ? "#fff7ed" : "#f0f9ff";
+      const labelBorder = morphT > 0.5 ? "#fed7aa" : "#bae6fd";
+      
+      const labelWidth = 140;
+      const labelX = pad.left + plotW - labelWidth - 10;
+      const labelY = pad.top + 10;
+
+      ctx.fillStyle = labelBg;
+      ctx.fillRect(labelX, labelY, labelWidth, 24);
+      ctx.strokeStyle = labelBorder;
       ctx.lineWidth = 1;
-      const labelWidth = 100;
-      const labelX = pad.left + plotW - labelWidth - 8;
-      const labelY = pad.top + 8;
-      ctx.fillRect(labelX, labelY, labelWidth, 22);
-      ctx.strokeRect(labelX, labelY, labelWidth, 22);
+      ctx.strokeRect(labelX, labelY, labelWidth, 24);
 
       ctx.fillStyle = labelColor;
       ctx.font = "bold 10px 'JetBrains Mono', monospace";
       ctx.textAlign = "center";
-      ctx.fillText(label, labelX + labelWidth / 2, labelY + 15);
+      ctx.fillText(label, labelX + labelWidth / 2, labelY + 16);
 
       ctx.restore();
     },

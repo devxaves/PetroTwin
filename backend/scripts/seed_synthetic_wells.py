@@ -156,12 +156,34 @@ async def seed_data() -> dict[str, int]:
             session.add(well)
             await session.flush()
 
+            # Configure well-specific operational personality for realistic fleet diversity:
+            # WELL-001: Well-tuned optimal baseline (Normal)
+            # WELL-002: Slotted liner scaling with gas breakout (Gas Interference)
+            # WELL-003: Cold Upper Grand Rapids heavy bitumen, viscous drag (Rod Float)
+            # WELL-004: Overpumped reservoir depletion, cavitation (Fluid Pound)
+            # WELL-005: Low reservoir pressure inflow deficit (Incomplete Fillage)
+            # WELL-006: Sand cut traveling valve wear (Valve Leak)
+            # WELL-007: Deep thermal McMurray (Normal Operating)
+            # WELL-008: Cyclic thermal dissipation (Rod Float)
+            well_target_conditions = {
+                "WELL-001": "normal",
+                "WELL-002": "gas_interference",
+                "WELL-003": "rod_float",
+                "WELL-004": "fluid_pound",
+                "WELL-005": "incomplete_fillage",
+                "WELL-006": "valve_leak",
+                "WELL-007": "normal",
+                "WELL-008": "rod_float",
+            }
+            target_cond = well_target_conditions.get(w_def["well_id"], "normal")
+
             history = simulate_well_history(
                 well_id=w_def["well_id"],
                 start_date=start_sim_date,
                 num_cycles=w_def["cycles"],
                 days_per_cycle=90,  # ~540 days (18 months) for 6 cycles
                 seed=1000 + idx * 77,
+                terminal_condition=target_cond,
             )
 
             # Bulk insert records

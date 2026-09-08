@@ -93,76 +93,76 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
 
   return (
     <div
-      className="rounded bg-[#0d1321] border border-[#1e293b] overflow-hidden"
+      className="rounded-xl bg-white border border-slate-200/80 shadow-xs overflow-hidden"
       data-testid="comparison-table-container"
     >
-      <div className="p-3 bg-[#131b2e] border-b border-[#1e293b] flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+      <div className="p-3.5 bg-slate-50/80 border-b border-slate-200/80 flex items-center justify-between">
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 font-display">
           Baseline vs. Proposed Operational Comparison
         </span>
-        <span className="text-[11px] font-mono text-slate-400">
-          Coupled Thermodynamic &amp; Mechanical Solver
+        <span className="text-[11px] font-mono text-slate-400 bg-white px-2 py-0.5 rounded border border-slate-200">
+          Coupled Solver Engine
         </span>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-left font-mono text-xs" data-testid="comparison-table">
           <thead>
-            <tr className="border-b border-[#1e293b] text-[11px] text-slate-400 uppercase bg-[#080c14]/50">
-              <th className="py-2.5 px-4">Metric</th>
-              <th className="py-2.5 px-4 text-right">Current Baseline</th>
-              <th className="py-2.5 px-4 text-right">Proposed Scenario</th>
-              <th className="py-2.5 px-4 text-right">Delta</th>
-              <th className="py-2.5 px-4 text-right">Impact</th>
+            <tr className="border-b border-slate-200 text-[11px] text-slate-500 uppercase bg-slate-100/50">
+              <th className="py-3 px-4 font-semibold">Metric</th>
+              <th className="py-3 px-4 text-right font-semibold">Current Baseline</th>
+              <th className="py-3 px-4 text-right font-semibold">Proposed Scenario</th>
+              <th className="py-3 px-4 text-right font-semibold">Delta</th>
+              <th className="py-3 px-4 text-right font-semibold">Impact</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1e293b]/60">
+          <tbody className="divide-y divide-slate-100">
             {rows.map((row) => {
               const isZero = Math.abs(row.delta) < 0.001;
               const isFavorable = row.lowerIsBetter
                 ? row.delta < 0
                 : row.delta > 0;
 
-              let deltaColor = "text-slate-400";
-              let badgeColor = "bg-slate-800 text-slate-300";
+              let deltaColor = "text-slate-500";
+              let badgeColor = "bg-slate-100 text-slate-600 border border-slate-200";
               if (!isZero) {
-                deltaColor = isFavorable ? "text-emerald-400" : "text-rose-400";
+                deltaColor = isFavorable ? "text-emerald-600" : "text-rose-600";
                 badgeColor = isFavorable
-                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
-                  : "bg-rose-500/10 text-rose-400 border border-rose-500/30";
+                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80"
+                  : "bg-rose-50 text-rose-700 border border-rose-200/80";
               }
 
               return (
                 <tr
                   key={row.metricKey}
-                  className="hover:bg-[#131b2e]/50 transition-colors"
+                  className="hover:bg-orange-50/30 transition-colors"
                   data-testid={`row-${row.metricKey}`}
                 >
-                  <td className="py-3 px-4 font-sans text-slate-200 font-medium">
+                  <td className="py-3.5 px-4 font-sans text-slate-800 font-medium">
                     {row.label}
                   </td>
-                  <td className="py-3 px-4 text-right text-slate-300">
+                  <td className="py-3.5 px-4 text-right text-slate-600">
                     {row.current.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}{" "}
-                    <span className="text-[10px] text-slate-500">{row.unit}</span>
-                  </td>
-                  <td
-                    className="py-3 px-4 text-right font-semibold text-slate-100"
-                    data-testid={`proposed-${row.metricKey}`}
-                  >
-                    {row.proposed.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}{" "}
                     <span className="text-[10px] text-slate-400">{row.unit}</span>
                   </td>
                   <td
-                    className={`py-3 px-4 text-right font-bold ${deltaColor}`}
+                    className="py-3.5 px-4 text-right font-bold text-slate-900"
+                    data-testid={`proposed-${row.metricKey}`}
+                  >
+                    {row.proposed.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    <span className="text-[10px] text-slate-500">{row.unit}</span>
+                  </td>
+                  <td
+                    className={`py-3.5 px-4 text-right font-bold ${deltaColor}`}
                     data-testid={`delta-${row.metricKey}`}
                   >
                     <div className="flex items-center justify-end gap-1">
                       {isZero ? (
-                        <Minus className="w-3.5 h-3.5 text-slate-500" />
+                        <Minus className="w-3.5 h-3.5 text-slate-400" />
                       ) : row.delta > 0 ? (
                         <ArrowUp className="w-3.5 h-3.5" data-testid="arrow-up" />
                       ) : (
@@ -176,9 +176,9 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3 px-4 text-right">
+                  <td className="py-3.5 px-4 text-right">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${badgeColor}`}
+                      className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide ${badgeColor}`}
                       data-testid={`badge-${row.metricKey}`}
                     >
                       {isZero

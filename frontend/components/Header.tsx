@@ -10,43 +10,43 @@ interface HeaderProps {
 
 export function Header({ wellId }: HeaderProps) {
   return (
-    <header className="border-b border-[#1e293b] bg-[#0d1321] px-6 py-3 sticky top-0 z-40">
-      <div className="flex items-center justify-between">
+    <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-6 py-3.5 sticky top-0 z-40 shadow-xs">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:border-amber-400">
-              <Flame className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-200/80 flex items-center justify-center text-orange-600 group-hover:border-orange-400 group-hover:scale-105 transition duration-200 shadow-xs">
+              <Flame className="w-4 h-4 fill-orange-500/20 text-orange-600" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm tracking-wider uppercase text-slate-100">
+                <span className="font-bold text-sm tracking-wider uppercase text-slate-900 font-['Space_Grotesk']">
                   ThermoTwin
                 </span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-800/60 font-mono">
-                  HMI v2.0
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-100/70 text-orange-700 border border-orange-200 font-mono font-semibold">
+                  TWIN v2.0
                 </span>
               </div>
-              <div className="text-[10px] text-slate-400 tracking-tight">
+              <div className="text-[10px] text-slate-500 font-medium tracking-tight">
                 CSS Thermal &amp; SRP Digital Twin
               </div>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1 text-xs">
+          <nav className="hidden md:flex items-center gap-1.5 text-xs font-medium">
             <Link
               href="/dashboard"
-              className={`px-3 py-1.5 rounded transition ${
+              className={`px-3 py-1.5 rounded-md transition duration-150 ${
                 !wellId
-                  ? "bg-[#1a2540] text-amber-400 font-medium border border-amber-500/30"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-[#131b2e]"
+                  ? "bg-orange-500 text-white font-semibold shadow-xs"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               }`}
             >
               Field Overview
             </Link>
             {wellId && (
-              <span className="flex items-center gap-1">
-                <span className="text-slate-600">/</span>
-                <span className="px-3 py-1.5 rounded bg-[#1a2540] text-cyan-400 font-mono font-medium border border-cyan-800/40">
+              <span className="flex items-center gap-1.5">
+                <span className="text-slate-400 font-light">/</span>
+                <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-mono text-xs font-semibold border border-slate-200">
                   {wellId}
                 </span>
               </span>
@@ -54,13 +54,14 @@ export function Header({ wellId }: HeaderProps) {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-mono">
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#080c14] border border-[#1e293b]">
+        <div className="flex items-center gap-3.5 text-xs font-mono">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 shadow-2xs">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-slate-300">SCADA LINK LIVE</span>
+            <span className="text-slate-700 font-medium text-[11px]">SCADA TELEMETRY ACTIVE</span>
           </div>
-          <div className="hidden sm:block text-slate-400 text-[11px]">
-            FIELD: <span className="text-slate-200">COLD LAKE PAD 4</span>
+          <div className="hidden sm:flex items-center gap-1.5 text-slate-500 text-[11px] font-medium bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
+            <span>FIELD:</span>
+            <span className="text-slate-900 font-semibold">COLD LAKE PAD 4</span>
           </div>
         </div>
       </div>

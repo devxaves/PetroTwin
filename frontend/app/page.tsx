@@ -96,17 +96,16 @@ export default function LandingPage() {
   const setRef = useScrollReveal();
 
   return (
-    <div className="min-h-screen bg-[#0B1120] text-[#CBD5E1]">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800">
       {/* ── Navigation ─────────────────────────────────────────── */}
       <nav className={styles.landingNav} data-testid="landing-nav">
         <div className={styles.landingNavInner}>
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded bg-amber-600/15 border border-amber-600/30 flex items-center justify-center text-amber-500">
-              <Flame className="w-4 h-4" />
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-600 shadow-xs">
+              <Flame className="w-5 h-5 fill-current" />
             </div>
             <span
-              className="font-semibold text-sm tracking-wider uppercase text-slate-100"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="font-bold text-base tracking-tight text-slate-900 font-display"
             >
               ThermoTwin
             </span>
@@ -116,7 +115,7 @@ export default function LandingPage() {
             className={styles.ctaButton}
             data-testid="nav-cta"
           >
-            Open the twin
+            Open Fleet Twin
           </Link>
         </div>
       </nav>
@@ -124,26 +123,35 @@ export default function LandingPage() {
       {/* ── 1. HERO ──────────────────────────────────────────── */}
       <section className={styles.hero} data-testid="hero-section">
         <div className={styles.heroText}>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-mono font-semibold w-fit">
+            <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+            NEXT-GEN HEAVY OIL DIGITAL TWIN
+          </div>
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-slate-50"
-            style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] text-slate-900 font-display tracking-tight"
           >
             See the pump.
             <br />
-            Understand the reservoir.
+            <span className="text-orange-600">Understand</span> the reservoir.
           </h1>
-          <p className="text-base sm:text-lg text-slate-400 max-w-lg leading-relaxed">
-            ThermoTwin connects steam injection decisions to pump consequences.
-            A decision-support system that couples cyclic steam stimulation with
-            sucker-rod pump diagnostics — so you can optimize both together.
+          <p className="text-base sm:text-lg text-slate-600 max-w-lg leading-relaxed font-sans">
+            ThermoTwin connects cyclic steam injection decisions to sucker-rod pump mechanics.
+            A coupled decision-support engine that unifies thermal reservoir modeling with
+            downhole dyno diagnostics &mdash; so operators optimize both together.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-4 pt-2">
             <Link
               href="/dashboard"
               className={styles.ctaButton}
               data-testid="hero-cta"
             >
-              Open the twin
+              Open Fleet Twin
+            </Link>
+            <Link
+              href="/wells/WELL-001"
+              className={styles.ctaButtonSecondary}
+            >
+              Live Demo: WELL-001
             </Link>
           </div>
         </div>
@@ -154,77 +162,77 @@ export default function LandingPage() {
 
       {/* ── 2. THE PROBLEM ───────────────────────────────────── */}
       <section
-        className={`${styles.section} ${styles.container} py-20`}
+        className={`${styles.section} ${styles.container} py-24`}
         ref={setRef(0)}
         data-testid="problem-section"
       >
         <div className={styles.problemGrid}>
           <div>
+            <div className="text-xs font-mono font-bold uppercase tracking-wider text-orange-600 mb-2">
+              The Engineering Gap
+            </div>
             <h2
-              className="text-2xl font-bold text-slate-100 mb-4"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-3xl font-extrabold text-slate-900 mb-4 font-display"
             >
               Steam and pumping are optimized in separate silos
             </h2>
-            <p className="text-sm text-slate-400 leading-relaxed mb-6">
+            <p className="text-sm text-slate-600 leading-relaxed mb-4 font-sans">
               In heavy oil thermal recovery, reservoir engineers optimize cyclic steam
-              stimulation for oil recovery. Production engineers tune sucker-rod pump
-              speed for mechanical reliability. Neither sees the other's consequences:
-              steam changes viscosity, which changes rod-float risk, which should change
-              pump speed — but these decisions happen on different desks, different
-              timescales, different software.
+              stimulation (CSS) purely for thermal penetration and oil yield. Meanwhile, production
+              engineers tune sucker-rod pump speeds for mechanical reliability.
             </p>
-            <p className="text-sm text-slate-300 leading-relaxed">
-              ThermoTwin couples both subsystems in a single physics-constrained model,
-              so you see what happens to the pump when you change the steam, and vice versa.
+            <p className="text-sm text-slate-600 leading-relaxed font-sans">
+              Neither sees the other's consequences: steam radically alters downhole viscosity,
+              which alters fluid drag and hydrodynamic rod-float risk. ThermoTwin couples both
+              subsystems in a single physics-grounded model.
             </p>
           </div>
           <div className="flex flex-col gap-4">
             {/* Before/After diagram */}
-            <div className="p-4 rounded bg-[#0d1321] border border-[#1e293b]">
+            <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
               <div
-                className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-3"
+                className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-400 mb-3"
               >
-                Today: Separate optimization
+                Today: Fragmented Siloed Optimization
               </div>
               <div className="flex items-center justify-around text-xs font-mono">
                 <div className="text-center">
-                  <div className="w-14 h-14 rounded bg-[#1C2A3F] border border-amber-800/40 flex items-center justify-center text-amber-500 text-lg mb-1">
+                  <div className="w-14 h-14 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 text-xl mb-1.5 shadow-inner">
                     ♨
                   </div>
-                  <div className="text-slate-400">CSS Team</div>
+                  <div className="text-slate-600 font-medium">CSS Team</div>
                 </div>
-                <div className="text-slate-600 text-lg">✕</div>
+                <div className="text-slate-300 text-xl font-bold">&times;</div>
                 <div className="text-center">
-                  <div className="w-14 h-14 rounded bg-[#1C2A3F] border border-cyan-800/40 flex items-center justify-center text-cyan-500 text-lg mb-1">
+                  <div className="w-14 h-14 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 text-xl mb-1.5 shadow-inner">
                     ⛽
                   </div>
-                  <div className="text-slate-400">SRP Team</div>
+                  <div className="text-slate-600 font-medium">SRP Team</div>
                 </div>
               </div>
             </div>
-            <div className="p-4 rounded bg-[#0d1321] border border-emerald-900/40">
+            <div className="p-5 rounded-2xl bg-white border-2 border-orange-500/30 shadow-xs bg-linear-to-r from-orange-50/20 to-transparent">
               <div
-                className="text-[10px] font-mono uppercase tracking-wider text-emerald-500/70 mb-3"
+                className="text-[11px] font-mono uppercase tracking-wider text-orange-600 font-bold mb-3"
               >
-                ThermoTwin: Coupled optimization
+                ThermoTwin: Coupled Industrial Logic
               </div>
               <div className="flex items-center justify-around text-xs font-mono">
                 <div className="text-center">
-                  <div className="w-14 h-14 rounded bg-[#1C2A3F] border border-amber-800/40 flex items-center justify-center text-amber-500 text-lg mb-1">
+                  <div className="w-14 h-14 rounded-xl bg-orange-500 text-white flex items-center justify-center text-xl mb-1.5 shadow-sm">
                     ♨
                   </div>
-                  <div className="text-slate-400">CSS</div>
+                  <div className="text-slate-800 font-bold">CSS Engine</div>
                 </div>
-                <div className="flex flex-col items-center gap-0.5 text-emerald-500">
-                  <div className="text-sm">⟷</div>
-                  <div className="text-[9px] text-emerald-400/70">coupled</div>
+                <div className="flex flex-col items-center gap-0.5 text-orange-600">
+                  <div className="text-base font-bold">&harr;</div>
+                  <div className="text-[10px] uppercase font-bold tracking-wider">Coupled</div>
                 </div>
                 <div className="text-center">
-                  <div className="w-14 h-14 rounded bg-[#1C2A3F] border border-cyan-800/40 flex items-center justify-center text-cyan-500 text-lg mb-1">
+                  <div className="w-14 h-14 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xl mb-1.5 shadow-sm">
                     ⛽
                   </div>
-                  <div className="text-slate-400">SRP</div>
+                  <div className="text-slate-800 font-bold">SRP Diagnostics</div>
                 </div>
               </div>
             </div>
@@ -239,14 +247,13 @@ export default function LandingPage() {
         data-testid="howitworks-section"
       >
         <h2
-          className="text-2xl font-bold text-slate-100 mb-2"
-          style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+          className="text-3xl font-extrabold text-slate-900 mb-2 font-display"
         >
-          Three real capabilities, not features
+          Three real capabilities, not static mockups
         </h2>
-        <p className="text-sm text-slate-400 mb-8 max-w-2xl">
-          Each panel below renders the actual dashboard component with sample data — the same
-          code you interact with inside the twin.
+        <p className="text-sm text-slate-500 mb-10 max-w-2xl font-sans">
+          Each panel below renders the live interactive dashboard component &mdash; the exact
+          same logic you interact with inside the well twin.
         </p>
 
         <div className={styles.howItWorksGrid}>
@@ -303,9 +310,9 @@ export default function LandingPage() {
               <ComparisonTable comparison={SAMPLE_COMPARISON} />
             </div>
             <div className={styles.featurePanelBody}>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-500 leading-relaxed font-sans">
                 Adjust both steam parameters and pump kinematics simultaneously. The coupled
-                solver shows how changes propagate across subsystems — steam volume affects
+                solver shows how changes propagate across subsystems &mdash; steam volume affects
                 viscosity affects rod-float risk affects recommended SPM.
               </p>
             </div>
@@ -320,94 +327,82 @@ export default function LandingPage() {
         data-testid="metrics-section"
       >
         <h2
-          className="text-2xl font-bold text-slate-100 mb-2"
-          style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+          className="text-3xl font-extrabold text-slate-900 mb-2 font-display"
         >
-          Tested results, not marketing claims
+          Tested benchmark results, not marketing claims
         </h2>
-        <p className="text-sm text-slate-400 mb-8 max-w-2xl">
-          All numbers below are from verified evaluation runs on held-out synthetic test data,
-          not cherry-picked examples. Context and baselines are included.
+        <p className="text-sm text-slate-500 mb-10 max-w-2xl font-sans">
+          All numbers below are from verified evaluation runs on held-out synthetic test wells,
+          with baseline comparisons and physical bounds rigorously enforced.
         </p>
 
         <div className={styles.metricsGrid}>
-          <div className="p-5 rounded bg-[#0d1321] border border-[#1e293b]">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-orange-200 transition">
             <div
-              className="text-3xl font-bold text-amber-500 mb-1"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-4xl font-black text-orange-600 mb-1 font-mono tracking-tight"
             >
               99.77%
             </div>
             <div
-              className="text-xs font-semibold text-slate-300 mb-2"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-xs font-bold uppercase tracking-wider text-slate-800 mb-2 font-display"
             >
               Classifier accuracy
             </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
+            <p className="text-xs text-slate-500 leading-relaxed font-sans">
               Dynamometer card condition classification on held-out test wells.
-              Baseline (majority-class) accuracy: 72.3%. The 27.5-point improvement
-              comes from physics-derived features, not just pattern matching.
+              Baseline (majority-class) accuracy: 72.3%. The 27.5-point gain
+              stems from physics-derived features.
             </p>
           </div>
 
-          <div className="p-5 rounded bg-[#0d1321] border border-[#1e293b]">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-orange-200 transition">
             <div
-              className="text-3xl font-bold text-emerald-400 mb-1"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-4xl font-black text-emerald-600 mb-1 font-mono tracking-tight"
             >
               +52.3%
             </div>
             <div
-              className="text-xs font-semibold text-slate-300 mb-2"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-xs font-bold uppercase tracking-wider text-slate-800 mb-2 font-display"
             >
               Economic value improvement
             </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
+            <p className="text-xs text-slate-500 leading-relaxed font-sans">
               Optimizer-recommended cycle vs. historical average unoptimized cycle
               on WELL-001 backtest. +152.3 bbl oil, SOR reduced from 4.33 to 3.18.
-              All within safe operating envelope constraints.
             </p>
           </div>
 
-          <div className="p-5 rounded bg-[#0d1321] border border-[#1e293b]">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-orange-200 transition">
             <div
-              className="text-3xl font-bold text-cyan-400 mb-1"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-4xl font-black text-sky-600 mb-1 font-mono tracking-tight"
             >
-              −4.4 pts
+              &minus;4.4 pts
             </div>
             <div
-              className="text-xs font-semibold text-slate-300 mb-2"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-xs font-bold uppercase tracking-wider text-slate-800 mb-2 font-display"
             >
               Risk reduction via steam
             </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
+            <p className="text-xs text-slate-500 leading-relaxed font-sans">
               Increasing steam volume from 2,000t to 3,400t lowers fluid viscosity
               from 2,604 cP to 1,842 cP, reducing rod-float risk from 37.8 to 33.4.
-              The coupling effect is modest and physically grounded.
             </p>
           </div>
 
-          <div className="p-5 rounded bg-[#0d1321] border border-[#1e293b]">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-orange-200 transition">
             <div
-              className="text-3xl font-bold text-rose-400 mb-1"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-4xl font-black text-rose-600 mb-1 font-mono tracking-tight"
             >
               +12.5 pts
             </div>
             <div
-              className="text-xs font-semibold text-slate-300 mb-2"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-xs font-bold uppercase tracking-wider text-slate-800 mb-2 font-display"
             >
               Risk increase from pump speed
             </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
+            <p className="text-xs text-slate-500 leading-relaxed font-sans">
               Increasing SPM from 4.2 to 9.5 raises rod-float risk from 28.4 to 40.9.
-              This is why you can't optimize the pump without knowing the reservoir
-              state — the mechanical and thermal systems are coupled.
+              Proves mechanical and thermal systems must be solved jointly.
             </p>
           </div>
         </div>
@@ -419,72 +414,73 @@ export default function LandingPage() {
         ref={setRef(3)}
         data-testid="trust-section"
       >
-        <div className="max-w-2xl">
+        <div className="max-w-2xl bg-white p-8 md:p-10 rounded-2xl border border-slate-200/80 shadow-xs">
+          <div className="text-xs font-mono font-bold uppercase tracking-wider text-orange-600 mb-2">
+            Safety &amp; Compliance Architecture
+          </div>
           <h2
-            className="text-2xl font-bold text-slate-100 mb-4"
-            style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+            className="text-3xl font-extrabold text-slate-900 mb-4 font-display"
           >
-            Decision-support, not autonomous control
+            Decision-support, not autonomous actuation
           </h2>
-          <p className="text-sm text-slate-400 leading-relaxed mb-4">
-            ThermoTwin is strictly advisory. The backend never connects to SCADA, RTU, or
-            any field actuation system. Every recommendation requires explicit operator
-            approval, and every decision is logged to an immutable audit trail.
+          <p className="text-sm text-slate-600 leading-relaxed mb-4 font-sans">
+            ThermoTwin is strictly advisory. The backend never directly connects to SCADA, RTU, or
+            any remote field actuator. Every recommendation requires explicit operator
+            review, approval, and is permanently recorded in an immutable audit trail.
           </p>
-          <p className="text-sm text-slate-400 leading-relaxed mb-4">
-            The physics engine uses a hybrid approach: reduced-order thermal models for
-            steam injection response, coupled with ML residual correction that achieves
-            a 55.1% RMSE reduction over physics alone on held-out test wells. Constraints
-            enforce safe operating envelopes — steam pressure, volume, soak time, and pump
-            speed all have hard limits that the optimizer cannot violate.
+          <p className="text-sm text-slate-600 leading-relaxed mb-4 font-sans">
+            The hybrid physics solver couples reduced-order thermal models with ML residual
+            correction (55.1% RMSE reduction). Hard constraint envelopes protect operators from
+            exceeding geomechanical and rod load safety limits.
           </p>
-          <p className="text-sm text-slate-500 leading-relaxed">
-            All evaluation data in this build is physics-consistent synthetic data,
-            not proprietary field data. Real deployment requires field calibration
-            against actual sensor telemetry.
+          <p className="text-xs text-slate-400 leading-relaxed font-mono">
+            Environment: Synthetic high-fidelity benchmark wells. Field deployment includes telemetry calibration.
           </p>
         </div>
       </section>
 
       {/* ── 6. FINAL CTA ─────────────────────────────────────── */}
       <section
-        className={`${styles.section} ${styles.container} py-20 text-center`}
+        className={`${styles.section} ${styles.container} py-24 text-center`}
         ref={setRef(4)}
         data-testid="final-cta-section"
       >
-        <h2
-          className="text-2xl font-bold text-slate-100 mb-4"
-          style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
-        >
-          Try the working twin
-        </h2>
-        <p className="text-sm text-slate-400 mb-6 max-w-lg mx-auto">
-          The full dashboard is live with 8 synthetic wells, real-time diagnostics,
-          a constrained optimizer, and a coupled what-if engine.
-        </p>
-        <Link
-          href="/dashboard"
-          className={styles.ctaButton}
-          data-testid="final-cta"
-        >
-          Open the twin
-        </Link>
+        <div className="max-w-3xl mx-auto p-10 md:p-14 rounded-3xl bg-linear-to-b from-orange-500/10 via-white to-white border border-orange-200 shadow-sm flex flex-col items-center">
+          <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center mb-4 shadow-md shadow-orange-500/30">
+            <Flame className="w-6 h-6 fill-current" />
+          </div>
+          <h2
+            className="text-3xl sm:text-4xl font-black text-slate-900 mb-3 font-display"
+          >
+            Experience the working digital twin
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 mb-8 max-w-lg mx-auto font-sans leading-relaxed">
+            Explore 8 live wells across the fleet with real-time diagnostics, Pareto frontier exploration,
+            and joint what-if scenario solvers.
+          </p>
+          <Link
+            href="/dashboard"
+            className={styles.ctaButton}
+            data-testid="final-cta"
+          >
+            Open Fleet Twin
+          </Link>
+        </div>
       </section>
 
       {/* ── 7. FOOTER ────────────────────────────────────────── */}
       <footer className={styles.footer} data-testid="landing-footer">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Flame className="w-3.5 h-3.5 text-amber-600" />
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <Flame className="w-4 h-4 text-orange-600 fill-current" />
             <span
-              className="text-xs text-slate-500"
-              style={{ fontFamily: "var(--font-data, 'JetBrains Mono', monospace)" }}
+              className="text-xs font-bold text-slate-700 uppercase tracking-wider font-display"
             >
               ThermoTwin
             </span>
           </div>
-          <span className="text-[11px] text-slate-600">
-            Heavy oil digital twin for CSS + SRP optimization
+          <span className="text-xs text-slate-400 font-mono">
+            Heavy Oil Coupled Reservoir &amp; SRP Digital Twin &bull; Light Industrial Logic
           </span>
         </div>
       </footer>

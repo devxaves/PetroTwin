@@ -22,6 +22,7 @@ def simulate_well_history(
     num_cycles: int = 4,
     days_per_cycle: int = 135,
     seed: int = 42,
+    terminal_condition: str | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
     """
     Simulate complete multi-cycle physical well history over time.
@@ -206,9 +207,21 @@ def simulate_well_history(
             )
 
             # Causal Link 6: Dynamometer card class based on physical conditions
-            # Card is captured periodically (e.g. every 3 days)
+            # Card is captured periodically (e.g. every 2 days)
             if day % 2 == 0:
-                if fill > 0.72:
+                is_terminal_window = (cycle_num == num_cycles) and (day >= prod_days - 6)
+                if is_terminal_window and terminal_condition:
+                    card_label = terminal_condition
+                    if card_label == "normal":
+                        fill = max(fill, 0.82)
+                    elif card_label == "rod_float":
+                        viscosity = max(viscosity, 2800.0)
+                        temp_c = min(temp_c, 58.0)
+                    elif card_label == "fluid_pound":
+                        fill = min(fill, 0.35)
+                    elif card_label == "incomplete_fillage":
+                        fill = 0.58
+                elif fill > 0.72:
                     card_label = "normal"
                 elif fill > 0.50:
                     card_label = rng.choice(["incomplete_fillage", "gas_interference"])
