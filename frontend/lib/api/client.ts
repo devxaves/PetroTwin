@@ -2,7 +2,8 @@
  * Base HTTP fetch wrapper with robust error handling for ThermoTwin.
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const rawApiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = rawApiBase.replace(/\/+$/, "");
 
 export class ApiError extends Error {
   status: number;
@@ -20,7 +21,8 @@ export async function apiClient<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
-  const url = `${API_BASE}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE}${cleanEndpoint}`;
   
   const headers = new Headers(options?.headers);
   if (!headers.has("Content-Type") && options?.body) {
