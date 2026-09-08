@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "./client";
+import { REALTIME_CONFIG } from "@/lib/realtime-config";
 import type {
   WellSummary,
   ProductionRecord,
@@ -26,7 +27,7 @@ export function useWells() {
   return useQuery({
     queryKey: ["wells"],
     queryFn: () => apiClient<WellSummary[]>("/wells"),
-    staleTime: 10_000,
+    staleTime: REALTIME_CONFIG.normal.staleTime,
   });
 }
 
@@ -40,7 +41,7 @@ export function useWellProduction(wellId: string, from?: string, to?: string) {
     queryKey: ["production", wellId, from, to],
     queryFn: () => apiClient<ProductionRecord[]>(`/wells/${wellId}/production${q}`),
     enabled: !!wellId,
-    staleTime: 15_000,
+    staleTime: REALTIME_CONFIG.moderate.staleTime,
   });
 }
 
@@ -49,7 +50,7 @@ export function useWellCSSCycles(wellId: string) {
     queryKey: ["css-cycles", wellId],
     queryFn: () => apiClient<CSSCycleRecord[]>(`/wells/${wellId}/css-cycles`),
     enabled: !!wellId,
-    staleTime: 30_000,
+    staleTime: REALTIME_CONFIG.slow.staleTime,
   });
 }
 
@@ -58,7 +59,7 @@ export function useDiagnosticsLatest(wellId: string) {
     queryKey: ["diagnostics", "latest", wellId],
     queryFn: () => apiClient<DiagnosticReport>(`/wells/${wellId}/diagnostics/latest`),
     enabled: !!wellId,
-    staleTime: 10_000,
+    staleTime: REALTIME_CONFIG.normal.staleTime,
   });
 }
 
@@ -67,7 +68,7 @@ export function useWellTwinState(wellId: string) {
     queryKey: ["twin", "state", wellId],
     queryFn: () => apiClient<WellTwinState>(`/wells/${wellId}/twin/state`),
     enabled: !!wellId,
-    staleTime: 10_000,
+    staleTime: REALTIME_CONFIG.normal.staleTime,
   });
 }
 
@@ -76,7 +77,7 @@ export function useJointRecommendation(wellId: string) {
     queryKey: ["twin", "recommendation", wellId],
     queryFn: () => apiClient<JointRecommendationResponse>(`/wells/${wellId}/twin/recommendation`),
     enabled: !!wellId,
-    staleTime: 15_000,
+    staleTime: REALTIME_CONFIG.moderate.staleTime,
   });
 }
 
@@ -85,7 +86,7 @@ export function useCSSScreening(wellId: string) {
     queryKey: ["css", "screening", wellId],
     queryFn: () => apiClient<CSSScreeningResponse>(`/wells/${wellId}/css/screening`),
     enabled: !!wellId,
-    staleTime: 30_000,
+    staleTime: REALTIME_CONFIG.slow.staleTime,
   });
 }
 
@@ -94,7 +95,7 @@ export function useCSSRecommend(wellId: string) {
     queryKey: ["css", "recommend", wellId],
     queryFn: () => apiClient<CSSRecommendResponse>(`/wells/${wellId}/css/recommend`),
     enabled: !!wellId,
-    staleTime: 30_000,
+    staleTime: REALTIME_CONFIG.slow.staleTime,
   });
 }
 
@@ -103,7 +104,7 @@ export function useParetoFront(wellId: string) {
     queryKey: ["whatif", "pareto", wellId],
     queryFn: () => apiClient<ParetoResponse>(`/wells/${wellId}/whatif/pareto`),
     enabled: !!wellId,
-    staleTime: 60_000,
+    staleTime: REALTIME_CONFIG.rare.staleTime,
   });
 }
 
@@ -112,7 +113,7 @@ export function useApprovals(wellId: string) {
     queryKey: ["approvals", wellId],
     queryFn: () => apiClient<ApprovalResponse[]>(`/wells/${wellId}/approvals`),
     enabled: !!wellId,
-    staleTime: 5_000,
+    staleTime: REALTIME_CONFIG.fast.staleTime,
   });
 }
 

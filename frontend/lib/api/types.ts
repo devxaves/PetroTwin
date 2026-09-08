@@ -221,7 +221,13 @@ export interface CSSScenarioResponse {
     expected_sor: number;
     expected_economic_value: number;
     energy_cost_per_bbl: number;
+    steam_cost?: number;
+    energy_cost?: number;
+    water_handling_cost?: number;
+    mechanical_risk_cost?: number;
+    daily_rates?: number[];
   };
+
   historical_average: {
     avg_cum_oil_bbl: number;
     avg_sor: number;

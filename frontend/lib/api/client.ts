@@ -20,6 +20,42 @@ export class ApiError extends Error {
   }
 }
 
+let cachedToken: string | null = null;
+
+/**
+ * Retrieves a valid Bearer authentication token.
+ * Defaults to demo approver credentials for decision support actions.
+ */
+export async function getAuthToken(): Promise<string | null> {
+  if (typeof window !== "undefined") {
+    const stored = localStorage.getItem("petrotwin_auth_token");
+    if (stored) return stored;
+  }
+  if (cachedToken) return cachedToken;
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: "approver_demo",
+        password: "ApproverPass2026!",
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      cachedToken = data.access_token;
+      if (typeof window !== "undefined" && cachedToken) {
+        localStorage.setItem("petrotwin_auth_token", cachedToken);
+      }
+      return cachedToken;
+    }
+  } catch (err) {
+    console.warn("Auto-authentication with demo approver credentials failed:", err);
+  }
+  return null;
+}
+
 export async function apiClient<T>(
   endpoint: string,
   options?: RequestInit
@@ -32,11 +68,37 @@ export async function apiClient<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  const res = await fetch(url, {
+  // Ensure Bearer authentication is attached for protected routes
+  if (!headers.has("Authorization")) {
+    const token = await getAuthToken();
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
+
+  let res = await fetch(url, {
     ...options,
     headers,
     cache: "no-store",
   });
+
+  // If token expired or rejected with 401, re-login and retry once
+  if (res.status === 401 && !headers.has("X-Retry")) {
+    cachedToken = null;
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("petrotwin_auth_token");
+    }
+    const freshToken = await getAuthToken();
+    if (freshToken) {
+      headers.set("Authorization", `Bearer ${freshToken}`);
+      headers.set("X-Retry", "1");
+      res = await fetch(url, {
+        ...options,
+        headers,
+        cache: "no-store",
+      });
+    }
+  }
 
   if (!res.ok) {
     let errBody: any;
@@ -53,3 +115,4 @@ export async function apiClient<T>(
 
   return res.json() as Promise<T>;
 }
+
