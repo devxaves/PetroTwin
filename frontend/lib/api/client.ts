@@ -2,7 +2,10 @@
  * Base HTTP fetch wrapper with robust error handling for ThermoTwin.
  */
 
-const rawApiBase = process.env.NEXT_PUBLIC1_API_URL || "http://localhost:8000";
+const rawApiBase =
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC1_API_URL ||
+  "http://localhost:8000";
 const API_BASE = rawApiBase.replace(/\/+$/, "");
 
 export class ApiError extends Error {
