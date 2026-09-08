@@ -6,6 +6,12 @@ DEMO CREDENTIALS — rotate before any real production deployment!
 """
 
 import asyncio
+import sys
+from pathlib import Path
+
+# Ensure the backend root is importable when this script is run directly.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from sqlalchemy import select
 from app.core.auth import User, get_password_hash
 from app.db.session import async_session_factory

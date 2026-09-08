@@ -13,7 +13,7 @@ export function Header({ wellId }: HeaderProps) {
     <header className="border-b border-[#1e293b] bg-[#0d1321] px-6 py-3 sticky top-0 z-40">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2.5 group">
+          <Link href="/dashboard" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:border-amber-400">
               <Flame className="w-4 h-4" />
             </div>
@@ -34,7 +34,7 @@ export function Header({ wellId }: HeaderProps) {
 
           <nav className="hidden md:flex items-center gap-1 text-xs">
             <Link
-              href="/"
+              href="/dashboard"
               className={`px-3 py-1.5 rounded transition ${
                 !wellId
                   ? "bg-[#1a2540] text-amber-400 font-medium border border-amber-500/30"

@@ -15,7 +15,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Operator Digital Twin Workflow", () => {
   test("full 6-step engineering workflow verification", async ({ page }) => {
     // 1. Load field overview, confirm at least one well shows non-zero risk
-    await page.goto("http://localhost:3000");
+    await page.goto("http://localhost:3000/dashboard");
     await expect(page.getByTestId("wells-table")).toBeVisible();
     
     const riskScores = page.getByTestId("risk-score-value");
