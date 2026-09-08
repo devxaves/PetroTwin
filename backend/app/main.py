@@ -58,19 +58,20 @@ async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
 
     import redis.asyncio as aioredis
 
-    redis_client = aioredis.from_url(
-        settings.redis_url, decode_responses=True, socket_connect_timeout=5
-    )
-    try:
-        await redis_client.ping()
-        logger.info("Redis connection verified.")
-    except Exception as exc:
-        logger.error(f"Cannot connect to Redis at {settings.redis_url}: {exc}")
-        raise RuntimeError(
-            f"Cannot connect to Redis at {settings.redis_url}: {exc}"
-        ) from exc
-    finally:
-        await redis_client.aclose()
+    if settings.redis_url and "localhost" not in settings.redis_url:
+        try:
+            redis_client = aioredis.from_url(
+                settings.redis_url, decode_responses=True, socket_connect_timeout=3
+            )
+            await redis_client.ping()
+            logger.info("Redis connection verified.")
+            await redis_client.aclose()
+        except Exception as exc:
+            logger.warning(
+                f"Redis unavailable at {settings.redis_url}: {exc}. Running in non-cached mode."
+            )
+    else:
+        logger.info("No remote Redis instance configured. Running in non-cached mode.")
 
     yield
 
