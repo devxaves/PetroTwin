@@ -39,21 +39,21 @@ export function RiskGauge({
 
   if (compact) {
     return (
-      <div className="flex items-center gap-2" data-testid="risk-gauge-compact">
-        <div className="w-16 h-2 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+      <div className="flex items-center gap-2.5" data-testid="risk-gauge-compact">
+        <div className="w-16 h-2.5 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
           <div
             className={`h-full ${barColor} transition-all duration-500 rounded-full`}
             style={{ width: `${safeScore}%` }}
           />
         </div>
         <span
-          className={`font-mono text-xs font-bold ${statusColor}`}
+          className={`font-mono text-xs sm:text-sm font-black ${statusColor}`}
           data-testid="risk-score-value"
         >
           {safeScore}
         </span>
         <span
-          className={`text-[9px] px-1.5 py-0.2 rounded font-mono uppercase font-semibold border ${statusBg}`}
+          className={`text-xs px-2 py-0.5 rounded-full font-mono uppercase font-extrabold border ${statusBg}`}
           data-testid="risk-level-badge"
         >
           {resolvedLevel}
@@ -64,40 +64,40 @@ export function RiskGauge({
 
   return (
     <div
-      className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col gap-5"
+      className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col gap-5"
       data-testid="risk-gauge"
     >
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
           <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+            className={`w-11 h-11 rounded-2xl flex items-center justify-center ${
               resolvedLevel === "HIGH"
-                ? "bg-rose-50 text-rose-600 border border-rose-100"
+                ? "bg-rose-50 text-rose-600 border border-rose-200"
                 : resolvedLevel === "MODERATE"
-                ? "bg-amber-50 text-amber-600 border border-amber-100"
-                : "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                ? "bg-amber-50 text-amber-600 border border-amber-200"
+                : "bg-emerald-50 text-emerald-600 border border-emerald-200"
             }`}
           >
             {resolvedLevel === "HIGH" ? (
-              <ShieldAlert className="w-5 h-5" />
+              <ShieldAlert className="w-6 h-6" />
             ) : resolvedLevel === "MODERATE" ? (
-              <AlertTriangle className="w-5 h-5" />
+              <AlertTriangle className="w-6 h-6" />
             ) : (
-              <CheckCircle className="w-5 h-5" />
+              <CheckCircle className="w-6 h-6" />
             )}
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-bold tracking-wider uppercase text-slate-900 font-['Space_Grotesk']">
+            <h3 className="text-base sm:text-lg font-extrabold tracking-wider uppercase text-slate-900 font-['Space_Grotesk']">
               Hydrodynamic Rod-Float Risk
             </h3>
-            <span className="text-xs sm:text-sm text-slate-500 font-sans mt-0.5 block">
+            <span className="text-xs sm:text-sm text-slate-600 font-sans mt-0.5 block font-medium">
               Downstroke buoyancy &amp; viscous drag index
             </span>
           </div>
         </div>
 
         <span
-          className={`text-xs sm:text-sm px-3 py-1 rounded-full font-mono uppercase font-bold border ${statusBg}`}
+          className={`text-xs sm:text-sm px-3.5 py-1 rounded-full font-mono uppercase font-extrabold border ${statusBg}`}
           data-testid="risk-level-badge"
         >
           {resolvedLevel} RISK
@@ -106,7 +106,7 @@ export function RiskGauge({
 
       <div className="flex items-end justify-between">
         <div>
-          <div className="text-xs uppercase font-mono text-slate-500 font-bold tracking-wider">
+          <div className="text-xs uppercase font-mono text-slate-600 font-extrabold tracking-wider">
             Risk Severity Score
           </div>
           <div
@@ -114,16 +114,16 @@ export function RiskGauge({
             data-testid="risk-score-value"
           >
             {safeScore}
-            <span className="text-sm font-normal text-slate-400 ml-1.5">/ 100</span>
+            <span className="text-base font-semibold text-slate-400 ml-2">/ 100</span>
           </div>
         </div>
 
-        <div className="text-right text-xs sm:text-sm text-slate-600 font-mono space-y-1">
-          <div className="flex items-center justify-end gap-1.5 text-emerald-700 font-medium">
+        <div className="text-right text-xs sm:text-sm text-slate-700 font-mono space-y-1.5">
+          <div className="flex items-center justify-end gap-2 text-emerald-800 font-bold">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
             <span>&lt; 30.0 Nominal Range</span>
           </div>
-          <div className="flex items-center justify-end gap-1.5 text-rose-700 font-bold">
+          <div className="flex items-center justify-end gap-2 text-rose-800 font-black">
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" />
             <span>&ge; 60.0 Sinking Lag Warning</span>
           </div>
@@ -144,7 +144,7 @@ export function RiskGauge({
       {/* Factor Breakdown with Visual Impact Bars */}
       {factorBreakdown && Object.keys(factorBreakdown).length > 0 && (
         <div className="pt-3 border-t border-slate-100 flex flex-col gap-3">
-          <div className="text-xs uppercase font-mono font-bold tracking-wider text-slate-500 flex items-center justify-between">
+          <div className="text-xs uppercase font-mono font-extrabold tracking-wider text-slate-600 flex items-center justify-between">
             <span>Weighted Factor Contribution</span>
             <span>Impact Pts</span>
           </div>
@@ -157,15 +157,15 @@ export function RiskGauge({
               return (
                 <div
                   key={factorName}
-                  className="p-3.5 sm:p-4 rounded-xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2"
+                  className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2.5"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-800 capitalize text-xs sm:text-sm font-bold truncate max-w-[140px]">
+                    <span className="text-slate-900 capitalize text-xs sm:text-sm font-bold truncate max-w-[140px]">
                       {factorName.replace(/_/g, " ")}
                     </span>
                     <span
                       className={`text-sm sm:text-base font-black ${
-                        isHighContrib ? "text-rose-600" : "text-amber-600"
+                        isHighContrib ? "text-rose-700" : "text-amber-700"
                       }`}
                     >
                       +{pts} pts
@@ -173,7 +173,7 @@ export function RiskGauge({
                   </div>
 
                   {/* Impact Bar */}
-                  <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+                  <div className="w-full h-2.5 rounded-full bg-slate-200 overflow-hidden">
                     <div
                       className={`h-full rounded-full ${
                         isHighContrib ? "bg-rose-500" : "bg-amber-500"
@@ -181,9 +181,9 @@ export function RiskGauge({
                       style={{ width: `${Math.min(100, (pts / 30) * 100)}%` }}
                     />
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 font-sans">
-                    <span>Weight: <strong className="text-slate-700 font-mono">{(detail.weight * 100).toFixed(0)}%</strong></span>
-                    <span>Raw: <strong className="text-slate-700 font-mono">{detail.raw_value.toFixed(1)}</strong></span>
+                  <div className="flex items-center justify-between text-xs text-slate-600 font-sans">
+                    <span>Weight: <strong className="text-slate-900 font-mono font-bold">{(detail.weight * 100).toFixed(0)}%</strong></span>
+                    <span>Raw: <strong className="text-slate-900 font-mono font-bold">{detail.raw_value.toFixed(1)}</strong></span>
                   </div>
                 </div>
               );

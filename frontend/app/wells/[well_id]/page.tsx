@@ -123,94 +123,94 @@ export default function WellTwinPage({ params }: WellPageProps) {
         {/* 2. ── 4 BIG EXECUTIVE WELL KPI CARDS AT THE TOP ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Card 1: Flowing Temperature & Viscosity */}
-          <div className="rounded-2xl bg-white p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
+          <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
             <div className="flex items-start justify-between">
-              <span className="text-xs font-medium uppercase tracking-wider text-slate-400 font-sans">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 font-sans">
                 Flowing Temp &amp; Viscosity
               </span>
-              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
+              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600">
                 <Thermometer className="w-5 h-5" />
               </div>
             </div>
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl sm:text-5xl font-extrabold font-mono text-orange-600 tracking-tight">
+                <span className="text-4xl sm:text-5xl font-black font-mono text-orange-600 tracking-tight">
                   {tempC.toFixed(1)}
                 </span>
-                <span className="text-sm font-bold text-slate-500 font-mono">&deg;C</span>
+                <span className="text-sm font-extrabold text-slate-700 font-mono">&deg;C</span>
               </div>
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
-                <span className="text-sky-700 font-semibold">~{viscosity.toLocaleString()} cP</span>
-                <span className="text-slate-400">Clearwater (460m)</span>
+                <span className="text-sky-700 font-bold text-sm">~{viscosity.toLocaleString()} cP</span>
+                <span className="text-slate-500 font-medium">Clearwater (460m)</span>
               </div>
             </div>
           </div>
 
           {/* Card 2: Production Rate & Water Cut */}
-          <div className="rounded-2xl bg-white p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
+          <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
             <div className="flex items-start justify-between">
-              <span className="text-xs font-medium uppercase tracking-wider text-slate-400 font-sans">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 font-sans">
                 Oil Production Rate
               </span>
-              <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                 <Flame className="w-5 h-5" />
               </div>
             </div>
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl sm:text-5xl font-extrabold font-mono text-slate-900 tracking-tight">
+                <span className="text-4xl sm:text-5xl font-black font-mono text-slate-900 tracking-tight">
                   {oilRate.toFixed(1)}
                 </span>
-                <span className="text-sm font-bold text-slate-500 font-mono">BOPD</span>
+                <span className="text-sm font-extrabold text-slate-700 font-mono">BOPD</span>
               </div>
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-600">
-                  Water Cut: <strong className="text-slate-900">{waterCut.toFixed(0)}%</strong>
+                <span className="text-slate-700 font-medium">
+                  Water Cut: <strong className="text-slate-900 font-bold">{waterCut.toFixed(0)}%</strong>
                 </span>
-                <span className="text-slate-400 font-mono">{tubingPress.toFixed(1)} MPa</span>
+                <span className="text-slate-600 font-bold font-mono">{tubingPress.toFixed(1)} MPa</span>
               </div>
             </div>
           </div>
 
           {/* Card 3: Pump Fillage & Cadence */}
-          <div className="rounded-2xl bg-white p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
+          <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
             <div className="flex items-start justify-between">
-              <span className="text-xs font-medium uppercase tracking-wider text-slate-400 font-sans">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 font-sans">
                 Pump Liquid Fillage
               </span>
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
                 <Gauge className="w-5 h-5" />
               </div>
             </div>
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl sm:text-5xl font-extrabold font-mono text-emerald-600 tracking-tight">
+                <span className="text-4xl sm:text-5xl font-black font-mono text-emerald-600 tracking-tight">
                   {fillage.toFixed(1)}
                 </span>
-                <span className="text-sm font-bold text-slate-500 font-mono">%</span>
+                <span className="text-sm font-extrabold text-slate-700 font-mono">%</span>
               </div>
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-600">
-                  Effective: <strong className="text-slate-900">{((fillage / 100) * strokeLength).toFixed(1)}&quot;</strong>
+                <span className="text-slate-700 font-medium">
+                  Effective: <strong className="text-slate-900 font-bold">{((fillage / 100) * strokeLength).toFixed(1)}&quot;</strong>
                 </span>
-                <span className="text-emerald-700 font-semibold">{spm} SPM</span>
+                <span className="text-emerald-800 font-bold">{spm} SPM</span>
               </div>
             </div>
           </div>
 
           {/* Card 4: Mechanical Rod-Float Risk */}
-          <div className="rounded-2xl bg-white p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
+          <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[160px]">
             <div className="flex items-start justify-between">
-              <span className="text-xs font-medium uppercase tracking-wider text-slate-400 font-sans">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 font-sans">
                 Rod-Float Risk Index
               </span>
               <div
                 className={`w-10 h-10 rounded-xl border flex items-center justify-center ${
                   isHighRisk
-                    ? "bg-rose-50 border-rose-100 text-rose-600"
+                    ? "bg-rose-50 border-rose-200 text-rose-600"
                     : isModRisk
-                    ? "bg-amber-50 border-amber-100 text-amber-600"
-                    : "bg-emerald-50 border-emerald-100 text-emerald-600"
+                    ? "bg-amber-50 border-amber-200 text-amber-600"
+                    : "bg-emerald-50 border-emerald-200 text-emerald-600"
                 }`}
               >
                 <AlertCircle className="w-5 h-5" />
@@ -219,7 +219,7 @@ export default function WellTwinPage({ params }: WellPageProps) {
             <div>
               <div className="flex items-baseline gap-2">
                 <span
-                  className={`text-4xl sm:text-5xl font-extrabold font-mono tracking-tight ${
+                  className={`text-4xl sm:text-5xl font-black font-mono tracking-tight ${
                     isHighRisk
                       ? "text-rose-600"
                       : isModRisk
@@ -229,21 +229,21 @@ export default function WellTwinPage({ params }: WellPageProps) {
                 >
                   {riskScore}
                 </span>
-                <span className="text-xs font-bold uppercase tracking-wider font-mono text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider font-mono text-slate-500">
                   / 100
                 </span>
               </div>
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-500">
-                  CSS: <strong className="text-slate-800">{phase}</strong>
+                <span className="text-slate-600">
+                  CSS: <strong className="text-slate-900 font-bold">{phase}</strong>
                 </span>
                 <span
-                  className={`font-bold uppercase text-[9px] px-2 py-0.5 rounded border ${
+                  className={`font-mono font-extrabold uppercase text-xs px-2.5 py-0.5 rounded-full border ${
                     isHighRisk
                       ? "bg-rose-50 text-rose-700 border-rose-200"
                       : isModRisk
-                      ? "bg-amber-50 text-amber-700 border-amber-200"
-                      : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                      ? "bg-amber-50 text-amber-800 border-amber-200"
+                      : "bg-emerald-50 text-emerald-800 border-emerald-200"
                   }`}
                 >
                   {isHighRisk ? "HIGH RISK" : isModRisk ? "MODERATE" : "NOMINAL"}

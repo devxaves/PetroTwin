@@ -71,20 +71,20 @@ export function ExplainabilityPanel({
 
   return (
     <div
-      className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col gap-5"
+      className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col gap-5"
       data-testid="explainability-panel"
     >
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200 text-orange-600 flex items-center justify-center">
             <Info className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-bold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
+            <h3 className="text-base sm:text-lg font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
               Twin Recommendation &amp; Explainability
             </h3>
-            <span className="text-xs text-slate-500 font-sans block mt-0.5">
+            <span className="text-xs sm:text-sm text-slate-600 font-sans block mt-0.5 font-medium">
               Coupled reservoir physics &amp; thermal enthalpy rationale
             </span>
           </div>
@@ -92,9 +92,9 @@ export function ExplainabilityPanel({
 
         {/* Confidence Badge */}
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-slate-500 font-medium">Combined Model Confidence:</span>
+          <span className="text-xs font-mono text-slate-600 font-bold">Model Confidence:</span>
           <span
-            className={`text-xs sm:text-sm px-3 py-1 rounded-full font-mono font-bold border ${confBg} ${confColor}`}
+            className={`text-xs sm:text-sm px-3.5 py-1 rounded-full font-mono font-black border ${confBg} ${confColor}`}
             data-testid="combined-confidence-badge"
           >
             {confPct}% ({confTier})
@@ -104,16 +104,16 @@ export function ExplainabilityPanel({
 
       {/* Rationale Bullets */}
       <div className="flex flex-col gap-2.5">
-        <div className="text-xs font-mono uppercase text-slate-500 font-bold tracking-wider">
+        <div className="text-xs font-mono uppercase text-slate-600 font-extrabold tracking-wider">
           Physical &amp; Reservoir Rationales
         </div>
-        <ul className="space-y-2" data-testid="reasons-list">
+        <ul className="space-y-2.5" data-testid="reasons-list">
           {reasons.map((reason, idx) => (
             <li
               key={idx}
-              className="flex items-start gap-3 text-xs sm:text-sm font-sans text-slate-700 bg-slate-50/90 p-3.5 rounded-xl border border-slate-200/80 leading-relaxed"
+              className="flex items-start gap-3 text-xs sm:text-sm font-sans text-slate-800 bg-slate-50/90 p-4 rounded-2xl border border-slate-200/80 leading-relaxed font-medium"
             >
-              <span className="text-orange-500 font-bold mt-0.5">•</span>
+              <span className="text-orange-600 font-black text-base mt-[-2px]">•</span>
               <span>{reason}</span>
             </li>
           ))}
@@ -123,17 +123,17 @@ export function ExplainabilityPanel({
       {/* Expected Effects Grid */}
       {expectedEffect && (
         <div className="flex flex-col gap-2.5">
-          <div className="text-xs font-mono uppercase text-slate-500 font-bold tracking-wider">
+          <div className="text-xs font-mono uppercase text-slate-600 font-extrabold tracking-wider">
             Expected Subsystem Effects (Coupled Model)
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs sm:text-sm font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 text-xs sm:text-sm font-mono">
             <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
-              <div className="text-xs text-slate-500 uppercase font-bold tracking-wider">Oil Production</div>
+              <div className="text-xs text-slate-600 uppercase font-extrabold tracking-wider">Oil Production</div>
               <div
                 className={`text-2xl sm:text-3xl font-black mt-1 ${
                   (expectedEffect.production_delta_pct ?? 0) >= 0
-                    ? "text-emerald-600"
-                    : "text-rose-600"
+                    ? "text-emerald-700"
+                    : "text-rose-700"
                 }`}
               >
                 {(expectedEffect.production_delta_pct ?? 0) >= 0 ? "+" : ""}
@@ -142,12 +142,12 @@ export function ExplainabilityPanel({
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
-              <div className="text-xs text-slate-500 uppercase font-bold tracking-wider">Steam-Oil Ratio</div>
+              <div className="text-xs text-slate-600 uppercase font-extrabold tracking-wider">Steam-Oil Ratio</div>
               <div
                 className={`text-2xl sm:text-3xl font-black mt-1 ${
                   (expectedEffect.sor_delta_pct ?? 0) <= 0
-                    ? "text-emerald-600"
-                    : "text-rose-600"
+                    ? "text-emerald-700"
+                    : "text-rose-700"
                 }`}
               >
                 {(expectedEffect.sor_delta_pct ?? 0) >= 0 ? "+" : ""}
@@ -156,12 +156,12 @@ export function ExplainabilityPanel({
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
-              <div className="text-xs text-slate-500 uppercase font-bold tracking-wider">Rod-Float Risk</div>
+              <div className="text-xs text-slate-600 uppercase font-extrabold tracking-wider">Rod-Float Risk</div>
               <div
                 className={`text-2xl sm:text-3xl font-black mt-1 ${
                   (expectedEffect.rod_float_risk_delta ?? 0) <= 0
-                    ? "text-emerald-600"
-                    : "text-rose-600"
+                    ? "text-emerald-700"
+                    : "text-rose-700"
                 }`}
               >
                 {(expectedEffect.rod_float_risk_delta ?? 0) >= 0 ? "+" : ""}
@@ -170,12 +170,12 @@ export function ExplainabilityPanel({
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
-              <div className="text-xs text-slate-500 uppercase font-bold tracking-wider">Energy Intensity</div>
+              <div className="text-xs text-slate-600 uppercase font-extrabold tracking-wider">Energy Intensity</div>
               <div
                 className={`text-2xl sm:text-3xl font-black mt-1 ${
                   (expectedEffect.energy_delta_pct ?? 0) <= 0
-                    ? "text-emerald-600"
-                    : "text-rose-600"
+                    ? "text-emerald-700"
+                    : "text-rose-700"
                 }`}
               >
                 {(expectedEffect.energy_delta_pct ?? 0) >= 0 ? "+" : ""}
@@ -190,7 +190,7 @@ export function ExplainabilityPanel({
       <div className="border-t border-slate-100 pt-4 flex flex-col gap-3.5">
         {isNotesOpen && (
           <div>
-            <label className="text-xs font-mono text-slate-600 font-bold block mb-1.5">
+            <label className="text-xs font-mono text-slate-700 font-extrabold block mb-1.5">
               Engineering Remarks / Operational Notes:
             </label>
             <input
@@ -198,7 +198,7 @@ export function ExplainabilityPanel({
               value={operatorNotes}
               onChange={(e) => setOperatorNotes(e.target.value)}
               placeholder="e.g. Approved with reduced soak time per field engineer observation"
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-800 font-mono focus:outline-hidden focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 font-mono focus:outline-hidden focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
             />
           </div>
         )}
@@ -208,7 +208,7 @@ export function ExplainabilityPanel({
             <button
               onClick={() => handleDecision("approved")}
               disabled={approvalMutation.isPending}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm font-mono transition shadow-xs cursor-pointer"
+              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs sm:text-sm font-mono transition shadow-xs cursor-pointer active:scale-95"
               data-testid="btn-approve"
             >
               <CheckCircle className="w-4 h-4" />
@@ -217,7 +217,7 @@ export function ExplainabilityPanel({
             <button
               onClick={() => handleDecision("rejected")}
               disabled={approvalMutation.isPending}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs sm:text-sm font-mono transition cursor-pointer"
+              className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 hover:bg-rose-100 font-black text-xs sm:text-sm font-mono transition cursor-pointer active:scale-95"
               data-testid="btn-reject"
             >
               <XCircle className="w-4 h-4" />
@@ -231,7 +231,7 @@ export function ExplainabilityPanel({
                 }
               }}
               disabled={approvalMutation.isPending}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 font-bold text-xs sm:text-sm font-mono transition cursor-pointer"
+              className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 hover:bg-amber-100 font-black text-xs sm:text-sm font-mono transition cursor-pointer active:scale-95"
               data-testid="btn-modify"
             >
               <Edit3 className="w-4 h-4" />
@@ -240,8 +240,8 @@ export function ExplainabilityPanel({
           </div>
 
           {/* Explicit Safety Disclosure */}
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-500 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200">
-            <Shield className="w-4 h-4 text-slate-400 shrink-0" />
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-600 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 font-medium">
+            <Shield className="w-4 h-4 text-slate-500 shrink-0" />
             <span>
               This logs a decision. No physical equipment is actuated.
             </span>
@@ -250,7 +250,7 @@ export function ExplainabilityPanel({
 
         {lastActionStatus && (
           <div
-            className={`p-4 rounded-xl border text-xs sm:text-sm font-mono font-medium flex items-center justify-between gap-3 transition-all ${
+            className={`p-4 rounded-xl border text-xs sm:text-sm font-mono font-bold flex items-center justify-between gap-3 transition-all ${
               isActionSuccess
                 ? "bg-emerald-50 border-emerald-300 text-emerald-900"
                 : "bg-rose-50 border-rose-300 text-rose-900"

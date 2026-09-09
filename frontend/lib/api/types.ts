@@ -274,6 +274,9 @@ export interface WhatIfResponse {
     rod_float_risk_score: ComparisonMetric;
     net_economic_value_usd: ComparisonMetric;
     pump_volumetric_efficiency: ComparisonMetric;
+    production_oil_bbl?: ComparisonMetric;
+    energy_cost_per_bbl?: ComparisonMetric;
+    economic_value_usd?: ComparisonMetric;
   };
   current_state_summary: Record<string, any>;
   proposed_state_summary: Record<string, any>;

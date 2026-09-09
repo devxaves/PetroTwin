@@ -43,40 +43,40 @@ export function Header({ wellId }: HeaderProps) {
   ];
 
   return (
-    <header className="border-b border-slate-200/80 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-2.5 sticky top-0 z-50 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3 sticky top-0 z-50 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Brand & Left Navigation */}
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-xl bg-orange-50 border border-orange-200/80 flex items-center justify-center text-orange-600 group-hover:border-orange-400 group-hover:scale-105 transition duration-200 shadow-xs">
-              <Flame className="w-4 h-4 fill-orange-500/20 text-orange-600" />
+            <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 group-hover:border-orange-400 group-hover:scale-105 transition duration-200 shadow-xs">
+              <Flame className="w-5 h-5 fill-orange-500/20 text-orange-600" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-sm tracking-tight text-slate-900 font-['Space_Grotesk']">
+                <span className="font-extrabold text-base tracking-tight text-slate-900 font-['Space_Grotesk']">
                   ThermoTwin
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200/80 font-mono font-semibold tracking-tight">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-800 border border-orange-200 font-mono font-bold tracking-tight">
                   DIGITAL TWIN v2.0
                 </span>
               </div>
-              <div className="text-[11px] text-slate-500 font-normal">
+              <div className="text-xs text-slate-600 font-medium">
                 CSS Heavy-Oil &amp; SRP Operations Intelligence
               </div>
             </div>
           </Link>
 
           {/* Nav Links */}
-          <nav className="hidden md:flex items-center gap-1.5 text-xs font-medium">
+          <nav className="hidden md:flex items-center gap-2 text-xs sm:text-sm font-medium">
             <Link
               href="/dashboard"
-              className={`px-3 py-1.5 rounded-lg transition duration-150 flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-xl transition duration-150 flex items-center gap-2 ${
                 pathname === "/dashboard"
-                  ? "bg-slate-900 text-white font-semibold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  ? "bg-slate-900 text-white font-bold shadow-xs"
+                  : "text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold"
               }`}
             >
-              <Activity className="w-3.5 h-3.5 text-orange-400" />
+              <Activity className="w-4 h-4 text-orange-400" />
               <span>Fleet Command</span>
             </Link>
 
@@ -85,14 +85,14 @@ export function Header({ wellId }: HeaderProps) {
               <button
                 type="button"
                 onClick={() => setDropdownOpen((prev) => !prev)}
-                className={`px-3 py-1.5 rounded-lg transition duration-150 flex items-center gap-1.5 border ${
+                className={`px-3.5 py-2 rounded-xl transition duration-150 flex items-center gap-2 border ${
                   wellId
-                    ? "bg-orange-50 border-orange-200 text-orange-900 font-semibold shadow-xs"
-                    : "border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                    ? "bg-orange-50 border-orange-300 text-orange-950 font-bold shadow-xs"
+                    : "border-slate-200 bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-50 font-semibold"
                 }`}
               >
                 <span>{wellId ? `Well: ${wellId}` : "Select Well Twin"}</span>
-                <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+                <ChevronDown className="w-4 h-4 opacity-70" />
               </button>
 
               {dropdownOpen && (
@@ -101,11 +101,11 @@ export function Header({ wellId }: HeaderProps) {
                     className="fixed inset-0 z-40"
                     onClick={() => setDropdownOpen(false)}
                   />
-                  <div className="absolute left-0 mt-1.5 w-64 rounded-xl bg-white border border-slate-200 shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
-                    <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <div className="absolute left-0 mt-2 w-72 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50 text-xs divide-y divide-slate-100">
+                    <div className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">
                       Cold Lake Pad 4 Wells
                     </div>
-                    <div className="max-h-60 overflow-y-auto py-1">
+                    <div className="max-h-64 overflow-y-auto py-1">
                       {wellList.map((w) => (
                         <button
                           key={w.well_id}
@@ -114,17 +114,17 @@ export function Header({ wellId }: HeaderProps) {
                             setDropdownOpen(false);
                             router.push(`/wells/${w.well_id}`);
                           }}
-                          className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-50 transition ${
+                          className={`w-full text-left px-4 py-2.5 flex items-center justify-between hover:bg-orange-50/50 transition ${
                             w.well_id === wellId
-                              ? "bg-orange-50/80 font-bold text-orange-900"
-                              : "text-slate-700"
+                              ? "bg-orange-50 font-bold text-orange-950"
+                              : "text-slate-800 font-medium"
                           }`}
                         >
-                          <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                            <span className="font-mono font-medium">{w.well_id}</span>
+                          <div className="flex items-center gap-2.5">
+                            <span className="w-2 h-2 rounded-full bg-orange-500" />
+                            <span className="font-mono font-bold text-slate-900">{w.well_id}</span>
                           </div>
-                          <span className="text-[11px] text-slate-400 truncate max-w-[120px]">
+                          <span className="text-xs text-slate-500 truncate max-w-[130px]">
                             {w.name}
                           </span>
                         </button>
@@ -137,13 +137,13 @@ export function Header({ wellId }: HeaderProps) {
 
             <Link
               href="/status"
-              className={`px-3 py-1.5 rounded-lg transition duration-150 flex items-center gap-1.5 ${
+              className={`px-3.5 py-2 rounded-xl transition duration-150 flex items-center gap-2 ${
                 pathname === "/status"
-                  ? "bg-slate-900 text-white font-semibold shadow-xs"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  ? "bg-slate-900 text-white font-bold shadow-xs"
+                  : "text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-semibold"
               }`}
             >
-              <Database className="w-3.5 h-3.5 text-sky-500" />
+              <Database className="w-4 h-4 text-sky-500" />
               <span>Telemetry Health</span>
             </Link>
           </nav>
@@ -151,19 +151,19 @@ export function Header({ wellId }: HeaderProps) {
 
         {/* Telemetry Status & Clock */}
         <div className="flex items-center gap-3 font-mono text-xs">
-          <div className="hidden lg:flex items-center gap-2 text-slate-500 text-[11px] bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/80">
-            <Radio className="w-3.5 h-3.5 text-orange-500 animate-pulse" />
-            <span className="font-semibold text-slate-600">PAD 4</span>
+          <div className="hidden lg:flex items-center gap-2 text-slate-600 text-xs bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+            <Radio className="w-4 h-4 text-orange-500 animate-pulse" />
+            <span className="font-bold text-slate-800">PAD 4</span>
             <span className="text-slate-300">|</span>
-            <span className="text-slate-700 font-semibold">{currentTime || "LIVE"}</span>
+            <span className="text-slate-900 font-bold">{currentTime || "LIVE"}</span>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 shadow-2xs">
-            <span className="relative flex h-2 w-2">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-900 shadow-2xs font-bold text-xs">
+            <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
             </span>
-            <span className="font-semibold text-[11px] tracking-tight">SCADA LIVE</span>
+            <span className="tracking-wide">SCADA LIVE</span>
           </div>
         </div>
       </div>

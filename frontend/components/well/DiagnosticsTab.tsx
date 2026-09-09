@@ -146,35 +146,35 @@ export function DiagnosticsTab({
             </div>
 
             {/* Diagnostic Explanation */}
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-700 text-xs sm:text-sm font-sans leading-relaxed">
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 text-xs sm:text-sm font-sans leading-relaxed font-medium">
               {recommendation?.rule ??
                 "Severe downstroke viscous drag detected. Bitumen column buoyant resistance exceeds rod fall velocity, risking rod buckling."}
             </div>
 
             {/* Setpoint Modification & Predicted Benefit */}
             <div className="grid grid-cols-2 gap-3.5">
-              <div className="p-4 sm:p-4.5 rounded-2xl bg-slate-50 border border-slate-200/80">
-                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                <span className="text-xs text-slate-600 uppercase font-extrabold tracking-wider">
                   Current Cadence
                 </span>
                 <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
                   {currentSpm}{" "}
-                  <span className="text-xs font-normal text-slate-500">SPM</span>
+                  <span className="text-xs font-semibold text-slate-500">SPM</span>
                 </div>
-                <span className="text-xs text-rose-600 font-semibold mt-0.5 block">
+                <span className="text-xs text-rose-700 font-bold mt-0.5 block">
                   Lagging Downstroke
                 </span>
               </div>
 
-              <div className="p-4 sm:p-4.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/90">
-                <span className="text-xs text-emerald-800 uppercase font-bold tracking-wider">
+              <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/90">
+                <span className="text-xs text-emerald-900 uppercase font-extrabold tracking-wider">
                   Target Setpoint
                 </span>
                 <div className="text-2xl sm:text-3xl font-black text-emerald-800 mt-1">
                   {targetSpm}{" "}
-                  <span className="text-xs font-normal text-emerald-600">SPM</span>
+                  <span className="text-xs font-semibold text-emerald-600">SPM</span>
                 </div>
-                <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1 mt-0.5">
+                <span className="text-xs text-emerald-800 font-bold flex items-center gap-1 mt-0.5">
                   <ArrowDownRight className="w-3.5 h-3.5" />
                   -26% Rod Fall Stress
                 </span>
@@ -182,13 +182,13 @@ export function DiagnosticsTab({
             </div>
 
             {/* Projected Impact Pill */}
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs sm:text-sm">
-              <span className="text-slate-600 font-sans font-medium">
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs sm:text-sm">
+              <span className="text-slate-700 font-sans font-bold">
                 Projected Risk Mitigation:
               </span>
               <div className="flex items-center gap-2 font-mono">
-                <span className="line-through text-slate-400">78 pts</span>
-                <span className="font-bold text-emerald-700">
+                <span className="line-through text-slate-400 font-medium">78 pts</span>
+                <span className="font-black text-emerald-800 text-sm sm:text-base">
                   &rarr; 28 pts (Nominal)
                 </span>
               </div>
@@ -196,13 +196,13 @@ export function DiagnosticsTab({
 
             {/* Work Order Staged Status Notification */}
             {isWorkOrderStaged && (
-              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-sans flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-sans flex items-start gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <div className="font-bold">
+                  <div className="font-extrabold text-sm text-emerald-950">
                     Supervisory Work Order #WO-8492 Staged
                   </div>
-                  <div className="text-[11px] text-emerald-700 mt-0.5">
+                  <div className="text-xs text-emerald-800 mt-1 font-medium">
                     Target {targetSpm} SPM queued for field dispatch review by{" "}
                     {operatorId}. Direct autonomous pump override remains blocked.
                   </div>
@@ -216,7 +216,7 @@ export function DiagnosticsTab({
               <button
                 type="button"
                 onClick={handleGoToWhatIf}
-                className="py-3.5 px-4 rounded-xl font-bold transition duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 text-white shadow-xs cursor-pointer"
+                className="py-4 px-5 rounded-2xl font-black transition duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 text-white shadow-xs cursor-pointer active:scale-95"
                 data-testid="btn-whatif-kinematics"
               >
                 <Sliders className="w-4 h-4 text-orange-400" />
@@ -227,7 +227,7 @@ export function DiagnosticsTab({
               <button
                 type="button"
                 onClick={() => setIsReviewModalOpen(true)}
-                className="py-3.5 px-4 rounded-xl font-bold transition duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm bg-orange-600 hover:bg-orange-500 text-white shadow-xs cursor-pointer"
+                className="py-4 px-5 rounded-2xl font-black transition duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm bg-orange-600 hover:bg-orange-500 text-white shadow-xs cursor-pointer active:scale-95"
                 data-testid="btn-review-setpoint"
               >
                 <ShieldCheck className="w-4 h-4" />
@@ -245,18 +245,18 @@ export function DiagnosticsTab({
             {/* Modal Header */}
             <div className="flex items-start justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
-                  <ShieldCheck className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600">
+                  <ShieldCheck className="w-7 h-7" />
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
+                  <h3 className="text-lg sm:text-xl font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
                     Supervisory Setpoint Review
                   </h3>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs font-mono font-bold text-slate-600">
+                    <span className="text-xs font-mono font-bold text-slate-700">
                       WELL: {wellId}
                     </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-bold border border-sky-200 uppercase font-mono">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-800 font-extrabold border border-sky-200 uppercase font-mono">
                       Decision Support Gate
                     </span>
                   </div>
@@ -266,15 +266,15 @@ export function DiagnosticsTab({
               <button
                 type="button"
                 onClick={() => setIsReviewModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition"
+                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition font-bold"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Decision Support Advisory Header */}
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs font-sans text-slate-600 leading-relaxed">
-              <strong className="text-slate-900">Safety Policy:</strong> Petroleum
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm font-sans text-slate-700 leading-relaxed font-medium">
+              <strong className="text-slate-900 font-bold">Safety Policy:</strong> Petroleum
               engineers must verify mechanical envelope limits before staging
               kinematic modifications into the field supervisory queue. Direct
               autonomous actuation is prohibited.
@@ -282,26 +282,26 @@ export function DiagnosticsTab({
 
             {/* Kinematics Comparison Card */}
             <div className="grid grid-cols-2 gap-4 font-mono">
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-xs text-slate-400 uppercase font-semibold">
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-xs text-slate-500 uppercase font-extrabold">
                   Current Setting
                 </span>
-                <div className="text-2xl font-black text-slate-800 mt-1">
-                  {currentSpm} <span className="text-xs font-normal">SPM</span>
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                  {currentSpm} <span className="text-xs font-semibold text-slate-500">SPM</span>
                 </div>
-                <div className="text-[11px] text-rose-600 font-medium mt-1">
+                <div className="text-xs text-rose-700 font-bold mt-1">
                   Risk Score: 78 / 100 (HIGH)
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
-                <span className="text-xs text-emerald-800 uppercase font-semibold">
+              <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
+                <span className="text-xs text-emerald-900 uppercase font-extrabold">
                   Proposed Setpoint
                 </span>
-                <div className="text-2xl font-black text-emerald-800 mt-1">
-                  {targetSpm} <span className="text-xs font-normal">SPM</span>
+                <div className="text-2xl sm:text-3xl font-black text-emerald-800 mt-1">
+                  {targetSpm} <span className="text-xs font-semibold text-emerald-600">SPM</span>
                 </div>
-                <div className="text-[11px] text-emerald-700 font-medium mt-1">
+                <div className="text-xs text-emerald-800 font-bold mt-1">
                   Projected Risk: 28 / 100 (Nominal)
                 </div>
               </div>
@@ -309,11 +309,11 @@ export function DiagnosticsTab({
 
             {/* Safety Verification Checklist */}
             <div className="flex flex-col gap-2.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-600 font-mono">
                 Mandatory Safety Verification Checks
               </span>
-              <div className="grid grid-cols-1 gap-2 text-xs font-sans">
-                <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition">
+              <div className="grid grid-cols-1 gap-2 text-xs sm:text-sm font-sans">
+                <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition font-medium">
                   <input
                     type="checkbox"
                     checked={checklist.buckling}

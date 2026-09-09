@@ -150,21 +150,21 @@ export default function StatusPage() {
       {/* ── Main Content Grid ────────────────────────────────── */}
       <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-6">
         {/* Page title row */}
-        <div className="flex items-end justify-between">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2
-              className="text-2xl font-extrabold tracking-tight text-slate-900 font-display"
+              className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 font-display"
             >
               System Telemetry Status
             </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
               Real-time cluster infrastructure and microservice heartbeat
             </p>
           </div>
           <div className="text-right">
-            <div className="text-[10px] uppercase font-mono text-slate-400 font-semibold mb-0.5">Last Poll</div>
+            <div className="text-xs uppercase font-mono text-slate-500 font-extrabold mb-1">Last Poll</div>
             <div
-              className="text-xs font-mono font-bold text-slate-700 bg-white px-2.5 py-1 rounded border border-slate-200"
+              className="text-xs sm:text-sm font-mono font-black text-slate-800 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs"
               data-testid="last-checked"
             >
               {state.lastChecked
@@ -178,12 +178,12 @@ export default function StatusPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* ── Overall System Status — wide panel ──────────── */}
           <div className="lg:col-span-8">
-            <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-6">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <span className="font-bold uppercase tracking-wider text-slate-900 font-display text-xs">
+            <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col gap-6">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <span className="font-extrabold uppercase tracking-wider text-slate-900 font-display text-xs sm:text-sm">
                   System Overview
                 </span>
-                <span className="text-[10px] font-mono text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">
+                <span className="text-xs font-mono text-slate-600 bg-slate-50 px-3 py-1 rounded-full border border-slate-200 font-bold">
                   SYS-001
                 </span>
               </div>
@@ -193,7 +193,7 @@ export default function StatusPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-14 h-14 rounded-xl flex items-center justify-center border ${
+                      className={`w-16 h-16 rounded-2xl flex items-center justify-center border ${
                         overallStatus === "ok"
                           ? "border-emerald-200 bg-emerald-50"
                           : overallStatus === "error"
@@ -206,13 +206,13 @@ export default function StatusPage() {
                       <StatusIndicator state={overallStatus} size="lg" />
                     </div>
                     <div>
-                      <div className="text-base font-bold text-slate-900 font-display" data-testid="overall-status-text">
+                      <div className="text-lg sm:text-xl font-extrabold text-slate-900 font-display" data-testid="overall-status-text">
                         {overallStatus === "ok" && "All Systems Operational"}
                         {overallStatus === "error" && "Connection Failure"}
                         {overallStatus === "warn" && "Partial Degradation"}
                         {overallStatus === "loading" && "Initializing telemetry..."}
                       </div>
-                      <div className="text-xs text-slate-500 mt-0.5 font-sans">
+                      <div className="text-xs sm:text-sm text-slate-600 mt-1 font-sans font-medium">
                         {state.errorMessage ?? "All coupled microservices responding within nominal thresholds (<20ms)"}
                       </div>
                     </div>
@@ -220,23 +220,23 @@ export default function StatusPage() {
                 </div>
 
                 {/* Service grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Database */}
                   <div
-                    className="flex items-center justify-between px-4 py-3 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:border-orange-200 transition"
+                    className="flex items-center justify-between px-5 py-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 hover:border-orange-200 transition"
                     data-testid="db-status-card"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3.5">
                       <StatusIndicator state={dbState} size="sm" />
                       <div>
-                        <div className="text-xs font-bold text-slate-800">PostgreSQL</div>
-                        <div className="text-[0.65rem] text-slate-400 tracking-wide uppercase font-mono">
+                        <div className="text-sm font-extrabold text-slate-900">PostgreSQL</div>
+                        <div className="text-xs text-slate-500 tracking-wide uppercase font-mono font-semibold">
                           TimescaleDB Core
                         </div>
                       </div>
                     </div>
                     <div
-                      className="text-xs font-mono font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200"
+                      className="text-xs font-mono font-bold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200"
                     >
                       :5432
                     </div>
@@ -244,20 +244,20 @@ export default function StatusPage() {
 
                   {/* Redis */}
                   <div
-                    className="flex items-center justify-between px-4 py-3 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:border-orange-200 transition"
+                    className="flex items-center justify-between px-5 py-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 hover:border-orange-200 transition"
                     data-testid="redis-status-card"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3.5">
                       <StatusIndicator state={redisState} size="sm" />
                       <div>
-                        <div className="text-xs font-bold text-slate-800">Redis</div>
-                        <div className="text-[0.65rem] text-slate-400 tracking-wide uppercase font-mono">
+                        <div className="text-sm font-extrabold text-slate-900">Redis</div>
+                        <div className="text-xs text-slate-500 tracking-wide uppercase font-mono font-semibold">
                           Fast In-Memory Cache
                         </div>
                       </div>
                     </div>
                     <div
-                      className="text-xs font-mono font-semibold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200"
+                      className="text-xs font-mono font-bold text-slate-700 bg-white px-2.5 py-1 rounded-lg border border-slate-200"
                     >
                       :6379
                     </div>

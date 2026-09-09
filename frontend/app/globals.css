@@ -52,6 +52,13 @@ body {
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+/* Accessible focus ring */
+*:focus-visible {
+  outline: 2px solid #ea580c;
+  outline-offset: 2px;
 }
 
 /* Subtle architectural grid pattern */

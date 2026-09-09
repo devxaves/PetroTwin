@@ -66,23 +66,23 @@ export function WellSchematicTwin({ wellId, twinState }: WellSchematicTwinProps)
   const instantaneousLoad = Math.round(8150 + strokePhase * 10270);
 
   return (
-    <div className="rounded-2xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden flex flex-col text-slate-100">
+    <div className="rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden flex flex-col text-slate-100">
       {/* Header Bar */}
-      <div className="p-4 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 backdrop-blur-xs">
+      <div className="p-4 sm:p-5 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 backdrop-blur-xs">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 flex items-center justify-center font-bold text-xs">
-            <Activity className="w-4 h-4 animate-pulse" />
+          <div className="w-10 h-10 rounded-2xl bg-orange-500/10 border border-orange-500/30 text-orange-400 flex items-center justify-center font-bold text-xs">
+            <Activity className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-white font-['Space_Grotesk'] uppercase tracking-wider">
+            <div className="flex items-center gap-2.5">
+              <span className="font-extrabold text-base sm:text-lg text-white font-['Space_Grotesk'] uppercase tracking-wider">
                 Live Subsurface Digital Twin
               </span>
-              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">
+              <span className="text-xs font-mono px-3 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
                 CADENCE: {spm} SPM
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-sans">
+            <p className="text-xs text-slate-400 font-sans mt-0.5 font-medium">
               Mechanical SRP reciprocation synchronized with Clearwater Sand thermal chamber
             </p>
           </div>
@@ -90,13 +90,13 @@ export function WellSchematicTwin({ wellId, twinState }: WellSchematicTwinProps)
 
         {/* Animation & Zone Controls */}
         <div className="flex items-center gap-2 text-xs font-mono">
-          <div className="flex items-center bg-slate-800/90 rounded-xl border border-slate-700/80 p-1 shadow-inner">
+          <div className="flex items-center bg-slate-800/90 rounded-2xl border border-slate-700/80 p-1.5 shadow-inner">
             <button
               type="button"
               onClick={() => setActiveZone("surface")}
-              className={`px-3 py-1 rounded-lg text-xs transition font-medium ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs transition font-bold ${
                 activeZone === "surface"
-                  ? "bg-orange-500 text-white font-bold shadow-xs"
+                  ? "bg-orange-500 text-white font-black shadow-xs"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -105,9 +105,9 @@ export function WellSchematicTwin({ wellId, twinState }: WellSchematicTwinProps)
             <button
               type="button"
               onClick={() => setActiveZone("tubing")}
-              className={`px-3 py-1 rounded-lg text-xs transition font-medium ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs transition font-bold ${
                 activeZone === "tubing"
-                  ? "bg-sky-500 text-white font-bold shadow-xs"
+                  ? "bg-sky-500 text-white font-black shadow-xs"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -116,9 +116,9 @@ export function WellSchematicTwin({ wellId, twinState }: WellSchematicTwinProps)
             <button
               type="button"
               onClick={() => setActiveZone("pump")}
-              className={`px-3 py-1 rounded-lg text-xs transition font-medium ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs transition font-bold ${
                 activeZone === "pump"
-                  ? "bg-emerald-500 text-white font-bold shadow-xs"
+                  ? "bg-emerald-500 text-white font-black shadow-xs"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -127,9 +127,9 @@ export function WellSchematicTwin({ wellId, twinState }: WellSchematicTwinProps)
             <button
               type="button"
               onClick={() => setActiveZone("reservoir")}
-              className={`px-3 py-1 rounded-lg text-xs transition font-medium ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs transition font-bold ${
                 activeZone === "reservoir"
-                  ? "bg-amber-500 text-white font-bold shadow-xs"
+                  ? "bg-amber-500 text-white font-black shadow-xs"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -140,13 +140,13 @@ export function WellSchematicTwin({ wellId, twinState }: WellSchematicTwinProps)
           <button
             type="button"
             onClick={() => setIsPlaying((prev) => !prev)}
-            className="p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
+            className="p-2.5 rounded-2xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition cursor-pointer"
             title={isPlaying ? "Pause Motion" : "Resume Motion"}
           >
             {isPlaying ? (
-              <Pause className="w-3.5 h-3.5 text-orange-400" />
+              <Pause className="w-4 h-4 text-orange-400" />
             ) : (
-              <Play className="w-3.5 h-3.5 text-emerald-400" />
+              <Play className="w-4 h-4 text-emerald-400" />
             )}
           </button>
         </div>

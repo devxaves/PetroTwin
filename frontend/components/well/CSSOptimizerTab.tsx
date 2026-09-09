@@ -127,6 +127,16 @@ export function CSSOptimizerTab({
     );
     const heatingRadius = (3.8 + (steamVolume / 1000) * 1.5 + soakDays * 0.25).toFixed(1);
 
+    // Dynamic 60-day Arps hyperbolic decline forecast f(steamVolume, soakDays, cutoffDays)
+    const initialPeakRate = 84.0 * (1 + 0.36 * volRatio + 0.06 * soakRatio);
+    const declineB = 0.48;
+    const declineDi = 0.035 / (1 + 0.18 * volRatio);
+    const dynamicDailyRates: number[] = [];
+    for (let day = 1; day <= cutoffDays; day++) {
+      const rate = initialPeakRate / Math.pow(1 + declineB * declineDi * day, 1 / declineB);
+      dynamicDailyRates.push(Number(rate.toFixed(1)));
+    }
+
     return {
       expectedOil,
       expectedSor,
@@ -143,6 +153,7 @@ export function CSSOptimizerTab({
       heatedFormationTemp,
       reducedViscosity,
       heatingRadius,
+      dynamicDailyRates,
     };
   }, [steamVolume, steamPressure, soakDays, cutoffDays]);
 
@@ -206,14 +217,14 @@ export function CSSOptimizerTab({
 
           <div>
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="text-xs uppercase font-mono font-bold tracking-wider text-slate-400">
+              <span className="text-xs uppercase font-mono font-extrabold tracking-wider text-slate-500">
                 Screening Feasibility Gate &bull; Cycle #{(screening?.cycles_completed ?? 0) + 1}
               </span>
               <span
-                className={`text-xs px-3 py-0.5 rounded-full font-mono font-bold uppercase border ${
+                className={`text-xs px-3.5 py-1 rounded-full font-mono font-black uppercase border ${
                   isCurrentlyUnsafe
-                    ? "bg-amber-50 text-amber-700 border-amber-200"
-                    : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    ? "bg-amber-50 text-amber-900 border-amber-300"
+                    : "bg-emerald-50 text-emerald-900 border-emerald-300"
                 }`}
               >
                 {isCurrentlyUnsafe
@@ -222,13 +233,13 @@ export function CSSOptimizerTab({
               </span>
             </div>
 
-            <h3 className="text-lg sm:text-xl font-bold font-['Space_Grotesk'] text-slate-900 mt-1">
+            <h3 className="text-lg sm:text-xl font-extrabold font-['Space_Grotesk'] text-slate-900 mt-1">
               {isCurrentlyUnsafe
                 ? "Pre-Stimulation Mechanical Workover Required"
                 : "Cycle Approved: Geomechanical & Thermal Limits Validated"}
             </h3>
 
-            <p className="text-xs sm:text-sm text-slate-600 font-sans mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 font-sans mt-1 max-w-2xl leading-relaxed font-medium">
               {isCurrentlyUnsafe
                 ? "Tubing string inspection and sand wash required prior to cycle steam injection. Bitumen column cooling observed."
                 : "Mechanical integrity verified. Caprock geomechanical stress safe at injection pressures up to 13.5 MPa."}
@@ -239,20 +250,20 @@ export function CSSOptimizerTab({
               <button
                 type="button"
                 onClick={() => setIsWorkoverCleared((prev) => !prev)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition border flex items-center gap-1.5 cursor-pointer ${
+                className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition border flex items-center gap-2 cursor-pointer shadow-xs ${
                   isWorkoverCleared
-                    ? "bg-emerald-50 text-emerald-800 border-emerald-300"
-                    : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+                    ? "bg-emerald-50 text-emerald-900 border-emerald-300"
+                    : "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200"
                 }`}
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${isWorkoverCleared ? "text-emerald-600" : "text-slate-500"}`} />
+                <RefreshCw className={`w-4 h-4 ${isWorkoverCleared ? "text-emerald-600" : "text-slate-600"}`} />
                 <span>
                   {isWorkoverCleared
                     ? "Workover Clearance Sign-off: Active (Cleared)"
                     : "Simulate Workover Sign-off"}
                 </span>
               </button>
-              <span className="text-[11px] text-slate-400 font-sans">
+              <span className="text-xs text-slate-500 font-sans font-medium">
                 (Simulate operator mechanical approval)
               </span>
             </div>
@@ -260,15 +271,15 @@ export function CSSOptimizerTab({
         </div>
 
         {/* Water Cut Metric Callout */}
-        <div className="bg-slate-50/90 p-4 rounded-2xl border border-slate-200/80 shrink-0 min-w-[180px] flex flex-col justify-between">
+        <div className="bg-slate-50/90 p-5 rounded-2xl border border-slate-200/80 shrink-0 min-w-[200px] flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs font-mono">
-            <span className="text-slate-400 uppercase font-semibold">Water Cut</span>
-            <span className="text-emerald-700 font-bold">&lt; 65% Limit</span>
+            <span className="text-slate-600 uppercase font-extrabold">Water Cut</span>
+            <span className="text-emerald-800 font-black">&lt; 65% Limit</span>
           </div>
-          <div className="text-3xl font-black font-mono text-slate-900 mt-1">
+          <div className="text-3xl sm:text-4xl font-black font-mono text-slate-900 mt-1">
             {((screening?.current_water_cut ?? 0.5) * 100).toFixed(0)}%
           </div>
-          <div className="w-full h-2 rounded-full bg-slate-200 mt-2 overflow-hidden">
+          <div className="w-full h-2.5 rounded-full bg-slate-200 mt-2.5 overflow-hidden">
             <div
               className="h-full rounded-full bg-sky-500"
               style={{ width: `${(screening?.current_water_cut ?? 0.5) * 100}%` }}
@@ -284,27 +295,27 @@ export function CSSOptimizerTab({
         <div className="lg:col-span-5 p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col gap-5 font-mono">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200 text-orange-600 flex items-center justify-center">
                 <Sliders className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="text-base sm:text-lg font-bold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
+                <h4 className="text-base sm:text-lg font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
                   Operating Parameters
                 </h4>
-                <span className="text-xs text-slate-500 font-sans block mt-0.5">
+                <span className="text-xs text-slate-600 font-sans block mt-0.5 font-medium">
                   Real-time thermo-hydraulic sliders
                 </span>
               </div>
             </div>
 
-            <span className="text-xs px-2.5 py-1 rounded-full font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="text-xs px-3 py-1 rounded-full font-black uppercase bg-emerald-50 text-emerald-800 border border-emerald-300">
               SAFE ENVELOPE
             </span>
           </div>
 
           {/* Preset Buttons for Fast Scenarios */}
           <div className="flex items-center gap-2 text-xs">
-            <span className="text-[11px] text-slate-400 uppercase font-semibold">Presets:</span>
+            <span className="text-xs text-slate-500 uppercase font-extrabold">Presets:</span>
             <button
               type="button"
               onClick={() => {
@@ -313,7 +324,7 @@ export function CSSOptimizerTab({
                 setSoakDays(3);
                 setCutoffDays(50);
               }}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] transition cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition cursor-pointer"
             >
               Eco (1800t)
             </button>
@@ -325,7 +336,7 @@ export function CSSOptimizerTab({
                 setSoakDays(4);
                 setCutoffDays(60);
               }}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] transition cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition cursor-pointer"
             >
               Nominal (2400t)
             </button>
@@ -337,21 +348,21 @@ export function CSSOptimizerTab({
                 setSoakDays(6);
                 setCutoffDays(75);
               }}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] transition cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition cursor-pointer"
             >
               Heavy (3200t)
             </button>
           </div>
 
           {/* Slider 1: Steam Volume */}
-          <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
             <div className="flex justify-between items-baseline">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                 Steam Volume:
               </span>
               <span className="text-xl sm:text-2xl font-black text-orange-600">
                 {steamVolume.toLocaleString()}{" "}
-                <span className="text-xs font-normal text-slate-500">t</span>
+                <span className="text-xs font-semibold text-slate-500">t</span>
               </span>
             </div>
             <input
@@ -361,24 +372,24 @@ export function CSSOptimizerTab({
               step={50}
               value={steamVolume}
               onChange={(e) => setSteamVolume(Number(e.target.value))}
-              className="w-full accent-orange-500 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-orange-500 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="slider-steam-volume"
             />
-            <div className="flex justify-between text-[11px] text-slate-400">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.steam_volume_min} t</span>
               <span>{bounds.steam_volume_max} t</span>
             </div>
           </div>
 
           {/* Slider 2: Injection Pressure */}
-          <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
             <div className="flex justify-between items-baseline">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                 Injection Pressure:
               </span>
               <span className="text-xl sm:text-2xl font-black text-sky-600">
                 {steamPressure.toFixed(1)}{" "}
-                <span className="text-xs font-normal text-slate-500">MPa</span>
+                <span className="text-xs font-semibold text-slate-500">MPa</span>
               </span>
             </div>
             <input
@@ -388,24 +399,24 @@ export function CSSOptimizerTab({
               step={0.1}
               value={steamPressure}
               onChange={(e) => setSteamPressure(Number(e.target.value))}
-              className="w-full accent-sky-500 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-sky-500 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="slider-steam-pressure"
             />
-            <div className="flex justify-between text-[11px] text-slate-400">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.steam_pressure_min} MPa</span>
               <span>{bounds.steam_pressure_max} MPa</span>
             </div>
           </div>
 
           {/* Slider 3: Soak Duration */}
-          <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
             <div className="flex justify-between items-baseline">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                 Soak Duration:
               </span>
               <span className="text-xl sm:text-2xl font-black text-slate-900">
                 {soakDays}{" "}
-                <span className="text-xs font-normal text-slate-500">days</span>
+                <span className="text-xs font-semibold text-slate-500">days</span>
               </span>
             </div>
             <input
@@ -415,24 +426,24 @@ export function CSSOptimizerTab({
               step={1}
               value={soakDays}
               onChange={(e) => setSoakDays(Number(e.target.value))}
-              className="w-full accent-slate-700 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-slate-700 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="slider-soak-days"
             />
-            <div className="flex justify-between text-[11px] text-slate-400">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.soak_days_min} days</span>
               <span>{bounds.soak_days_max} days</span>
             </div>
           </div>
 
           {/* Slider 4: Dynamic Cutoff Override */}
-          <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col gap-2">
             <div className="flex justify-between items-baseline">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                 Production Cutoff:
               </span>
               <span className="text-xl sm:text-2xl font-black text-slate-900">
                 {cutoffDays}{" "}
-                <span className="text-xs font-normal text-slate-500">days</span>
+                <span className="text-xs font-semibold text-slate-500">days</span>
               </span>
             </div>
             <input
@@ -442,10 +453,10 @@ export function CSSOptimizerTab({
               step={5}
               value={cutoffDays}
               onChange={(e) => setCutoffDays(Number(e.target.value))}
-              className="w-full accent-slate-700 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-slate-700 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="slider-cutoff-days"
             />
-            <div className="flex justify-between text-[11px] text-slate-400">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.cutoff_min} days</span>
               <span>{bounds.cutoff_max} days</span>
             </div>
@@ -455,7 +466,7 @@ export function CSSOptimizerTab({
           <button
             onClick={handleRunOptimizerScenario}
             disabled={runScenarioMutation.isPending}
-            className="mt-2 flex items-center justify-center gap-2 py-4 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold font-mono text-sm transition shadow-sm hover:shadow cursor-pointer disabled:opacity-60"
+            className="mt-2 flex items-center justify-center gap-2 py-4 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-black font-mono text-sm sm:text-base transition shadow-sm hover:shadow cursor-pointer disabled:opacity-60 active:scale-95"
             data-testid="btn-run-scenario"
           >
             {runScenarioMutation.isPending ? (
@@ -589,6 +600,47 @@ export function CSSOptimizerTab({
                   <ArrowUpRight className="w-3.5 h-3.5" />
                   +${Math.round(Math.max(0, activeEconDelta)).toLocaleString()}
                 </div>
+              </div>
+            </div>
+
+            {/* Dynamic Forecasted Oil Decline Profile */}
+            <div className="flex flex-col gap-2 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
+              <div className="flex justify-between items-center text-xs">
+                <span className="font-bold text-slate-700 uppercase tracking-wider">
+                  Forecasted Production Profile ({cutoffDays} Days Dynamic Cutoff)
+                </span>
+                <span className="text-slate-500">
+                  Peak: {Math.max(...(runScenarioMutation.data?.evaluation?.daily_rates ?? realTimeResponse.dynamicDailyRates)).toFixed(1)} BOPD &rarr; Cutoff: {(runScenarioMutation.data?.evaluation?.daily_rates ?? realTimeResponse.dynamicDailyRates)[(runScenarioMutation.data?.evaluation?.daily_rates ?? realTimeResponse.dynamicDailyRates).length - 1]?.toFixed(1)} BOPD
+                </span>
+              </div>
+
+              <div className="w-full h-24 relative overflow-hidden mt-1">
+                <svg viewBox="0 0 500 80" className="w-full h-full overflow-visible select-none" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="optGradLive" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ea580c" stopOpacity="0.28" />
+                      <stop offset="100%" stopColor="#ea580c" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  {(() => {
+                    const rates: number[] = runScenarioMutation.data?.evaluation?.daily_rates ?? realTimeResponse.dynamicDailyRates;
+                    if (rates.length < 2) return null;
+                    const maxRate = Math.max(...rates, 1);
+                    const points = rates.map((r: number, i: number) => {
+                      const x = (i / (rates.length - 1)) * 500;
+                      const y = 80 - (r / maxRate) * 70;
+                      return `${x.toFixed(1)},${y.toFixed(1)}`;
+                    });
+                    const linePath = `M ${points.join(" L ")}`;
+                    const areaPath = `M 0,80 L ${points.join(" L ")} L 500,80 Z`;
+                    return (
+                      <>
+                        <path d={areaPath} fill="url(#optGradLive)" />
+                        <path d={linePath} fill="none" stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" />
+                      </>
+                    );
+                  })()}
+                </svg>
               </div>
             </div>
 

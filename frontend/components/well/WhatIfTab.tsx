@@ -85,8 +85,22 @@ export function WhatIfTab({
         spm: whatIfSpm,
         stroke_length: whatIfStroke,
       });
+      const oilVal =
+        res.comparison?.cumulative_oil_bbl?.proposed ??
+        res.comparison?.production_oil_bbl?.proposed ??
+        liveComparison.cumulative_oil_bbl.proposed;
+      const sorVal =
+        res.comparison?.sor?.proposed ?? liveComparison.sor.proposed;
+      const riskVal =
+        res.comparison?.rod_float_risk_score?.proposed ??
+        liveComparison.rod_float_risk_score.proposed;
+      const econVal =
+        res.comparison?.net_economic_value_usd?.proposed ??
+        res.comparison?.economic_value_usd?.proposed ??
+        liveComparison.net_economic_value_usd.proposed;
+
       setWhatIfSuccessMsg(
-        `Coupled scenario converged! Oil: ${res.comparison.cumulative_oil_bbl.proposed.toFixed(1)} bbl, SOR: ${res.comparison.sor.proposed.toFixed(2)}, Rod-Float Risk: ${res.comparison.rod_float_risk_score.proposed} pts, Economic Net Value: $${Math.round(res.comparison.net_economic_value_usd.proposed).toLocaleString()}.`
+        `Coupled scenario converged! Oil: ${oilVal.toFixed(1)} bbl, SOR: ${sorVal.toFixed(2)}, Rod-Float Risk: ${riskVal} pts, Economic Net Value: $${Math.round(econVal).toLocaleString()}.`
       );
     } catch (err: any) {
       setWhatIfErrorMsg(
@@ -259,21 +273,48 @@ export function WhatIfTab({
     whatIfStroke,
   ]);
 
-  const activeComparison =
-    simulateWhatIfMutation.data?.comparison ?? liveComparison;
+  const activeComparison = useMemo(() => {
+    const raw = simulateWhatIfMutation.data?.comparison as Record<string, any> | undefined;
+    if (!raw) return liveComparison;
+
+    return {
+      cumulative_oil_bbl:
+        raw.cumulative_oil_bbl ?? raw.production_oil_bbl ?? liveComparison.cumulative_oil_bbl,
+      production_oil_bbl:
+        raw.production_oil_bbl ?? raw.cumulative_oil_bbl ?? liveComparison.cumulative_oil_bbl,
+      sor: raw.sor ?? liveComparison.sor,
+      energy_intensity_usd_per_bbl:
+        raw.energy_intensity_usd_per_bbl ?? raw.energy_cost_per_bbl ?? liveComparison.energy_intensity_usd_per_bbl,
+      energy_cost_per_bbl:
+        raw.energy_cost_per_bbl ?? raw.energy_intensity_usd_per_bbl ?? liveComparison.energy_intensity_usd_per_bbl,
+      rod_float_risk_score: raw.rod_float_risk_score ?? liveComparison.rod_float_risk_score,
+      net_economic_value_usd:
+        raw.net_economic_value_usd ?? raw.economic_value_usd ?? liveComparison.net_economic_value_usd,
+      economic_value_usd:
+        raw.economic_value_usd ?? raw.net_economic_value_usd ?? liveComparison.net_economic_value_usd,
+      pump_volumetric_efficiency:
+        raw.pump_volumetric_efficiency ?? liveComparison.pump_volumetric_efficiency,
+    };
+  }, [simulateWhatIfMutation.data, liveComparison]);
 
   // Real-time dynamic explainability rationales (fixed string typo for negative delta)
   const dynamicRationales = useMemo(() => {
-    const deltaUSD = activeComparison.net_economic_value_usd.delta;
+    const econObj = activeComparison?.net_economic_value_usd;
+    const deltaUSD = econObj?.delta ?? 0;
+    const proposedEcon = econObj?.proposed ?? 0;
     const econMsg =
       deltaUSD >= 0
         ? `driving a net economic gain of +$${Math.round(deltaUSD).toLocaleString()} over baseline`
-        : `reflecting an economic margin of $${Math.round(activeComparison.net_economic_value_usd.proposed).toLocaleString()} (-$${Math.round(Math.abs(deltaUSD)).toLocaleString()} vs baseline)`;
+        : `reflecting an economic margin of $${Math.round(proposedEcon).toLocaleString()} (-$${Math.round(Math.abs(deltaUSD)).toLocaleString()} vs baseline)`;
+
+    const effVal = activeComparison?.pump_volumetric_efficiency?.proposed ?? 85;
+    const riskVal = activeComparison?.rod_float_risk_score?.proposed ?? 30;
+    const sorVal = activeComparison?.sor?.proposed ?? 3.5;
 
     return [
       `Coupled What-If solver simulates non-isothermal reservoir Darcy drainage coupled with downstroke rod string buoyancy mechanics.`,
-      `Pumping cadence set at ${whatIfSpm.toFixed(1)} SPM with ${whatIfStroke}" stroke produces ${activeComparison.pump_volumetric_efficiency.proposed}% volumetric fillage while maintaining rod-float risk at ${activeComparison.rod_float_risk_score.proposed} pts (${activeComparison.rod_float_risk_score.proposed < 35 ? "LOW" : activeComparison.rod_float_risk_score.proposed < 60 ? "MODERATE" : "HIGH"}).`,
-      `Steam volume of ${whatIfSteam.toLocaleString()}t at ${whatIfPressure.toFixed(1)} MPa optimizes SOR to ${activeComparison.sor.proposed} t/bbl, ${econMsg}.`,
+      `Pumping cadence set at ${whatIfSpm.toFixed(1)} SPM with ${whatIfStroke}" stroke produces ${effVal}% volumetric fillage while maintaining rod-float risk at ${riskVal} pts (${riskVal < 35 ? "LOW" : riskVal < 60 ? "MODERATE" : "HIGH"}).`,
+      `Steam volume of ${whatIfSteam.toLocaleString()}t at ${whatIfPressure.toFixed(1)} MPa optimizes SOR to ${sorVal} t/bbl, ${econMsg}.`,
     ];
   }, [
     whatIfSteam,
@@ -290,16 +331,16 @@ export function WhatIfTab({
       <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col gap-5 font-mono">
         <div className="flex flex-wrap items-center justify-between border-b border-slate-100 pb-4 gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200 text-orange-600 flex items-center justify-center">
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-base sm:text-lg font-bold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
+              <h4 className="text-base sm:text-lg font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
                 Coupled What-If Operating Sliders
               </h4>
               <div className="flex items-center gap-2 mt-0.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs text-emerald-700 font-semibold font-sans">
+                <span className="text-xs text-emerald-800 font-bold font-sans">
                   Real-time Coupled Thermal &amp; Mechanical Solver
                 </span>
               </div>
@@ -309,7 +350,7 @@ export function WhatIfTab({
           <button
             onClick={handleRunWhatIf}
             disabled={simulateWhatIfMutation.isPending}
-            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold transition shadow-sm hover:shadow text-xs sm:text-sm cursor-pointer disabled:opacity-60"
+            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-black transition shadow-sm hover:shadow text-xs sm:text-sm cursor-pointer disabled:opacity-60 active:scale-95"
             data-testid="btn-simulate-whatif"
           >
             {simulateWhatIfMutation.isPending ? (
@@ -325,7 +366,7 @@ export function WhatIfTab({
 
         {/* 4 Quick Scenario Presets */}
         <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">
+          <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider mr-1">
             Presets:
           </span>
           <button
@@ -338,7 +379,7 @@ export function WhatIfTab({
               setWhatIfSpm(5.5);
               setWhatIfStroke(120);
             }}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold transition cursor-pointer"
           >
             Balanced Target
           </button>
@@ -352,7 +393,7 @@ export function WhatIfTab({
               setWhatIfSpm(6.8);
               setWhatIfStroke(144);
             }}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold transition cursor-pointer"
           >
             Max Oil Recovery
           </button>
@@ -366,7 +407,7 @@ export function WhatIfTab({
               setWhatIfSpm(4.5);
               setWhatIfStroke(100);
             }}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold transition cursor-pointer"
           >
             Energy Conservation
           </button>
@@ -380,23 +421,22 @@ export function WhatIfTab({
               setWhatIfSpm(4.0);
               setWhatIfStroke(120);
             }}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold transition cursor-pointer"
           >
             Rod-Float Mitigation
           </button>
         </div>
 
-
         {/* Feedback alerts */}
         {whatIfSuccessMsg && (
-          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-mono flex items-start justify-between gap-2 transition-all">
-            <div className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs font-mono flex items-start justify-between gap-2 transition-all">
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <div className="font-bold uppercase tracking-wider text-emerald-800">
+                <div className="font-black uppercase tracking-wider text-emerald-900 text-xs sm:text-sm">
                   Coupled Scenario Converged
                 </div>
-                <div className="mt-0.5 leading-relaxed text-emerald-700 font-sans text-xs">
+                <div className="mt-1 leading-relaxed text-emerald-800 font-sans text-xs sm:text-sm font-medium">
                   {whatIfSuccessMsg}
                 </div>
               </div>
@@ -411,14 +451,14 @@ export function WhatIfTab({
         )}
 
         {whatIfErrorMsg && (
-          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-900 text-xs font-mono flex items-start justify-between gap-2 transition-all">
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-rose-50 border border-rose-300 text-rose-950 text-xs font-mono flex items-start justify-between gap-2 transition-all">
+            <div className="flex items-start gap-2.5">
+              <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
               <div>
-                <div className="font-bold uppercase tracking-wider text-rose-800">
+                <div className="font-black uppercase tracking-wider text-rose-900 text-xs sm:text-sm">
                   Simulation Constraint Notice
                 </div>
-                <div className="mt-0.5 leading-relaxed text-rose-700 font-sans text-xs">
+                <div className="mt-1 leading-relaxed text-rose-800 font-sans text-xs sm:text-sm font-medium">
                   {whatIfErrorMsg}
                 </div>
               </div>
@@ -432,16 +472,15 @@ export function WhatIfTab({
           </div>
         )}
 
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 text-xs font-mono">
           {/* Steam Volume */}
-          <div className="flex flex-col gap-2 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
+          <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80">
             <div className="flex justify-between items-baseline">
-              <span className="text-slate-500 uppercase font-bold text-[11px]">
+              <span className="text-slate-600 uppercase font-extrabold text-xs">
                 Steam Vol:
               </span>
               <span className="text-lg sm:text-xl font-black text-orange-600">
-                {whatIfSteam} <span className="text-xs font-normal">t</span>
+                {whatIfSteam} <span className="text-xs font-semibold text-slate-500">t</span>
               </span>
             </div>
             <input
@@ -451,23 +490,23 @@ export function WhatIfTab({
               step={50}
               value={whatIfSteam}
               onChange={(e) => setWhatIfSteam(Number(e.target.value))}
-              className="w-full accent-orange-500 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-orange-500 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="whatif-slider-steam"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.steam_volume_min} t</span>
               <span>{bounds.steam_volume_max} t</span>
             </div>
           </div>
 
           {/* Steam Pressure */}
-          <div className="flex flex-col gap-2 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
+          <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80">
             <div className="flex justify-between items-baseline">
-              <span className="text-slate-500 uppercase font-bold text-[11px]">
+              <span className="text-slate-600 uppercase font-extrabold text-xs">
                 Pressure:
               </span>
               <span className="text-lg sm:text-xl font-black text-sky-600">
-                {whatIfPressure.toFixed(1)} <span className="text-xs font-normal">MPa</span>
+                {whatIfPressure.toFixed(1)} <span className="text-xs font-semibold text-slate-500">MPa</span>
               </span>
             </div>
             <input
@@ -477,23 +516,23 @@ export function WhatIfTab({
               step={0.1}
               value={whatIfPressure}
               onChange={(e) => setWhatIfPressure(Number(e.target.value))}
-              className="w-full accent-sky-500 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-sky-500 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="whatif-slider-pressure"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.steam_pressure_min} MPa</span>
               <span>{bounds.steam_pressure_max} MPa</span>
             </div>
           </div>
 
           {/* Soak Days */}
-          <div className="flex flex-col gap-2 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
+          <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80">
             <div className="flex justify-between items-baseline">
-              <span className="text-slate-500 uppercase font-bold text-[11px]">
+              <span className="text-slate-600 uppercase font-extrabold text-xs">
                 Soak:
               </span>
               <span className="text-lg sm:text-xl font-black text-slate-900">
-                {whatIfSoak} <span className="text-xs font-normal">days</span>
+                {whatIfSoak} <span className="text-xs font-semibold text-slate-500">days</span>
               </span>
             </div>
             <input
@@ -503,23 +542,23 @@ export function WhatIfTab({
               step={1}
               value={whatIfSoak}
               onChange={(e) => setWhatIfSoak(Number(e.target.value))}
-              className="w-full accent-slate-700 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-slate-700 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="whatif-slider-soak"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.soak_days_min}d</span>
               <span>{bounds.soak_days_max}d</span>
             </div>
           </div>
 
           {/* Cutoff Days */}
-          <div className="flex flex-col gap-2 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
+          <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80">
             <div className="flex justify-between items-baseline">
-              <span className="text-slate-500 uppercase font-bold text-[11px]">
+              <span className="text-slate-600 uppercase font-extrabold text-xs">
                 Cutoff:
               </span>
               <span className="text-lg sm:text-xl font-black text-slate-900">
-                {whatIfCutoff} <span className="text-xs font-normal">days</span>
+                {whatIfCutoff} <span className="text-xs font-semibold text-slate-500">days</span>
               </span>
             </div>
             <input
@@ -529,23 +568,23 @@ export function WhatIfTab({
               step={5}
               value={whatIfCutoff}
               onChange={(e) => setWhatIfCutoff(Number(e.target.value))}
-              className="w-full accent-slate-700 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-slate-700 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="whatif-slider-cutoff"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.cutoff_min}d</span>
               <span>{bounds.cutoff_max}d</span>
             </div>
           </div>
 
           {/* SPM */}
-          <div className="flex flex-col gap-2 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
+          <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80">
             <div className="flex justify-between items-baseline">
-              <span className="text-slate-500 uppercase font-bold text-[11px]">
+              <span className="text-slate-600 uppercase font-extrabold text-xs">
                 Cadence:
               </span>
-              <span className="text-lg sm:text-xl font-black text-emerald-700">
-                {whatIfSpm.toFixed(1)} <span className="text-xs font-normal">SPM</span>
+              <span className="text-lg sm:text-xl font-black text-emerald-800">
+                {whatIfSpm.toFixed(1)} <span className="text-xs font-semibold text-slate-500">SPM</span>
               </span>
             </div>
             <input
@@ -555,19 +594,19 @@ export function WhatIfTab({
               step={0.1}
               value={whatIfSpm}
               onChange={(e) => setWhatIfSpm(Number(e.target.value))}
-              className="w-full accent-emerald-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-emerald-600 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="whatif-slider-spm"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.spm_min} SPM</span>
               <span>{bounds.spm_max} SPM</span>
             </div>
           </div>
 
           {/* Stroke Length */}
-          <div className="flex flex-col gap-2 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80">
+          <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-slate-200/80">
             <div className="flex justify-between items-baseline">
-              <span className="text-slate-500 uppercase font-bold text-[11px]">
+              <span className="text-slate-600 uppercase font-extrabold text-xs">
                 Stroke Travel:
               </span>
               <span className="text-lg sm:text-xl font-black text-slate-900">
@@ -581,10 +620,10 @@ export function WhatIfTab({
               step={5}
               value={whatIfStroke}
               onChange={(e) => setWhatIfStroke(Number(e.target.value))}
-              className="w-full accent-slate-700 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              className="w-full accent-slate-700 cursor-pointer h-2.5 bg-slate-200 rounded-lg"
               data-testid="whatif-slider-stroke"
             />
-            <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+            <div className="flex justify-between text-xs text-slate-500 font-medium">
               <span>{bounds.stroke_min}&quot;</span>
               <span>{bounds.stroke_max}&quot;</span>
             </div>
@@ -668,6 +707,24 @@ export function WhatIfTab({
         <div className="lg:col-span-7">
           <ParetoChart
             points={paretoData?.pareto_front ?? []}
+            liveScenario={{
+              sor: activeComparison.sor.proposed,
+              cumulative_oil_bbl: activeComparison.cumulative_oil_bbl.proposed,
+              steam_volume_t: whatIfSteam,
+              steam_pressure_mpa: whatIfPressure,
+              soak_days: whatIfSoak,
+              production_cutoff_days: whatIfCutoff,
+              spm: whatIfSpm,
+              stroke_length: whatIfStroke,
+              net_economic_value_usd: activeComparison.net_economic_value_usd.proposed,
+              rod_float_risk_score: activeComparison.rod_float_risk_score.proposed,
+            }}
+            baselineScenario={{
+              sor: dynamicBaseline.sor,
+              cumulative_oil_bbl: dynamicBaseline.oil,
+              net_economic_value_usd: dynamicBaseline.econ,
+              rod_float_risk_score: dynamicBaseline.risk,
+            }}
             onSelectPoint={(pt) => {
               setWhatIfSteam(pt.steam_volume_t);
               setWhatIfPressure(pt.steam_pressure_mpa);

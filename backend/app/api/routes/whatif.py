@@ -217,8 +217,14 @@ async def simulate_whatif_scenario(
         "production_oil_bbl": make_metric(
             cur_css_eval["predicted_oil_bbl"], prop_css_eval["predicted_oil_bbl"]
         ),
+        "cumulative_oil_bbl": make_metric(
+            cur_css_eval["predicted_oil_bbl"], prop_css_eval["predicted_oil_bbl"]
+        ),
         "sor": make_metric(cur_css_eval["sor"], prop_css_eval["sor"]),
         "energy_cost_per_bbl": make_metric(
+            cur_css_eval["energy_cost_per_bbl"], prop_css_eval["energy_cost_per_bbl"]
+        ),
+        "energy_intensity_usd_per_bbl": make_metric(
             cur_css_eval["energy_cost_per_bbl"], prop_css_eval["energy_cost_per_bbl"]
         ),
         "rod_float_risk_score": make_metric(
@@ -230,6 +236,9 @@ async def simulate_whatif_scenario(
             prop_coupled["pump"]["volumetric_efficiency"],
         ),
         "economic_value_usd": make_metric(
+            cur_css_eval["economic_value"], prop_css_eval["economic_value"]
+        ),
+        "net_economic_value_usd": make_metric(
             cur_css_eval["economic_value"], prop_css_eval["economic_value"]
         ),
     }

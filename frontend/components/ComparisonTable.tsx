@@ -98,14 +98,14 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
     >
       <div className="p-4 sm:p-5 bg-slate-50/90 border-b border-slate-200/90 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h4 className="text-sm sm:text-base font-bold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
+          <h4 className="text-sm sm:text-base font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
             Baseline vs. Proposed Operational Comparison
           </h4>
-          <span className="text-xs text-slate-500 font-sans mt-0.5 block">
+          <span className="text-xs text-slate-600 font-sans mt-0.5 block font-medium">
             Coupled reservoir and mechanical subsystem evaluation matrix
           </span>
         </div>
-        <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+        <span className="text-xs font-mono font-extrabold text-emerald-800 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">
           Coupled Solver Engine
         </span>
       </div>
@@ -113,12 +113,12 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
       <div className="overflow-x-auto">
         <table className="w-full text-left font-mono text-xs sm:text-sm" data-testid="comparison-table">
           <thead>
-            <tr className="border-b border-slate-200 text-xs text-slate-500 uppercase font-bold bg-slate-100/60">
-              <th className="py-3.5 px-5 font-bold">Metric</th>
-              <th className="py-3.5 px-5 text-right font-bold">Current Baseline</th>
-              <th className="py-3.5 px-5 text-right font-bold">Proposed Scenario</th>
-              <th className="py-3.5 px-5 text-right font-bold">Delta</th>
-              <th className="py-3.5 px-5 text-right font-bold">Impact</th>
+            <tr className="border-b border-slate-200 text-xs text-slate-700 uppercase font-extrabold bg-slate-100/80 tracking-wider">
+              <th className="py-4 px-5">Metric</th>
+              <th className="py-4 px-5 text-right">Current Baseline</th>
+              <th className="py-4 px-5 text-right">Proposed Scenario</th>
+              <th className="py-4 px-5 text-right">Delta</th>
+              <th className="py-4 px-5 text-right">Impact</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -128,29 +128,29 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
                 ? row.delta < 0
                 : row.delta > 0;
 
-              let deltaColor = "text-slate-500";
-              let badgeColor = "bg-slate-100 text-slate-600 border border-slate-200";
+              let deltaColor = "text-slate-600";
+              let badgeColor = "bg-slate-100 text-slate-700 border border-slate-200";
               if (!isZero) {
-                deltaColor = isFavorable ? "text-emerald-600" : "text-rose-600";
+                deltaColor = isFavorable ? "text-emerald-700" : "text-rose-700";
                 badgeColor = isFavorable
-                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80"
-                  : "bg-rose-50 text-rose-700 border border-rose-200/80";
+                  ? "bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold"
+                  : "bg-rose-50 text-rose-800 border border-rose-300 font-bold";
               }
 
               return (
                 <tr
                   key={row.metricKey}
-                  className="hover:bg-orange-50/20 transition-colors"
+                  className="hover:bg-orange-50/30 transition-colors"
                   data-testid={`row-${row.metricKey}`}
                 >
-                  <td className="py-4 px-5 font-sans text-slate-900 font-semibold text-xs sm:text-sm">
+                  <td className="py-4 px-5 font-sans text-slate-900 font-bold text-xs sm:text-sm">
                     {row.label}
                   </td>
-                  <td className="py-4 px-5 text-right text-slate-600">
+                  <td className="py-4 px-5 text-right text-slate-700 font-semibold">
                     {row.current.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}{" "}
-                    <span className="text-xs text-slate-400 font-normal">{row.unit}</span>
+                    <span className="text-xs text-slate-500 font-medium">{row.unit}</span>
                   </td>
                   <td
                     className="py-4 px-5 text-right font-black text-slate-900 text-sm sm:text-base"
@@ -159,7 +159,7 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
                     {row.proposed.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}{" "}
-                    <span className="text-xs text-slate-500 font-normal">{row.unit}</span>
+                    <span className="text-xs text-slate-600 font-medium">{row.unit}</span>
                   </td>
                   <td
                     className={`py-4 px-5 text-right font-black ${deltaColor}`}
@@ -183,7 +183,7 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
                   </td>
                   <td className="py-4 px-5 text-right">
                     <span
-                      className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide ${badgeColor}`}
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-extrabold tracking-wide ${badgeColor}`}
                       data-testid={`badge-${row.metricKey}`}
                     >
                       {isZero
