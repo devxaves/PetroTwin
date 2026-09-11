@@ -18,13 +18,9 @@ import { SAFE_OPERATING_ENVELOPE } from "./index";
 import {
   Play,
   Sliders,
-  Sparkles,
   CheckCircle2,
   AlertTriangle,
   RefreshCw,
-  Flame,
-  Gauge,
-  Activity,
 } from "lucide-react";
 
 interface WhatIfTabProps {
@@ -101,9 +97,10 @@ export function WhatIfTab({
       setWhatIfSuccessMsg(
         `Coupled scenario converged! Oil: ${oilVal.toFixed(1)} bbl, SOR: ${sorVal.toFixed(2)}, Rod-Float Risk: ${riskVal} pts, Economic Net Value: $${Math.round(econVal).toLocaleString()}.`
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
       setWhatIfErrorMsg(
-        err?.message || "Simulation failed. Please verify operating envelope limits."
+        msg || "Simulation failed. Please verify operating envelope limits."
       );
     }
   };

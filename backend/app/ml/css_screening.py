@@ -46,7 +46,12 @@ async def screen_well_for_css(
     reasons: list[str] = []
 
     # 1. Check recent failure events (within last 30 days or unresolved)
-    q_fail = select(Failure).where(Failure.well_id == well_id).order_by(desc(Failure.event_time)).limit(1)
+    q_fail = (
+        select(Failure)
+        .where(Failure.well_id == well_id)
+        .order_by(desc(Failure.event_time))
+        .limit(1)
+    )
     latest_failure = (await session.execute(q_fail)).scalar_one_or_none()
 
     # Consider failures in the last 20 days or critical severity as blocking
@@ -85,12 +90,20 @@ async def screen_well_for_css(
     latest_card = (await session.execute(q_card)).scalar_one_or_none()
 
     q_telem = (
-        select(SRPTelemetry).where(SRPTelemetry.well_id == well_id).order_by(desc(SRPTelemetry.timestamp)).limit(1)
+        select(SRPTelemetry)
+        .where(SRPTelemetry.well_id == well_id)
+        .order_by(desc(SRPTelemetry.timestamp))
+        .limit(1)
     )
     latest_telem = (await session.execute(q_telem)).scalar_one_or_none()
     spm = latest_telem.spm if latest_telem else 8.0
 
-    q_prod = select(Production).where(Production.well_id == well_id).order_by(desc(Production.timestamp)).limit(1)
+    q_prod = (
+        select(Production)
+        .where(Production.well_id == well_id)
+        .order_by(desc(Production.timestamp))
+        .limit(1)
+    )
     latest_prod = (await session.execute(q_prod)).scalar_one_or_none()
     temp_c = latest_prod.temperature_c if latest_prod else 50.0
     water_cut = latest_prod.water_cut if latest_prod else 0.55
@@ -102,7 +115,9 @@ async def screen_well_for_css(
         min_load = min(loads)
         downstroke_loads = [p["load"] for p in card_pts[len(card_pts) // 2 :]]
         mean_ds = sum(downstroke_loads) / len(downstroke_loads)
-        var_ds = sum((x - mean_ds) ** 2 for x in downstroke_loads) / len(downstroke_loads)
+        var_ds = sum((x - mean_ds) ** 2 for x in downstroke_loads) / len(
+            downstroke_loads
+        )
 
         # Max spike
         derivatives = []
@@ -176,7 +191,10 @@ async def screen_well_for_css(
 
     # 4. Forward cycle forecast (determine next cycle number)
     q_max_cycle = (
-        select(CSSCycle.cycle_id).where(CSSCycle.well_id == well_id).order_by(desc(CSSCycle.cycle_id)).limit(1)
+        select(CSSCycle.cycle_id)
+        .where(CSSCycle.well_id == well_id)
+        .order_by(desc(CSSCycle.cycle_id))
+        .limit(1)
     )
     max_c_id = (await session.execute(q_max_cycle)).scalar_one_or_none()
     next_cycle_num = (max_c_id or 0) + 1
@@ -199,7 +217,10 @@ async def screen_well_for_css(
         )
         classification = "poor"
         can_stimulate = False
-    elif predicted_oil < MARGINAL_ECONOMIC_OIL_BBL or water_cut > WATER_CUT_MARGINAL_THRESHOLD:
+    elif (
+        predicted_oil < MARGINAL_ECONOMIC_OIL_BBL
+        or water_cut > WATER_CUT_MARGINAL_THRESHOLD
+    ):
         reasons.append(
             f"Moderate incremental recovery ({predicted_oil:.0f} bbl) with elevated water cut ({water_cut * 100:.1f}%)."
         )

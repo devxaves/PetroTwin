@@ -5,7 +5,9 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """Application configuration loaded from environment variables / .env file."""
 
-    database_url: str = "postgresql+asyncpg://petrotwin:petrotwin@localhost:5432/petrotwin"
+    database_url: str = (
+        "postgresql+asyncpg://petrotwin:petrotwin@localhost:5432/petrotwin"
+    )
     redis_url: str = "redis://localhost:6379/0"
     cors_origins: list[str] = ["http://localhost:3000"]
     debug: bool = False
@@ -19,7 +21,9 @@ class Settings(BaseSettings):
             v = v.strip()
             if v.startswith("postgres://"):
                 v = v.replace("postgres://", "postgresql+asyncpg://", 1)
-            elif v.startswith("postgresql://") and not v.startswith("postgresql+asyncpg://"):
+            elif v.startswith("postgresql://") and not v.startswith(
+                "postgresql+asyncpg://"
+            ):
                 v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
         return v
 

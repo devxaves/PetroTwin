@@ -16,31 +16,47 @@ def test_envelope_rejection_on_out_of_bounds_parameters():
     """Verify hard envelope validation rejects all out-of-bounds parameters."""
     # 1. Excess steam volume
     with pytest.raises(ValueError, match="Steam volume"):
-        validate_envelope_parameters(steam_volume_t=4500.0, steam_pressure_mpa=11.0, soak_days=4)
+        validate_envelope_parameters(
+            steam_volume_t=4500.0, steam_pressure_mpa=11.0, soak_days=4
+        )
 
     # 2. Too low steam volume
     with pytest.raises(ValueError, match="Steam volume"):
-        validate_envelope_parameters(steam_volume_t=800.0, steam_pressure_mpa=11.0, soak_days=4)
+        validate_envelope_parameters(
+            steam_volume_t=800.0, steam_pressure_mpa=11.0, soak_days=4
+        )
 
     # 3. Excess steam pressure (geomechanical fracture breach)
     with pytest.raises(ValueError, match="Steam pressure"):
-        validate_envelope_parameters(steam_volume_t=2500.0, steam_pressure_mpa=15.0, soak_days=4)
+        validate_envelope_parameters(
+            steam_volume_t=2500.0, steam_pressure_mpa=15.0, soak_days=4
+        )
 
     # 4. Too low steam pressure
     with pytest.raises(ValueError, match="Steam pressure"):
-        validate_envelope_parameters(steam_volume_t=2500.0, steam_pressure_mpa=5.0, soak_days=4)
+        validate_envelope_parameters(
+            steam_volume_t=2500.0, steam_pressure_mpa=5.0, soak_days=4
+        )
 
     # 5. Out of bounds soak time
     with pytest.raises(ValueError, match="Soak duration"):
-        validate_envelope_parameters(steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=1)
+        validate_envelope_parameters(
+            steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=1
+        )
     with pytest.raises(ValueError, match="Soak duration"):
-        validate_envelope_parameters(steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=10)
+        validate_envelope_parameters(
+            steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=10
+        )
 
     # 6. Out of bounds cutoff days
     with pytest.raises(ValueError, match="Production cutoff"):
-        validate_envelope_parameters(steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=4, cutoff_days=20)
+        validate_envelope_parameters(
+            steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=4, cutoff_days=20
+        )
     with pytest.raises(ValueError, match="Production cutoff"):
-        validate_envelope_parameters(steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=4, cutoff_days=250)
+        validate_envelope_parameters(
+            steam_volume_t=2500.0, steam_pressure_mpa=11.0, soak_days=4, cutoff_days=250
+        )
 
 
 def test_optimizer_never_violates_envelope_across_seeds():
@@ -54,10 +70,24 @@ def test_optimizer_never_violates_envelope_across_seeds():
             soak = opt["soak_days"]
             cutoff = opt["production_cutoff_days"]
 
-            assert SAFE_ENVELOPE["steam_volume_min_t"] <= vol <= SAFE_ENVELOPE["steam_volume_max_t"]
-            assert SAFE_ENVELOPE["steam_pressure_min_mpa"] <= press <= SAFE_ENVELOPE["steam_pressure_max_mpa"]
-            assert SAFE_ENVELOPE["soak_days_min"] <= soak <= SAFE_ENVELOPE["soak_days_max"]
-            assert SAFE_ENVELOPE["production_cutoff_min_days"] <= cutoff <= SAFE_ENVELOPE["production_cutoff_max_days"]
+            assert (
+                SAFE_ENVELOPE["steam_volume_min_t"]
+                <= vol
+                <= SAFE_ENVELOPE["steam_volume_max_t"]
+            )
+            assert (
+                SAFE_ENVELOPE["steam_pressure_min_mpa"]
+                <= press
+                <= SAFE_ENVELOPE["steam_pressure_max_mpa"]
+            )
+            assert (
+                SAFE_ENVELOPE["soak_days_min"] <= soak <= SAFE_ENVELOPE["soak_days_max"]
+            )
+            assert (
+                SAFE_ENVELOPE["production_cutoff_min_days"]
+                <= cutoff
+                <= SAFE_ENVELOPE["production_cutoff_max_days"]
+            )
 
 
 def test_dynamic_cutoff_stopping_point_accuracy():
@@ -97,6 +127,6 @@ async def test_optimizer_recommended_scenario_beats_historical_average():
     hist_val = hist["avg_economic_value"]
     rec_val = recommended["economic_value"]
 
-    assert rec_val >= hist_val, (
-        f"Recommended cycle value (${rec_val:,.2f}) must be >= historical average (${hist_val:,.2f})"
-    )
+    assert (
+        rec_val >= hist_val
+    ), f"Recommended cycle value (${rec_val:,.2f}) must be >= historical average (${hist_val:,.2f})"

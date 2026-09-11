@@ -55,18 +55,24 @@ async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
         logger.info("PostgreSQL database connection verified.")
     except Exception as exc:
         logger.error(f"Cannot connect to PostgreSQL at {settings.database_url}: {exc}")
-        raise RuntimeError(f"Cannot connect to PostgreSQL at {settings.database_url}: {exc}") from exc
+        raise RuntimeError(
+            f"Cannot connect to PostgreSQL at {settings.database_url}: {exc}"
+        ) from exc
 
     import redis.asyncio as aioredis
 
     if settings.redis_url and "localhost" not in settings.redis_url:
         try:
-            redis_client = aioredis.from_url(settings.redis_url, decode_responses=True, socket_connect_timeout=3)
+            redis_client = aioredis.from_url(
+                settings.redis_url, decode_responses=True, socket_connect_timeout=3
+            )
             await redis_client.ping()
             logger.info("Redis connection verified.")
             await redis_client.aclose()
         except Exception as exc:
-            logger.warning(f"Redis unavailable at {settings.redis_url}: {exc}. Running in non-cached mode.")
+            logger.warning(
+                f"Redis unavailable at {settings.redis_url}: {exc}. Running in non-cached mode."
+            )
     else:
         logger.info("No remote Redis instance configured. Running in non-cached mode.")
 
@@ -109,7 +115,9 @@ async def metrics_and_logging_middleware(request: Request, call_next):
         status_code = str(response.status_code)
     except Exception as exc:
         status_code = "500"
-        logger.error(f"Unhandled exception on {method} {endpoint}: {exc}", exc_info=True)
+        logger.error(
+            f"Unhandled exception on {method} {endpoint}: {exc}", exc_info=True
+        )
         raise exc
     finally:
         duration = time.time() - start_time

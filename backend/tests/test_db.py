@@ -21,7 +21,9 @@ async def test_db_timescaledb_extension():
     """
     async with engine.connect() as conn:
         result = await conn.execute(
-            text("SELECT EXISTS(  SELECT 1 FROM pg_available_extensions WHERE name = 'timescaledb')")
+            text(
+                "SELECT EXISTS(  SELECT 1 FROM pg_available_extensions WHERE name = 'timescaledb')"
+            )
         )
         available = result.scalar()
     assert available is True

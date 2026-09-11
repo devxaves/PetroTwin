@@ -2,16 +2,7 @@
 
 import React, { useState, useMemo, useRef } from "react";
 import type { ProductionRecord } from "@/lib/api/types";
-import {
-  TrendingUp,
-  Thermometer,
-  Droplets,
-  Calendar,
-  Layers,
-  Gauge,
-  Activity,
-  Zap,
-} from "lucide-react";
+
 
 interface ProductionTrendChartProps {
   records: ProductionRecord[];
@@ -51,7 +42,6 @@ export function ProductionTrendChart({ records }: ProductionTrendChartProps) {
   const [metricView, setMetricView] = useState<ChartMetricView>("coupled");
   const [timeRange, setTimeRange] = useState<TimeRangeView>(14);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   // Filter records by selected time range
@@ -153,9 +143,6 @@ export function ProductionTrendChart({ records }: ProductionTrendChartProps) {
     bopdValues.reduce((a, b) => a + b, 0) / bopdValues.length
   ).toFixed(1);
   const peakBopd = Math.max(...bopdValues).toFixed(1);
-  const avgTemp = (
-    tempValues.reduce((a, b) => a + b, 0) / tempValues.length
-  ).toFixed(1);
   const avgCut = (
     cutValues.reduce((a, b) => a + b, 0) / cutValues.length
   ).toFixed(0);
@@ -293,8 +280,6 @@ export function ProductionTrendChart({ records }: ProductionTrendChartProps) {
             const rect = svgRef.current?.getBoundingClientRect();
             if (rect) {
               const svgX = ((e.clientX - rect.left) / rect.width) * width;
-              const svgY = ((e.clientY - rect.top) / rect.height) * height;
-              setMousePos({ x: svgX, y: svgY });
 
               // Snap to closest data point
               let closestIdx = 0;
@@ -310,7 +295,6 @@ export function ProductionTrendChart({ records }: ProductionTrendChartProps) {
             }
           }}
           onMouseLeave={() => {
-            setMousePos(null);
             setHoveredIndex(null);
           }}
         >

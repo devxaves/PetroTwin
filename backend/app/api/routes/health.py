@@ -25,7 +25,9 @@ async def health_check() -> dict:
         db_status = "disconnected"
 
     # Check Redis
-    redis_client = aioredis.from_url(settings.redis_url, decode_responses=True, socket_connect_timeout=5)
+    redis_client = aioredis.from_url(
+        settings.redis_url, decode_responses=True, socket_connect_timeout=5
+    )
     try:
         await redis_client.ping()
     except Exception:

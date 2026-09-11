@@ -34,12 +34,22 @@ router = APIRouter(prefix="/wells", tags=["css-optimizer"])
 class CSSScenarioRequest(BaseModel):
     cycle_number: int = Field(..., ge=1, description="Target CSS cycle number")
     steam_volume_t: float = Field(..., description="Steam volume in metric tonnes")
-    steam_pressure_mpa: float = Field(..., description="Steam injection pressure in MPa")
+    steam_pressure_mpa: float = Field(
+        ..., description="Steam injection pressure in MPa"
+    )
     soak_days: int = Field(..., description="Soak duration in days")
-    custom_cutoff_days: int | None = Field(None, description="Optional manual cutoff override in days")
-    oil_price: float | None = Field(None, gt=0, description="Crude oil price in USD/bbl")
-    gas_price: float | None = Field(None, gt=0, description="Natural gas price in USD/GJ")
-    electricity_price: float | None = Field(None, gt=0, description="Electricity price in USD/kWh")
+    custom_cutoff_days: int | None = Field(
+        None, description="Optional manual cutoff override in days"
+    )
+    oil_price: float | None = Field(
+        None, gt=0, description="Crude oil price in USD/bbl"
+    )
+    gas_price: float | None = Field(
+        None, gt=0, description="Natural gas price in USD/GJ"
+    )
+    electricity_price: float | None = Field(
+        None, gt=0, description="Electricity price in USD/kWh"
+    )
 
 
 class CSSScreeningResponse(BaseModel):
@@ -120,7 +130,9 @@ async def get_css_recommendation(
     )
 
     oil_delta = round(recommended["expected_oil_bbl"] - hist["avg_cum_oil_bbl"], 2)
-    econ_delta = round(recommended["expected_economic_value"] - hist["avg_economic_value"], 2)
+    econ_delta = round(
+        recommended["expected_economic_value"] - hist["avg_economic_value"], 2
+    )
     sor_delta = round(recommended["expected_sor"] - hist["avg_sor"], 3)
 
     return CSSRecommendResponse(
@@ -186,8 +198,12 @@ async def evaluate_css_scenario(
     hist = await get_historical_cycle_average(well_id, session)
 
     delta = {
-        "oil_delta_bbl": round(eval_res["expected_oil_bbl"] - hist["avg_cum_oil_bbl"], 2),
-        "economic_delta_usd": round(eval_res["expected_economic_value"] - hist["avg_economic_value"], 2),
+        "oil_delta_bbl": round(
+            eval_res["expected_oil_bbl"] - hist["avg_cum_oil_bbl"], 2
+        ),
+        "economic_delta_usd": round(
+            eval_res["expected_economic_value"] - hist["avg_economic_value"], 2
+        ),
         "sor_delta": round(eval_res["expected_sor"] - hist["avg_sor"], 3),
     }
 

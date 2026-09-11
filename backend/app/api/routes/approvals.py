@@ -34,8 +34,12 @@ class ApprovalCreateRequest(BaseModel):
     recommendation_snapshot: dict[str, Any] = Field(
         ..., description="Snapshot of the joint recommendation payload at review time"
     )
-    operator_decision: str = Field(..., description="Decision choice: 'approved', 'rejected', or 'modified'")
-    operator_notes: str | None = Field(None, max_length=512, description="Optional engineering remarks or reasoning")
+    operator_decision: str = Field(
+        ..., description="Decision choice: 'approved', 'rejected', or 'modified'"
+    )
+    operator_notes: str | None = Field(
+        None, max_length=512, description="Optional engineering remarks or reasoning"
+    )
 
 
 class ApprovalResponse(BaseModel):
@@ -132,7 +136,9 @@ async def get_operator_approvals(
         )
 
     stmt = (
-        select(OperatorApproval).where(OperatorApproval.well_id == well_id).order_by(OperatorApproval.decided_at.desc())
+        select(OperatorApproval)
+        .where(OperatorApproval.well_id == well_id)
+        .order_by(OperatorApproval.decided_at.desc())
     )
     records = (await session.execute(stmt)).scalars().all()
 

@@ -32,21 +32,39 @@ class WellTwinState(BaseModel):
 
     well_id: str
     timestamp: datetime
-    current_temperature_c: float = Field(..., description="Current flowing downhole temperature in Celsius")
-    current_viscosity_cp: float = Field(..., description="Current heavy crude oil dynamic viscosity in centipoise (cP)")
+    current_temperature_c: float = Field(
+        ..., description="Current flowing downhole temperature in Celsius"
+    )
+    current_viscosity_cp: float = Field(
+        ..., description="Current heavy crude oil dynamic viscosity in centipoise (cP)"
+    )
     css_cycle_phase: str = Field(
-        ..., description="Active operational cycle phase: injection, soak, production, or idle"
+        ...,
+        description="Active operational cycle phase: injection, soak, production, or idle",
     )
     cycle_number: int = Field(..., description="Current or target CSS cycle number")
-    pump_fillage: float = Field(..., description="Downhole pump liquid barrel fillage ratio in [0.0, 1.0]")
-    rod_float_risk_score: float = Field(
-        ..., description="Continuous 0-100 hydrodynamic rod-float risk score from Prompt 3"
+    pump_fillage: float = Field(
+        ..., description="Downhole pump liquid barrel fillage ratio in [0.0, 1.0]"
     )
-    rod_float_risk_level: str = Field(..., description="Risk tier: LOW, MODERATE, or HIGH")
-    dynamometer_classification: str = Field(..., description="Current dynamometer operating condition label")
-    dynamometer_confidence: float = Field(..., description="Confidence of dynamometer card classifier [0.0, 1.0]")
-    current_spm: float = Field(..., description="Operating stroke rate in strokes per minute")
-    stroke_length_in: float = Field(..., description="Polished rod stroke length in inches")
+    rod_float_risk_score: float = Field(
+        ...,
+        description="Continuous 0-100 hydrodynamic rod-float risk score from Prompt 3",
+    )
+    rod_float_risk_level: str = Field(
+        ..., description="Risk tier: LOW, MODERATE, or HIGH"
+    )
+    dynamometer_classification: str = Field(
+        ..., description="Current dynamometer operating condition label"
+    )
+    dynamometer_confidence: float = Field(
+        ..., description="Confidence of dynamometer card classifier [0.0, 1.0]"
+    )
+    current_spm: float = Field(
+        ..., description="Operating stroke rate in strokes per minute"
+    )
+    stroke_length_in: float = Field(
+        ..., description="Polished rod stroke length in inches"
+    )
     predicted_production_trajectory: dict[str, Any] = Field(
         ..., description="Forecast trajectory from Prompt 4 hybrid production model"
     )
@@ -67,15 +85,30 @@ async def get_well_twin_state(
         raise HTTPException(status_code=404, detail=f"Well '{well_id}' was not found.")
 
     # 1. Latest Production record
-    q_prod = select(Production).where(Production.well_id == well_id).order_by(Production.timestamp.desc()).limit(1)
+    q_prod = (
+        select(Production)
+        .where(Production.well_id == well_id)
+        .order_by(Production.timestamp.desc())
+        .limit(1)
+    )
     prod = (await session.execute(q_prod)).scalars().first()
 
     # 2. Latest SRP Telemetry
-    q_srp = select(SRPTelemetry).where(SRPTelemetry.well_id == well_id).order_by(SRPTelemetry.timestamp.desc()).limit(1)
+    q_srp = (
+        select(SRPTelemetry)
+        .where(SRPTelemetry.well_id == well_id)
+        .order_by(SRPTelemetry.timestamp.desc())
+        .limit(1)
+    )
     srp = (await session.execute(q_srp)).scalars().first()
 
     # 3. Latest CSS Cycle
-    q_cycle = select(CSSCycle).where(CSSCycle.well_id == well_id).order_by(CSSCycle.cycle_id.desc()).limit(1)
+    q_cycle = (
+        select(CSSCycle)
+        .where(CSSCycle.well_id == well_id)
+        .order_by(CSSCycle.cycle_id.desc())
+        .limit(1)
+    )
     cycle = (await session.execute(q_cycle)).scalars().first()
 
     # 4. Latest Dynamometer Card
@@ -160,7 +193,11 @@ async def get_well_twin_state(
         prod_days=60,
     )
 
-    state_timestamp = prod.timestamp if prod else (srp.timestamp if srp else (cycle.production_start if cycle else now))
+    state_timestamp = (
+        prod.timestamp
+        if prod
+        else (srp.timestamp if srp else (cycle.production_start if cycle else now))
+    )
 
     return WellTwinState(
         well_id=well_id,

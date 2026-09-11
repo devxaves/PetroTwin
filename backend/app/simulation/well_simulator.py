@@ -160,7 +160,9 @@ def simulate_well_history(
             # Causal Link 5: Production rates
             oil_rate = oil_production_rate(fill, spm, stroke_length)
             # Water cut rises as steam condensate is produced, then stabilizes
-            water_cut = min(0.92, max(0.40, 0.88 - 0.35 * cycle_progress + rng.gauss(0, 0.02)))
+            water_cut = min(
+                0.92, max(0.40, 0.88 - 0.35 * cycle_progress + rng.gauss(0, 0.02))
+            )
             water_rate = (oil_rate / max(1.0 - water_cut, 0.05)) * water_cut
             gas_rate = oil_rate * rng.uniform(120.0, 180.0)  # GOR
 
@@ -207,7 +209,9 @@ def simulate_well_history(
             # Causal Link 6: Dynamometer card class based on physical conditions
             # Card is captured periodically (e.g. every 2 days)
             if day % 2 == 0:
-                is_terminal_window = (cycle_num == num_cycles) and (day >= prod_days - 6)
+                is_terminal_window = (cycle_num == num_cycles) and (
+                    day >= prod_days - 6
+                )
                 if is_terminal_window and terminal_condition:
                     card_label = terminal_condition
                     if card_label == "normal":

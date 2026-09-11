@@ -62,11 +62,15 @@ def test_simulation_cycle_progression_consistency():
 
     mean_early_temp = sum(r["temperature_c"] for r in early_phase) / 10.0
     mean_late_temp = sum(r["temperature_c"] for r in late_phase) / 10.0
-    assert mean_early_temp > mean_late_temp, "Early phase must be hotter than late phase"
+    assert (
+        mean_early_temp > mean_late_temp
+    ), "Early phase must be hotter than late phase"
 
     mean_early_rate = sum(r["oil_rate_bopd"] for r in early_phase) / 10.0
     mean_late_rate = sum(r["oil_rate_bopd"] for r in late_phase) / 10.0
-    assert mean_early_rate > mean_late_rate, "Early phase must produce more oil than cold late phase"
+    assert (
+        mean_early_rate > mean_late_rate
+    ), "Early phase must produce more oil than cold late phase"
 
 
 def test_simulation_generates_all_table_data():

@@ -135,12 +135,20 @@ async def get_latest_diagnostics(
 
     # 3. Fetch latest telemetry and production for operating parameters
     q_telem = (
-        select(SRPTelemetry).where(SRPTelemetry.well_id == well_id).order_by(desc(SRPTelemetry.timestamp)).limit(1)
+        select(SRPTelemetry)
+        .where(SRPTelemetry.well_id == well_id)
+        .order_by(desc(SRPTelemetry.timestamp))
+        .limit(1)
     )
     latest_telem = (await session.execute(q_telem)).scalar_one_or_none()
     spm = latest_telem.spm if latest_telem else 8.0
 
-    q_prod = select(Production).where(Production.well_id == well_id).order_by(desc(Production.timestamp)).limit(1)
+    q_prod = (
+        select(Production)
+        .where(Production.well_id == well_id)
+        .order_by(desc(Production.timestamp))
+        .limit(1)
+    )
     latest_prod = (await session.execute(q_prod)).scalar_one_or_none()
     temp_c = latest_prod.temperature_c if latest_prod else 55.0
 

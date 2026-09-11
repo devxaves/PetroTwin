@@ -12,7 +12,9 @@ from app.ml.production_model import (
 
 def test_production_model_artifact_exists_and_loads():
     """Verify saved production model artifact exists and contains metrics."""
-    assert Path(DEFAULT_MODEL_PATH).exists(), f"Production model artifact not found at {DEFAULT_MODEL_PATH}"
+    assert Path(
+        DEFAULT_MODEL_PATH
+    ).exists(), f"Production model artifact not found at {DEFAULT_MODEL_PATH}"
     bundle = load_production_model(DEFAULT_MODEL_PATH)
     assert "model" in bundle
     assert "metrics" in bundle
@@ -29,8 +31,12 @@ def test_hybrid_model_beats_physics_alone_on_held_out_wells():
     hyb_mae = metrics["hybrid_mae"]
     hyb_rmse = metrics["hybrid_rmse"]
 
-    assert hyb_rmse < phys_rmse, f"Hybrid RMSE ({hyb_rmse}) must be lower than physics-alone ({phys_rmse})"
-    assert hyb_mae < phys_mae, f"Hybrid MAE ({hyb_mae}) must be lower than physics-alone ({phys_mae})"
+    assert (
+        hyb_rmse < phys_rmse
+    ), f"Hybrid RMSE ({hyb_rmse}) must be lower than physics-alone ({phys_rmse})"
+    assert (
+        hyb_mae < phys_mae
+    ), f"Hybrid MAE ({hyb_mae}) must be lower than physics-alone ({phys_mae})"
     assert metrics["beats_physics"] is True
 
     # Assert by-well split was used

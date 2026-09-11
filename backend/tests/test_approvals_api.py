@@ -40,7 +40,10 @@ async def test_create_and_list_operator_approval():
         created = post_resp.json()
         assert created["well_id"] == "WELL-001"
         assert created["operator_decision"] == "approved"
-        assert created["operator_notes"] == "Approved for Cycle 3 steam optimization during day shift."
+        assert (
+            created["operator_notes"]
+            == "Approved for Cycle 3 steam optimization during day shift."
+        )
         assert created["recommendation_snapshot"] == snapshot
         assert "decided_at" in created
         assert created["outcome_recorded_at"] is None
@@ -109,4 +112,6 @@ async def test_operator_approval_zero_actuation_safety():
     # 2. Inspect the source code of record_operator_approval
     src = inspect.getsource(approvals.record_operator_approval)
     for pattern in forbidden_patterns:
-        assert pattern not in src, f"Forbidden actuation call '{pattern}' found in record_operator_approval source!"
+        assert (
+            pattern not in src
+        ), f"Forbidden actuation call '{pattern}' found in record_operator_approval source!"

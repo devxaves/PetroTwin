@@ -90,7 +90,9 @@ def test_cycle_to_cycle_variance_calculation():
     # areas are 1,000,000 and 500,000 -> mean = 750,000
     # var = ((250000)^2 + (-250000)^2) / 2 = 62,500,000,000
     assert features["cycle_to_cycle_variance"] > 0.0
-    assert pytest.approx(features["cycle_to_cycle_variance"], rel=1e-3) == (62500000000.0)
+    assert pytest.approx(features["cycle_to_cycle_variance"], rel=1e-3) == (
+        62500000000.0
+    )
 
 
 def test_invalid_short_card_raises_value_error():

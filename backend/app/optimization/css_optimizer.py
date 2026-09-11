@@ -54,26 +54,38 @@ def validate_envelope_parameters(
     Strictly enforce safe-operating-envelope constraints in code.
     Raises ValueError with explicit descriptive error on any violation.
     """
-    if not (SAFE_ENVELOPE["steam_volume_min_t"] <= steam_volume_t <= SAFE_ENVELOPE["steam_volume_max_t"]):
+    if not (
+        SAFE_ENVELOPE["steam_volume_min_t"]
+        <= steam_volume_t
+        <= SAFE_ENVELOPE["steam_volume_max_t"]
+    ):
         raise ValueError(
             f"Steam volume {steam_volume_t} tonnes is outside safe envelope "
             f"[{SAFE_ENVELOPE['steam_volume_min_t']}, {SAFE_ENVELOPE['steam_volume_max_t']}]."
         )
 
-    if not (SAFE_ENVELOPE["steam_pressure_min_mpa"] <= steam_pressure_mpa <= SAFE_ENVELOPE["steam_pressure_max_mpa"]):
+    if not (
+        SAFE_ENVELOPE["steam_pressure_min_mpa"]
+        <= steam_pressure_mpa
+        <= SAFE_ENVELOPE["steam_pressure_max_mpa"]
+    ):
         raise ValueError(
             f"Steam pressure {steam_pressure_mpa} MPa is outside safe envelope "
             f"[{SAFE_ENVELOPE['steam_pressure_min_mpa']}, {SAFE_ENVELOPE['steam_pressure_max_mpa']}]."
         )
 
-    if not (SAFE_ENVELOPE["soak_days_min"] <= soak_days <= SAFE_ENVELOPE["soak_days_max"]):
+    if not (
+        SAFE_ENVELOPE["soak_days_min"] <= soak_days <= SAFE_ENVELOPE["soak_days_max"]
+    ):
         raise ValueError(
             f"Soak duration {soak_days} days is outside safe envelope "
             f"[{SAFE_ENVELOPE['soak_days_min']}, {SAFE_ENVELOPE['soak_days_max']}]."
         )
 
     if cutoff_days is not None and not (
-        SAFE_ENVELOPE["production_cutoff_min_days"] <= cutoff_days <= SAFE_ENVELOPE["production_cutoff_max_days"]
+        SAFE_ENVELOPE["production_cutoff_min_days"]
+        <= cutoff_days
+        <= SAFE_ENVELOPE["production_cutoff_max_days"]
     ):
         raise ValueError(
             f"Production cutoff {cutoff_days} days is outside safe envelope "
@@ -170,7 +182,9 @@ def evaluate_scenario(
     steam_cost = round(steam_volume_t * steam_cost_per_t, 2)
     lift_power_cost = round(cutoff_day * DEFAULT_DAILY_LIFT_ELECTRIC_COST, 2)
     water_cost = round(total_water * DEFAULT_WATER_DISPOSAL_PER_BBL, 2)
-    risk_cost = round((mechanical_risk_score / 100.0) * DEFAULT_WORKOVER_EVENT_COST * 0.25, 2)
+    risk_cost = round(
+        (mechanical_risk_score / 100.0) * DEFAULT_WORKOVER_EVENT_COST * 0.25, 2
+    )
 
     net_val = economic_value(
         oil_price=oil_price,
@@ -249,7 +263,9 @@ async def get_historical_cycle_average(
     well_id: str, session: AsyncSession, oil_price: float = DEFAULT_OIL_PRICE_PER_BBL
 ) -> dict[str, float]:
     """Calculate the well's historical average cycle economic performance."""
-    q_cycles = select(CSSCycle).where(CSSCycle.well_id == well_id).order_by(CSSCycle.cycle_id)
+    q_cycles = (
+        select(CSSCycle).where(CSSCycle.well_id == well_id).order_by(CSSCycle.cycle_id)
+    )
     cycles = (await session.execute(q_cycles)).scalars().all()
 
     if not cycles:
@@ -260,7 +276,11 @@ async def get_historical_cycle_average(
             "cycles_count": 0,
         }
 
-    q_prods = select(Production).where(Production.well_id == well_id).order_by(Production.timestamp)
+    q_prods = (
+        select(Production)
+        .where(Production.well_id == well_id)
+        .order_by(Production.timestamp)
+    )
     prods = (await session.execute(q_prods)).scalars().all()
 
     cycle_values: list[float] = []
@@ -268,7 +288,9 @@ async def get_historical_cycle_average(
     cycle_steams: list[float] = []
 
     for c in cycles:
-        c_prods = [p for p in prods if c.production_start <= p.timestamp <= c.production_end]
+        c_prods = [
+            p for p in prods if c.production_start <= p.timestamp <= c.production_end
+        ]
         oil_sum = sum(p.oil_rate_bopd for p in c_prods)
         water_sum = sum(p.water_rate_bwpd for p in c_prods)
         prod_days = max(1, len(c_prods))

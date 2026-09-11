@@ -32,7 +32,9 @@ async def test_screening_rule_high_rod_float_risk_rejects():
     telem_mock.scalar_one_or_none.return_value = MagicMock(spm=9.5)
 
     prod_mock = MagicMock()
-    prod_mock.scalar_one_or_none.return_value = MagicMock(temperature_c=48.0, water_cut=0.60)
+    prod_mock.scalar_one_or_none.return_value = MagicMock(
+        temperature_c=48.0, water_cut=0.60
+    )
 
     session.execute.side_effect = [fail_mock, card_mock, telem_mock, prod_mock]
 
@@ -90,7 +92,9 @@ async def test_screening_rule_excessive_water_cut_rejects():
 
     # Water cut = 91%
     prod_mock = MagicMock()
-    prod_mock.scalar_one_or_none.return_value = MagicMock(temperature_c=65.0, water_cut=0.91)
+    prod_mock.scalar_one_or_none.return_value = MagicMock(
+        temperature_c=65.0, water_cut=0.91
+    )
 
     session.execute.side_effect = [fail_mock, card_mock, telem_mock, prod_mock]
 
@@ -120,7 +124,9 @@ async def test_screening_rule_healthy_well_approved():
     telem_mock.scalar_one_or_none.return_value = MagicMock(spm=6.5)
 
     prod_mock = MagicMock()
-    prod_mock.scalar_one_or_none.return_value = MagicMock(temperature_c=62.0, water_cut=0.55)
+    prod_mock.scalar_one_or_none.return_value = MagicMock(
+        temperature_c=62.0, water_cut=0.55
+    )
 
     cycle_mock = MagicMock()
     cycle_mock.scalar_one_or_none.return_value = 2  # next cycle 3

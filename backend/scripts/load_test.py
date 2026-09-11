@@ -20,7 +20,9 @@ REQUESTS_PER_USER = 5
 BASE_URL = "http://localhost:8000"
 
 
-async def make_request(client: httpx.AsyncClient, method: str, path: str, json_data: dict | None):
+async def make_request(
+    client: httpx.AsyncClient, method: str, path: str, json_data: dict | None
+):
     start = time.perf_counter()
     try:
         if method == "GET":

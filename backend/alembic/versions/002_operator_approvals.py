@@ -42,5 +42,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index(op.f("ix_operator_approvals_well_id"), table_name="operator_approvals")
+    op.drop_index(
+        op.f("ix_operator_approvals_well_id"), table_name="operator_approvals"
+    )
     op.drop_table("operator_approvals")

@@ -50,10 +50,18 @@ def test_coupling_css_change_alters_srp_rod_float_risk() -> None:
     risk_b = res_high_steam["rod_mechanics"]["rod_float_risk_score"]
 
     # Assertions proving downstream physical link
-    assert temp_b > temp_a, f"High steam should yield higher temperature ({temp_b} > {temp_a})"
-    assert visc_b < visc_a, f"High steam should lower oil viscosity ({visc_b} < {visc_a})"
-    assert risk_a != risk_b, "Identical SPM with different steam volume MUST NOT yield identical risk scores!"
-    assert risk_a > risk_b, f"Colder oil under low steam should have higher rod-float risk ({risk_a} > {risk_b})"
+    assert (
+        temp_b > temp_a
+    ), f"High steam should yield higher temperature ({temp_b} > {temp_a})"
+    assert (
+        visc_b < visc_a
+    ), f"High steam should lower oil viscosity ({visc_b} < {visc_a})"
+    assert (
+        risk_a != risk_b
+    ), "Identical SPM with different steam volume MUST NOT yield identical risk scores!"
+    assert (
+        risk_a > risk_b
+    ), f"Colder oil under low steam should have higher rod-float risk ({risk_a} > {risk_b})"
 
 
 def test_coupling_spm_change_alters_rod_float_and_efficiency() -> None:
@@ -92,8 +100,12 @@ def test_coupling_spm_change_alters_rod_float_and_efficiency() -> None:
     eff_low = res_low_spm["pump"]["volumetric_efficiency"]
     eff_high = res_high_spm["pump"]["volumetric_efficiency"]
 
-    assert risk_low != risk_high, "Different SPM with identical CSS MUST NOT yield identical risk scores!"
-    assert risk_high > risk_low, f"Higher SPM should increase downward rod drag and risk ({risk_high} > {risk_low})"
+    assert (
+        risk_low != risk_high
+    ), "Different SPM with identical CSS MUST NOT yield identical risk scores!"
+    assert (
+        risk_high > risk_low
+    ), f"Higher SPM should increase downward rod drag and risk ({risk_high} > {risk_low})"
     assert eff_low != eff_high, "Different SPM MUST alter volumetric pump efficiency!"
 
 
@@ -128,8 +140,12 @@ def test_coupling_spm_change_does_not_fabricate_temperature_change() -> None:
     visc_1 = res_1["reservoir"]["viscosity_cp"]
     visc_2 = res_2["reservoir"]["viscosity_cp"]
 
-    assert temp_1 == temp_2, f"SPM change should NOT affect reservoir temperature ({temp_1} == {temp_2})"
-    assert visc_1 == visc_2, f"SPM change should NOT alter reservoir viscosity ({visc_1} == {visc_2})"
+    assert (
+        temp_1 == temp_2
+    ), f"SPM change should NOT affect reservoir temperature ({temp_1} == {temp_2})"
+    assert (
+        visc_1 == visc_2
+    ), f"SPM change should NOT alter reservoir viscosity ({visc_1} == {visc_2})"
 
 
 def test_pump_efficiency_helper() -> None:

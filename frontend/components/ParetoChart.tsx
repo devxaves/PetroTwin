@@ -4,13 +4,6 @@ import React, { useState, useMemo, useRef } from "react";
 import type { ParetoPoint } from "@/lib/api/types";
 import {
   TrendingUp,
-  Sparkles,
-  Layers,
-  Radio,
-  Sliders,
-  DollarSign,
-  ShieldAlert,
-  Flame,
   CheckCircle2,
   Info,
 } from "lucide-react";

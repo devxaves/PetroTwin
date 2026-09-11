@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle, XCircle, Edit3, Shield, Info, AlertTriangle } from "lucide-react";
+import { CheckCircle, XCircle, Edit3, Shield, Info } from "lucide-react";
 import { useRecordApproval } from "@/lib/api/queries";
 
 interface ExplainabilityPanelProps {
@@ -14,7 +14,7 @@ interface ExplainabilityPanelProps {
     energy_delta_pct?: number;
   };
   combinedConfidence?: number;
-  recommendationSnapshot: Record<string, any>;
+  recommendationSnapshot: Record<string, unknown>;
   onDecisionLogged?: (decision: string) => void;
 }
 
@@ -62,9 +62,10 @@ export function ExplainabilityPanel({
       setOperatorNotes("");
       setIsNotesOpen(false);
       if (onDecisionLogged) onDecisionLogged(decision);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setIsActionSuccess(false);
-      setLastActionStatus(`Action failed: ${err.message}`);
+      const msg = err instanceof Error ? err.message : String(err);
+      setLastActionStatus(`Action failed: ${msg}`);
     }
   };
 

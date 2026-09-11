@@ -19,7 +19,9 @@ from app.ml.dyna_baseline import classify_baseline
 from app.ml.dyna_features import FEATURE_NAMES, extract_features
 
 # Default model artifact path
-DEFAULT_ARTIFACT_PATH = Path(__file__).parent / "artifacts" / "dyna_classifier_v1.joblib"
+DEFAULT_ARTIFACT_PATH = (
+    Path(__file__).parent / "artifacts" / "dyna_classifier_v1.joblib"
+)
 
 # Cached model instance
 _CACHED_MODEL_BUNDLE: dict[str, Any] | None = None
@@ -27,7 +29,9 @@ _CACHED_MODEL_BUNDLE: dict[str, Any] | None = None
 
 def get_feature_vector(features: dict[str, float]) -> np.ndarray:
     """Convert feature dictionary to ordered numpy array."""
-    return np.array([features[k] for k in FEATURE_NAMES], dtype=np.float64).reshape(1, -1)
+    return np.array([features[k] for k in FEATURE_NAMES], dtype=np.float64).reshape(
+        1, -1
+    )
 
 
 def train_model(
@@ -70,7 +74,9 @@ def load_classifier(
 
     path = Path(artifact_path)
     if not path.exists():
-        raise FileNotFoundError(f"Classifier artifact not found at {path}. Run train_classifier.py first.")
+        raise FileNotFoundError(
+            f"Classifier artifact not found at {path}. Run train_classifier.py first."
+        )
 
     bundle = joblib.load(path)
     _CACHED_MODEL_BUNDLE = bundle
@@ -110,7 +116,9 @@ def predict_card(
     pred_label = classes[best_idx]
     confidence = float(probs[best_idx])
 
-    prob_dict = {cls_name: float(round(p, 4)) for cls_name, p in zip(classes, probs, strict=True)}
+    prob_dict = {
+        cls_name: float(round(p, 4)) for cls_name, p in zip(classes, probs, strict=True)
+    }
 
     return {
         "ml_prediction": pred_label,
