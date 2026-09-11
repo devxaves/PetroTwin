@@ -43,7 +43,7 @@ export function Header({ wellId }: HeaderProps) {
   ];
 
   return (
-    <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3 sticky top-0 z-50 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+    <header className="border-b border-slate-200 bg-white/98 backdrop-blur-md px-4 sm:px-6 py-3 sticky top-0 z-50 shadow-xs">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Brand & Left Navigation */}
         <div className="flex items-center gap-6">

@@ -240,23 +240,29 @@ export function DiagnosticsTab({
 
       {/* ── SUPERVISORY OPERATOR REVIEW & SAFETY GATE MODAL ── */}
       {isReviewModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full p-6 sm:p-8 flex flex-col gap-6 text-slate-800 animate-in fade-in zoom-in-95 duration-150">
+        <div
+          className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 md:p-6"
+          onClick={() => setIsReviewModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col text-slate-800 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-slate-100 shrink-0 bg-white">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600">
-                  <ShieldCheck className="w-7 h-7" />
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 shrink-0">
+                  <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
+                  <h3 className="text-base sm:text-lg font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
                     Supervisory Setpoint Review
                   </h3>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-2 mt-0.5">
                     <span className="text-xs font-mono font-bold text-slate-700">
                       WELL: {wellId}
                     </span>
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-800 font-extrabold border border-sky-200 uppercase font-mono">
+                    <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-sky-50 text-sky-800 font-extrabold border border-sky-200 uppercase font-mono">
                       Decision Support Gate
                     </span>
                   </div>
@@ -266,174 +272,178 @@ export function DiagnosticsTab({
               <button
                 type="button"
                 onClick={() => setIsReviewModalOpen(false)}
-                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition font-bold"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition font-bold cursor-pointer shrink-0"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
 
-            {/* Decision Support Advisory Header */}
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm font-sans text-slate-700 leading-relaxed font-medium">
-              <strong className="text-slate-900 font-bold">Safety Policy:</strong> Petroleum
-              engineers must verify mechanical envelope limits before staging
-              kinematic modifications into the field supervisory queue. Direct
-              autonomous actuation is prohibited.
-            </div>
-
-            {/* Kinematics Comparison Card */}
-            <div className="grid grid-cols-2 gap-4 font-mono">
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-xs text-slate-500 uppercase font-extrabold">
-                  Current Setting
-                </span>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                  {currentSpm} <span className="text-xs font-semibold text-slate-500">SPM</span>
+            {/* Operator Sign-off Form & Body */}
+            <form onSubmit={handleStageWorkOrder} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              {/* Scrollable Modal Body */}
+              <div className="p-4 sm:p-5 overflow-y-auto flex flex-col gap-3.5 flex-1 min-h-0">
+                {/* Decision Support Advisory Header */}
+                <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm font-sans text-slate-700 leading-relaxed font-medium">
+                  <strong className="text-slate-900 font-bold">Safety Policy:</strong> Petroleum
+                  engineers must verify mechanical envelope limits before staging
+                  kinematic modifications into the field supervisory queue. Direct
+                  autonomous actuation is prohibited.
                 </div>
-                <div className="text-xs text-rose-700 font-bold mt-1">
-                  Risk Score: 78 / 100 (HIGH)
+
+                {/* Kinematics Comparison Card */}
+                <div className="grid grid-cols-2 gap-3 font-mono">
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                    <span className="text-[11px] sm:text-xs text-slate-500 uppercase font-extrabold">
+                      Current Setting
+                    </span>
+                    <div className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">
+                      {currentSpm} <span className="text-xs font-semibold text-slate-500">SPM</span>
+                    </div>
+                    <div className="text-[11px] sm:text-xs text-rose-700 font-bold mt-1">
+                      Risk Score: 78 / 100 (HIGH)
+                    </div>
+                  </div>
+
+                  <div className="p-3 sm:p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200">
+                    <span className="text-[11px] sm:text-xs text-emerald-900 uppercase font-extrabold">
+                      Proposed Setpoint
+                    </span>
+                    <div className="text-xl sm:text-2xl font-black text-emerald-800 mt-0.5">
+                      {targetSpm} <span className="text-xs font-semibold text-emerald-600">SPM</span>
+                    </div>
+                    <div className="text-[11px] sm:text-xs text-emerald-800 font-bold mt-1">
+                      Projected Risk: 28 / 100 (Nominal)
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
-                <span className="text-xs text-emerald-900 uppercase font-extrabold">
-                  Proposed Setpoint
-                </span>
-                <div className="text-2xl sm:text-3xl font-black text-emerald-800 mt-1">
-                  {targetSpm} <span className="text-xs font-semibold text-emerald-600">SPM</span>
+                {/* Safety Verification Checklist */}
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-slate-600 font-mono">
+                    Mandatory Safety Verification Checks
+                  </span>
+                  <div className="grid grid-cols-1 gap-2 text-xs sm:text-sm font-sans">
+                    <label className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition font-medium">
+                      <input
+                        type="checkbox"
+                        checked={checklist.buckling}
+                        onChange={(e) =>
+                          setChecklist((prev) => ({
+                            ...prev,
+                            buckling: e.target.checked,
+                          }))
+                        }
+                        className="w-4 h-4 rounded text-orange-600 accent-orange-600 shrink-0"
+                      />
+                      <span className="text-xs sm:text-sm leading-snug">
+                        <strong>Rod Compressive Buckling:</strong> MPRL remains above
+                        critical 4,000 lbs neutral point.
+                      </span>
+                    </label>
+
+                    <label className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition font-medium">
+                      <input
+                        type="checkbox"
+                        checked={checklist.vfdThermal}
+                        onChange={(e) =>
+                          setChecklist((prev) => ({
+                            ...prev,
+                            vfdThermal: e.target.checked,
+                          }))
+                        }
+                        className="w-4 h-4 rounded text-orange-600 accent-orange-600 shrink-0"
+                      />
+                      <span className="text-xs sm:text-sm leading-snug">
+                        <strong>Surface VFD Thermal Duty:</strong> Inverter frequency
+                        reduction is within continuous rating.
+                      </span>
+                    </label>
+
+                    <label className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition font-medium">
+                      <input
+                        type="checkbox"
+                        checked={checklist.gearboxTorque}
+                        onChange={(e) =>
+                          setChecklist((prev) => ({
+                            ...prev,
+                            gearboxTorque: e.target.checked,
+                          }))
+                        }
+                        className="w-4 h-4 rounded text-orange-600 accent-orange-600 shrink-0"
+                      />
+                      <span className="text-xs sm:text-sm leading-snug">
+                        <strong>Gearbox Torque Envelope:</strong> PPRL load stays
+                        below 26,000 lbs rating boundary.
+                      </span>
+                    </label>
+
+                    <label className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition font-medium">
+                      <input
+                        type="checkbox"
+                        checked={checklist.viscosityEquilibrium}
+                        onChange={(e) =>
+                          setChecklist((prev) => ({
+                            ...prev,
+                            viscosityEquilibrium: e.target.checked,
+                          }))
+                        }
+                        className="w-4 h-4 rounded text-orange-600 accent-orange-600 shrink-0"
+                      />
+                      <span className="text-xs sm:text-sm leading-snug">
+                        <strong>Bitumen Viscosity Match:</strong> Fall velocity
+                        aligns with current 47.3°C column fluid.
+                      </span>
+                    </label>
+                  </div>
                 </div>
-                <div className="text-xs text-emerald-800 font-bold mt-1">
-                  Projected Risk: 28 / 100 (Nominal)
+
+                {/* Operator Sign-off Details */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-bold text-slate-700 font-mono">
+                      Authorized Operator / Engineer
+                    </label>
+                    <input
+                      type="text"
+                      value={operatorId}
+                      onChange={(e) => setOperatorId(e.target.value)}
+                      required
+                      className="p-2.5 rounded-xl border border-slate-200 text-xs font-mono bg-slate-50 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-bold text-slate-700 font-mono">
+                      Remediation Protocol
+                    </label>
+                    <input
+                      type="text"
+                      readOnly
+                      value="CSS Heavy Oil Viscous Drag Control"
+                      className="p-2.5 rounded-xl border border-slate-200 text-xs font-mono bg-slate-100 text-slate-600 cursor-not-allowed"
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Safety Verification Checklist */}
-            <div className="flex flex-col gap-2.5">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-600 font-mono">
-                Mandatory Safety Verification Checks
-              </span>
-              <div className="grid grid-cols-1 gap-2 text-xs sm:text-sm font-sans">
-                <label className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition font-medium">
-                  <input
-                    type="checkbox"
-                    checked={checklist.buckling}
-                    onChange={(e) =>
-                      setChecklist((prev) => ({
-                        ...prev,
-                        buckling: e.target.checked,
-                      }))
-                    }
-                    className="w-4 h-4 rounded text-orange-600 accent-orange-600"
-                  />
-                  <span>
-                    <strong>Rod Compressive Buckling:</strong> MPRL remains above
-                    critical 4,000 lbs neutral point.
-                  </span>
-                </label>
-
-                <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition">
-                  <input
-                    type="checkbox"
-                    checked={checklist.vfdThermal}
-                    onChange={(e) =>
-                      setChecklist((prev) => ({
-                        ...prev,
-                        vfdThermal: e.target.checked,
-                      }))
-                    }
-                    className="w-4 h-4 rounded text-orange-600 accent-orange-600"
-                  />
-                  <span>
-                    <strong>Surface VFD Thermal Duty:</strong> Inverter frequency
-                    reduction is within continuous rating.
-                  </span>
-                </label>
-
-                <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition">
-                  <input
-                    type="checkbox"
-                    checked={checklist.gearboxTorque}
-                    onChange={(e) =>
-                      setChecklist((prev) => ({
-                        ...prev,
-                        gearboxTorque: e.target.checked,
-                      }))
-                    }
-                    className="w-4 h-4 rounded text-orange-600 accent-orange-600"
-                  />
-                  <span>
-                    <strong>Gearbox Torque Envelope:</strong> PPRL load stays
-                    below 26,000 lbs rating boundary.
-                  </span>
-                </label>
-
-                <label className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/90 border border-slate-200/80 cursor-pointer hover:bg-slate-100 transition">
-                  <input
-                    type="checkbox"
-                    checked={checklist.viscosityEquilibrium}
-                    onChange={(e) =>
-                      setChecklist((prev) => ({
-                        ...prev,
-                        viscosityEquilibrium: e.target.checked,
-                      }))
-                    }
-                    className="w-4 h-4 rounded text-orange-600 accent-orange-600"
-                  />
-                  <span>
-                    <strong>Bitumen Viscosity Match:</strong> Fall velocity
-                    aligns with current 47.3°C column fluid.
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            {/* Operator Sign-off Form */}
-            <form onSubmit={handleStageWorkOrder} className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-slate-700 font-mono">
-                    Authorized Operator / Engineer
+                    Engineering Justification / Sign-off Notes
                   </label>
-                  <input
-                    type="text"
-                    value={operatorId}
-                    onChange={(e) => setOperatorId(e.target.value)}
-                    required
-                    className="p-2.5 rounded-xl border border-slate-200 text-xs font-mono bg-slate-50 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-700 font-mono">
-                    Remediation Protocol
-                  </label>
-                  <input
-                    type="text"
-                    readOnly
-                    value="CSS Heavy Oil Viscous Drag Control"
-                    className="p-2.5 rounded-xl border border-slate-200 text-xs font-mono bg-slate-100 text-slate-600 cursor-not-allowed"
+                  <textarea
+                    rows={2}
+                    value={operatorNotes}
+                    onChange={(e) => setOperatorNotes(e.target.value)}
+                    className="p-2.5 rounded-xl border border-slate-200 text-xs font-sans bg-slate-50 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-orange-500 leading-relaxed resize-none"
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-700 font-mono">
-                  Engineering Justification / Sign-off Notes
-                </label>
-                <textarea
-                  rows={2}
-                  value={operatorNotes}
-                  onChange={(e) => setOperatorNotes(e.target.value)}
-                  className="p-2.5 rounded-xl border border-slate-200 text-xs font-sans bg-slate-50 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-orange-500 leading-relaxed"
-                />
-              </div>
-
-              {/* Action Buttons in Modal */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+              {/* Action Buttons in Sticky Modal Footer */}
+              <div className="p-3.5 sm:p-4.5 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 shrink-0 rounded-b-3xl">
                 <button
                   type="button"
                   onClick={handleGoToWhatIf}
-                  className="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-2 cursor-pointer"
+                  className="px-3.5 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 transition flex items-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Sliders className="w-4 h-4 text-slate-500" />
                   <span>Test in What-If First</span>
@@ -443,14 +453,14 @@ export function DiagnosticsTab({
                   <button
                     type="button"
                     onClick={() => setIsReviewModalOpen(false)}
-                    className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition cursor-pointer"
+                    className="px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition cursor-pointer"
                   >
                     Cancel
                   </button>
 
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-orange-600 hover:bg-orange-500 text-white transition shadow-sm flex items-center gap-2 cursor-pointer"
+                    className="px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-orange-600 hover:bg-orange-500 text-white transition shadow-sm flex items-center gap-2 cursor-pointer"
                   >
                     <Check className="w-4 h-4" />
                     <span>Stage Supervisory Work Order</span>

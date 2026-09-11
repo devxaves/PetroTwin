@@ -90,7 +90,13 @@ function useScrollReveal() {
   return setRef;
 }
 
-// ── Landing Page Component �    <div className="min-h-screen bg-[#f8fafc] text-slate-800 selection:bg-orange-500 selection:text-white">
+// ── Landing Page Component ────────────────────────────────────────────
+
+export default function LandingPage() {
+  const setRef = useScrollReveal();
+
+  return (
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800 selection:bg-orange-500 selection:text-white">
       {/* ── Navigation ─────────────────────────────────────────── */}
       <nav className={styles.landingNav} data-testid="landing-nav">
         <div className={styles.landingNavInner}>
@@ -471,7 +477,7 @@ function useScrollReveal() {
         ref={setRef(4)}
         data-testid="final-cta-section"
       >
-        <div className="max-w-3xl mx-auto p-10 sm:p-16 rounded-3xl bg-linear-to-b from-orange-500/10 via-white to-white border border-orange-200 shadow-sm flex flex-col items-center">
+        <div className="max-w-3xl mx-auto p-10 sm:p-16 rounded-3xl bg-gradient-to-b from-orange-500/10 via-white to-white border border-orange-200 shadow-sm flex flex-col items-center">
           <div className="w-14 h-14 rounded-2xl bg-orange-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-orange-500/30">
             <Flame className="w-7 h-7 fill-current" />
           </div>
@@ -506,25 +512,6 @@ function useScrollReveal() {
             </span>
           </div>
           <span className="text-xs text-slate-500 font-mono font-medium">
-            Heavy Oil Coupled Reservoir &amp; SRP Digital Twin &bull; Light Industrial Logic
-          </span>
-        </div>
-      </footer>
-    </div></div>
-      </section>
-
-      {/* ── 7. FOOTER ────────────────────────────────────────── */}
-      <footer className={styles.footer} data-testid="landing-footer">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <Flame className="w-4 h-4 text-orange-600 fill-current" />
-            <span
-              className="text-xs font-bold text-slate-700 uppercase tracking-wider font-display"
-            >
-              ThermoTwin
-            </span>
-          </div>
-          <span className="text-xs text-slate-400 font-mono">
             Heavy Oil Coupled Reservoir &amp; SRP Digital Twin &bull; Light Industrial Logic
           </span>
         </div>
