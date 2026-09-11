@@ -21,7 +21,7 @@ from app.main import app
 async def test_create_and_list_operator_approval():
     """Test standard approval audit trail flow: record approval and retrieve history."""
     transport = ASGITransport(app=app)
-    token = create_access_token({"sub": "test_operator", "role": "approver"})
+    token = create_access_token({"sub": "approver_demo", "role": "approver"})
     headers = {"Authorization": f"Bearer {token}"}
     snapshot = {
         "css": {"steam_volume_t": 2800.0, "steam_pressure_mpa": 11.5, "soak_days": 4},
@@ -66,7 +66,7 @@ async def test_create_and_list_operator_approval():
 async def test_operator_approval_validation():
     """Test validation of operator decisions (approved, rejected, modified)."""
     transport = ASGITransport(app=app)
-    token = create_access_token({"sub": "test_operator", "role": "approver"})
+    token = create_access_token({"sub": "approver_demo", "role": "approver"})
     headers = {"Authorization": f"Bearer {token}"}
     snapshot = {"test": "data"}
 
