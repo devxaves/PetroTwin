@@ -59,6 +59,14 @@ jobs:
       - name: Black format check
         run: poetry run black --check .
 
+      - name: Run database migrations & seed test data
+        env:
+          DATABASE_URL: postgresql+asyncpg://petrotwin:petrotwin@localhost:5432/petrotwin
+        run: |
+          poetry run alembic upgrade head
+          poetry run python scripts/seed_synthetic_wells.py --if-empty
+          poetry run python scripts/seed_users.py
+
       - name: Run Backend Tests
         env:
           DATABASE_URL: postgresql+asyncpg://petrotwin:petrotwin@localhost:5432/petrotwin

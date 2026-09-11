@@ -13,6 +13,7 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from app.api.routes import approvals
+from app.core.auth import create_access_token
 from app.main import app
 
 
@@ -20,6 +21,8 @@ from app.main import app
 async def test_create_and_list_operator_approval():
     """Test standard approval audit trail flow: record approval and retrieve history."""
     transport = ASGITransport(app=app)
+    token = create_access_token({"sub": "test_operator", "role": "approver"})
+    headers = {"Authorization": f"Bearer {token}"}
     snapshot = {
         "css": {"steam_volume_t": 2800.0, "steam_pressure_mpa": 11.5, "soak_days": 4},
         "srp": {"target_spm": 6.0, "action": "REDUCE_SPM"},
@@ -30,6 +33,7 @@ async def test_create_and_list_operator_approval():
         # 1. Record approval
         post_resp = await client.post(
             "/wells/WELL-001/approvals",
+            headers=headers,
             json={
                 "recommendation_snapshot": snapshot,
                 "operator_decision": "approved",
@@ -49,7 +53,7 @@ async def test_create_and_list_operator_approval():
         assert created["outcome_recorded_at"] is None
 
         # 2. Retrieve history
-        get_resp = await client.get("/wells/WELL-001/approvals")
+        get_resp = await client.get("/wells/WELL-001/approvals", headers=headers)
         assert get_resp.status_code == 200, get_resp.text
         history = get_resp.json()
         assert len(history) >= 1
@@ -62,12 +66,15 @@ async def test_create_and_list_operator_approval():
 async def test_operator_approval_validation():
     """Test validation of operator decisions (approved, rejected, modified)."""
     transport = ASGITransport(app=app)
+    token = create_access_token({"sub": "test_operator", "role": "approver"})
+    headers = {"Authorization": f"Bearer {token}"}
     snapshot = {"test": "data"}
 
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         # Invalid decision string
         resp = await client.post(
             "/wells/WELL-001/approvals",
+            headers=headers,
             json={
                 "recommendation_snapshot": snapshot,
                 "operator_decision": "auto_execute_now",  # Invalid!
