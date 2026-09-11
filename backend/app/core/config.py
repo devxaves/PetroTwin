@@ -5,13 +5,11 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """Application configuration loaded from environment variables / .env file."""
 
-    database_url: str = (
-        "postgresql+asyncpg://thermotwin:thermotwin@localhost:5432/thermotwin"
-    )
+    database_url: str = "postgresql+asyncpg://petrotwin:petrotwin@localhost:5432/petrotwin"
     redis_url: str = "redis://localhost:6379/0"
     cors_origins: list[str] = ["http://localhost:3000"]
     debug: bool = False
-    jwt_secret_key: str = "thermotwin-super-secret-production-key-2026"
+    jwt_secret_key: str = "petrotwin-super-secret-production-key-2026"
     sentry_dsn: str | None = None
 
     @field_validator("database_url", mode="before")

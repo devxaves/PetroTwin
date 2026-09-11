@@ -45,9 +45,7 @@ TEST_WELLS = ["WELL-007", "WELL-008"]
 async def load_and_prepare_data():
     """Load cards from DB and extract feature vectors grouped by well."""
     async with async_session_factory() as session:
-        query = select(DynamometerCard).order_by(
-            DynamometerCard.well_id, DynamometerCard.timestamp
-        )
+        query = select(DynamometerCard).order_by(DynamometerCard.well_id, DynamometerCard.timestamp)
         res = await session.execute(query)
         cards = res.scalars().all()
 
@@ -86,22 +84,16 @@ async def load_and_prepare_data():
     )
 
 
-def evaluate_baseline(
-    x_test: np.ndarray, y_test: list[str], labels: list[str]
-) -> tuple[float, dict, np.ndarray]:
+def evaluate_baseline(x_test: np.ndarray, y_test: list[str], labels: list[str]) -> tuple[float, dict, np.ndarray]:
     """Evaluate rule-based baseline classifier on the test set."""
     preds: list[str] = []
     for row in x_test:
-        feat_dict = {
-            name: float(val) for name, val in zip(FEATURE_NAMES, row, strict=True)
-        }
+        feat_dict = {name: float(val) for name, val in zip(FEATURE_NAMES, row, strict=True)}
         preds.append(classify_baseline(feat_dict))
 
     correct = sum(p == y for p, y in zip(preds, y_test, strict=True))
     accuracy = correct / len(y_test)
-    report = classification_report(
-        y_test, preds, labels=labels, output_dict=True, zero_division=0
-    )
+    report = classification_report(y_test, preds, labels=labels, output_dict=True, zero_division=0)
     cm = confusion_matrix(y_test, preds, labels=labels)
     return accuracy, report, cm
 
@@ -133,9 +125,7 @@ def main():
     # 3. Evaluate ML Classifier on held-out test wells
     ml_preds = model.predict(x_test)
     ml_acc = float(np.mean(ml_preds == np.array(y_test)))
-    ml_report = classification_report(
-        y_test, ml_preds, labels=all_labels, output_dict=True, zero_division=0
-    )
+    ml_report = classification_report(y_test, ml_preds, labels=all_labels, output_dict=True, zero_division=0)
     ml_cm = confusion_matrix(y_test, ml_preds, labels=all_labels)
 
     print("\n" + "-" * 70)
@@ -147,9 +137,7 @@ def main():
     print(ml_cm)
 
     print("\nML Per-Class Performance:")
-    print(
-        f"{'Class':<22} {'Precision':<10} {'Recall':<10} {'F1-Score':<10} {'Support'}"
-    )
+    print(f"{'Class':<22} {'Precision':<10} {'Recall':<10} {'F1-Score':<10} {'Support'}")
     for lbl in all_labels:
         cls_data = ml_report.get(lbl, {})
         p = cls_data.get("precision", 0.0) * 100

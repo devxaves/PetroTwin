@@ -63,9 +63,7 @@ async def test_get_well_production_filtered_window():
         t_from = full_data[5]["timestamp"]
         t_to = full_data[10]["timestamp"]
 
-        filtered_res = await client.get(
-            f"/wells/WELL-001/production?from={t_from}&to={t_to}"
-        )
+        filtered_res = await client.get(f"/wells/WELL-001/production?from={t_from}&to={t_to}")
 
     assert filtered_res.status_code == 200
     filtered = filtered_res.json()

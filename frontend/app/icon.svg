@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="petroGrad" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <rect width="32" height="32" rx="8" fill="#0f172a"/>
+  <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="7.25" stroke="#ea580c" stroke-opacity="0.4" stroke-width="1.5" fill="none"/>
+  
+  <!-- Stylized Twin P & T Geometry (Flame + Pump Derrick Fusion) -->
+  <!-- Left Thermal Plume Curve -->
+  <path d="M12 7C12 7 8 13 8 17.5C8 21.6 11.1 25 15 25C16.8 25 18.5 24.3 19.8 23.1C18.2 22.3 17 20.6 17 18.7C17 16.2 19 14.5 20.2 12.8C18.5 10 12 7 12 7Z" fill="url(#petroGrad)"/>
+  
+  <!-- Right Mechanical Sucker Rod Derrick & Beam Accent -->
+  <path d="M19 8L24.5 14.5L20.5 17L25 24H21.5L18.5 19.5L20 16L16.5 12L19 8Z" fill="#38bdf8"/>
+  
+  <!-- Central Twin Singularity Point -->
+  <circle cx="17.5" cy="18.5" r="1.5" fill="#ffffff"/>
+</svg>

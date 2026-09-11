@@ -77,11 +77,7 @@ async def load_training_dataset():
 
         well_prods = prods_by_well.get(well_id, [])
         # Find production records within this cycle's production window
-        cycle_prods = [
-            p
-            for p in well_prods
-            if cycle.production_start <= p.timestamp <= cycle.production_end
-        ]
+        cycle_prods = [p for p in well_prods if cycle.production_start <= p.timestamp <= cycle.production_end]
 
         for p_rec in cycle_prods:
             day_idx = max(1, (p_rec.timestamp - cycle.production_start).days + 1)
@@ -164,9 +160,7 @@ def main():
     # 1. Physics-only baseline error on held-out test wells
     phys_mae, phys_rmse = compute_metrics(y_act_test, y_phys_test)
     print("\n" + "-" * 70)
-    print(
-        f"PHYSICS-ONLY TEST ERROR:  MAE = {phys_mae:.3f} bopd | RMSE = {phys_rmse:.3f} bopd"
-    )
+    print(f"PHYSICS-ONLY TEST ERROR:  MAE = {phys_mae:.3f} bopd | RMSE = {phys_rmse:.3f} bopd")
     print("-" * 70)
 
     # 2. Train ML residual regressor
@@ -182,13 +176,8 @@ def main():
     rmse_pct_improve = ((phys_rmse - hyb_rmse) / phys_rmse) * 100
 
     print("\n" + "-" * 70)
-    print(
-        f"HYBRID (PHYSICS + ML RESIDUAL) ERROR: MAE = {hyb_mae:.3f} bopd | RMSE = {hyb_rmse:.3f} bopd"
-    )
-    print(
-        f"ERROR REDUCTION OVER PHYSICS-ALONE:  MAE: -{mae_pct_improve:.1f}% | "
-        f"RMSE: -{rmse_pct_improve:.1f}%"
-    )
+    print(f"HYBRID (PHYSICS + ML RESIDUAL) ERROR: MAE = {hyb_mae:.3f} bopd | RMSE = {hyb_rmse:.3f} bopd")
+    print(f"ERROR REDUCTION OVER PHYSICS-ALONE:  MAE: -{mae_pct_improve:.1f}% | RMSE: -{rmse_pct_improve:.1f}%")
     print("-" * 70)
 
     beats = hyb_rmse < phys_rmse

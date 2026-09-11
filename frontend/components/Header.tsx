@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Flame, ChevronDown, Activity, Database, Radio } from "lucide-react";
+import { ChevronDown, Activity, Database, Radio } from "lucide-react";
 import { useWells } from "@/lib/api/queries";
+import { PetroTwinLogo } from "@/components/PetroTwinLogo";
 
 interface HeaderProps {
   wellId?: string;
@@ -48,13 +49,11 @@ export function Header({ wellId }: HeaderProps) {
         {/* Brand & Left Navigation */}
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 group-hover:border-orange-400 group-hover:scale-105 transition duration-200 shadow-xs">
-              <Flame className="w-5 h-5 fill-orange-500/20 text-orange-600" />
-            </div>
+            <PetroTwinLogo size={38} className="group-hover:scale-105 transition duration-200" />
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-base tracking-tight text-slate-900 font-['Space_Grotesk']">
-                  ThermoTwin
+                  PetroTwin
                 </span>
                 <span className="text-xs px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-800 border border-orange-200 font-mono font-bold tracking-tight">
                   DIGITAL TWIN v2.0

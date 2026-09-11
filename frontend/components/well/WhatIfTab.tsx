@@ -25,7 +25,6 @@ import {
   Flame,
   Gauge,
   Activity,
-  ShieldCheck,
 } from "lucide-react";
 
 interface WhatIfTabProps {
@@ -60,13 +59,13 @@ export function WhatIfTab({
   const [whatIfSoak, setWhatIfSoak] = useState<number>(4);
   const [whatIfCutoff, setWhatIfCutoff] = useState<number>(75);
   const [whatIfSpm, setWhatIfSpm] = useState<number>(initialSpm ?? twinState?.current_spm ?? 6.5);
+  const [prevInitialSpm, setPrevInitialSpm] = useState(initialSpm);
   const [whatIfStroke, setWhatIfStroke] = useState<number>(twinState?.stroke_length_in ?? 120);
 
-  React.useEffect(() => {
-    if (initialSpm !== undefined) {
-      setWhatIfSpm(initialSpm);
-    }
-  }, [initialSpm]);
+  if (initialSpm !== undefined && initialSpm !== prevInitialSpm) {
+    setPrevInitialSpm(initialSpm);
+    setWhatIfSpm(initialSpm);
+  }
 
   const [whatIfSuccessMsg, setWhatIfSuccessMsg] = useState<string | null>(null);
   const [whatIfErrorMsg, setWhatIfErrorMsg] = useState<string | null>(null);

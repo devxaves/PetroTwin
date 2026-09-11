@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import inspect
+
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -83,9 +84,7 @@ async def test_operator_approval_zero_actuation_safety():
     or external hardware dispatch logic exists in the approvals router.
     """
     # 1. Inspect the approvals router module attributes and functions
-    functions = [
-        obj for name, obj in inspect.getmembers(approvals, inspect.isfunction)
-    ]
+    functions = [obj for name, obj in inspect.getmembers(approvals, inspect.isfunction)]
     function_names = [f.__name__ for f in functions]
 
     # Verify only record and get exist
@@ -110,6 +109,4 @@ async def test_operator_approval_zero_actuation_safety():
     # 2. Inspect the source code of record_operator_approval
     src = inspect.getsource(approvals.record_operator_approval)
     for pattern in forbidden_patterns:
-        assert pattern not in src, (
-            f"Forbidden actuation call '{pattern}' found in record_operator_approval source!"
-        )
+        assert pattern not in src, f"Forbidden actuation call '{pattern}' found in record_operator_approval source!"

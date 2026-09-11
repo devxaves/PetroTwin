@@ -24,9 +24,7 @@ from app.simulation.inflow_and_pump_model import (
 from app.simulation.thermal_model import calculate_k_decay, reservoir_temperature
 from app.simulation.viscosity_model import oil_viscosity_cp
 
-DEFAULT_MODEL_PATH = (
-    Path(__file__).parent / "artifacts" / "css_production_model_v1.joblib"
-)
+DEFAULT_MODEL_PATH = Path(__file__).parent / "artifacts" / "css_production_model_v1.joblib"
 
 FEATURE_COLUMNS = [
     "cycle_number",
@@ -62,13 +60,9 @@ def physics_daily_oil_forecast(
     """
     # 1. Thermal response
     # Peak temperature depends on steam volume and soak efficiency
-    t_peak = min(
-        240.0, 160.0 + (steam_volume_t / 4000.0) * 80.0 + min(soak_days, 5) * 4.0
-    )
+    t_peak = min(240.0, 160.0 + (steam_volume_t / 4000.0) * 80.0 + min(soak_days, 5) * 4.0)
 
-    k_decay = calculate_k_decay(
-        cycle_number=cycle_number, steam_volume_t=steam_volume_t
-    )
+    k_decay = calculate_k_decay(cycle_number=cycle_number, steam_volume_t=steam_volume_t)
     t_hours = float(day_in_cycle * 24)
     temp_c = reservoir_temperature(
         t_hours=t_hours,
@@ -138,18 +132,14 @@ def train_residual_model(
     return reg
 
 
-def save_production_bundle(
-    bundle: dict[str, Any], path: str | Path = DEFAULT_MODEL_PATH
-) -> None:
+def save_production_bundle(bundle: dict[str, Any], path: str | Path = DEFAULT_MODEL_PATH) -> None:
     """Save model bundle to disk."""
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, p)
 
 
-def load_production_model(
-    path: str | Path = DEFAULT_MODEL_PATH, force_reload: bool = False
-) -> dict[str, Any]:
+def load_production_model(path: str | Path = DEFAULT_MODEL_PATH, force_reload: bool = False) -> dict[str, Any]:
     """Load cached or saved production model bundle."""
     global _CACHED_PRODUCTION_BUNDLE
     if _CACHED_PRODUCTION_BUNDLE is not None and not force_reload:
@@ -157,9 +147,7 @@ def load_production_model(
 
     p = Path(path)
     if not p.exists():
-        raise FileNotFoundError(
-            f"Production model not found at {p}. Run train_production_model.py first."
-        )
+        raise FileNotFoundError(f"Production model not found at {p}. Run train_production_model.py first.")
 
     bundle = joblib.load(p)
     _CACHED_PRODUCTION_BUNDLE = bundle

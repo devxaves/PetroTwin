@@ -32,10 +32,7 @@ def calculate_shoelace_area(points: Sequence[dict[str, float]]) -> float:
     area = 0.0
     for i in range(n):
         j = (i + 1) % n
-        area += (
-            points[i]["position"] * points[j]["load"]
-            - points[j]["position"] * points[i]["load"]
-        )
+        area += points[i]["position"] * points[j]["load"] - points[j]["position"] * points[i]["load"]
     return abs(area) * 0.5
 
 
@@ -72,9 +69,7 @@ def extract_features(
     min_pos = min(positions)
     stroke_length = max_pos - min_pos
 
-    max_pos_indices = [
-        i for i, pos in enumerate(positions) if abs(pos - max_pos) < 1e-6
-    ]
+    max_pos_indices = [i for i, pos in enumerate(positions) if abs(pos - max_pos) < 1e-6]
     split_idx = max_pos_indices[0] if max_pos_indices else len(card_points) // 2
 
     # Ensure split_idx is reasonable
@@ -106,9 +101,7 @@ def extract_features(
     down_loads = [p["load"] for p in downstroke]
     if len(down_loads) > 1:
         mean_down_load = sum(down_loads) / len(down_loads)
-        downstroke_load_variance = sum(
-            (ld - mean_down_load) ** 2 for ld in down_loads
-        ) / len(down_loads)
+        downstroke_load_variance = sum((ld - mean_down_load) ** 2 for ld in down_loads) / len(down_loads)
     else:
         downstroke_load_variance = 0.0
 
@@ -129,14 +122,8 @@ def extract_features(
     left_points = [p for p in card_points if p["position"] <= mid_pos]
     right_points = [p for p in card_points if p["position"] > mid_pos]
 
-    left_load_mean = (
-        sum(p["load"] for p in left_points) / len(left_points) if left_points else 0.0
-    )
-    right_load_mean = (
-        sum(p["load"] for p in right_points) / len(right_points)
-        if right_points
-        else 0.0
-    )
+    left_load_mean = sum(p["load"] for p in left_points) / len(left_points) if left_points else 0.0
+    right_load_mean = sum(p["load"] for p in right_points) / len(right_points) if right_points else 0.0
     card_asymmetry = right_load_mean - left_load_mean
 
     # Cycle-to-cycle variance across historical cards (variance of card area)
@@ -144,9 +131,7 @@ def extract_features(
         hist_areas = [calculate_shoelace_area(c) for c in history_cards]
         all_areas = [card_area, *hist_areas]
         mean_area = sum(all_areas) / len(all_areas)
-        cycle_to_cycle_variance = sum((a - mean_area) ** 2 for a in all_areas) / len(
-            all_areas
-        )
+        cycle_to_cycle_variance = sum((a - mean_area) ** 2 for a in all_areas) / len(all_areas)
     else:
         cycle_to_cycle_variance = 0.0
 

@@ -54,6 +54,13 @@ export function ProductionTrendChart({ records }: ProductionTrendChartProps) {
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
+  // Filter records by selected time range
+  const data = useMemo(() => {
+    if (!records || records.length === 0) return [];
+    if (timeRange === 0 || records.length <= timeRange) return records;
+    return records.slice(-timeRange);
+  }, [records, timeRange]);
+
   if (!records || records.length === 0) {
     return (
       <div className="p-6 text-center text-xs font-mono text-slate-400 bg-slate-50 rounded-2xl border border-slate-200">
@@ -61,12 +68,6 @@ export function ProductionTrendChart({ records }: ProductionTrendChartProps) {
       </div>
     );
   }
-
-  // Filter records by selected time range
-  const data = useMemo(() => {
-    if (timeRange === 0 || records.length <= timeRange) return records;
-    return records.slice(-timeRange);
-  }, [records, timeRange]);
 
   // Bounds for SVG
   const width = 600;

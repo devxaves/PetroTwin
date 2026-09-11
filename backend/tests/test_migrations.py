@@ -1,10 +1,10 @@
 from pathlib import Path
 
 import pytest
-from alembic.config import Config
 from sqlalchemy import inspect, text
 
 from alembic import command
+from alembic.config import Config
 from app.core.config import settings
 from app.db.session import engine
 
@@ -40,9 +40,7 @@ async def test_database_tables_exist_after_migration():
         )
         hypertables = {row[0] for row in result.fetchall()}
         assert "production" in hypertables, "production table must be a hypertable"
-        assert (
-            "srp_telemetry" in hypertables
-        ), "srp_telemetry table must be a hypertable"
+        assert "srp_telemetry" in hypertables, "srp_telemetry table must be a hypertable"
 
 
 def test_alembic_upgrade_head_command():

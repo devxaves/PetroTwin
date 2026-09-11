@@ -1,5 +1,5 @@
 /**
- * ThermoTwin — Centralized Real-Time / Polling Configuration.
+ * PetroTwin — Centralized Real-Time / Polling Configuration.
  *
  * All React Query staleTime & polling intervals reference this config
  * instead of hardcoded magic numbers. When the backend gains WebSocket/SSE

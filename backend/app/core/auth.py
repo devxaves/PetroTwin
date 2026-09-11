@@ -1,8 +1,9 @@
 import os
 from datetime import UTC, datetime, timedelta
 from typing import Any
-import jwt
+
 import bcrypt
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
@@ -13,11 +14,12 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.db.base import Base
 from app.db.session import get_session
 
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "thermotwin-super-secret-production-key-2026")
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "petrotwin-super-secret-production-key-2026")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 security = HTTPBearer(auto_error=False)
+
 
 class User(Base):
     __tablename__ = "users"
@@ -29,11 +31,13 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
 
+
 class UserResponse(BaseModel):
     id: int
     username: str
     role: str
     is_active: bool
+
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -41,18 +45,22 @@ class TokenResponse(BaseModel):
     role: str
     username: str
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+
 
 def get_password_hash(password: str) -> str:
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
+
 
 def create_access_token(data: dict[str, Any], expires_delta: timedelta | None = None) -> str:
     to_encode = data.copy()
     expire = datetime.now(UTC) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
 
 def decode_access_token(token: str) -> dict[str, Any]:
     try:
@@ -62,6 +70,7 @@ def decode_access_token(token: str) -> dict[str, Any]:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication token or token expired.",
         ) from exc
+
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials | None = Depends(security),
@@ -79,7 +88,7 @@ async def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token payload missing username subject.",
         )
-    
+
     stmt = select(User).where(User.username == username)
     user = (await session.execute(stmt)).scalar_one_or_none()
     if not user or not user.is_active:
@@ -89,6 +98,7 @@ async def get_current_user(
         )
     return user
 
+
 def require_role(allowed_roles: list[str]):
     async def role_checker(current_user: User = Depends(get_current_user)) -> User:
         if current_user.role not in allowed_roles:
@@ -97,4 +107,5 @@ def require_role(allowed_roles: list[str]):
                 detail=f"Action prohibited. Required role: {allowed_roles}. Current role: {current_user.role}.",
             )
         return current_user
+
     return role_checker

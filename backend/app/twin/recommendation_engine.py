@@ -1,4 +1,4 @@
-"""Combined Recommendation Engine & Explainability for ThermoTwin.
+"""Combined Recommendation Engine & Explainability for PetroTwin.
 
 Synthesizes reservoir thermal optimization (Prompt 4) with SRP mechanical diagnostics
 and rod-float risk mitigation (Prompt 3) into an actionable, explainable joint
@@ -96,9 +96,7 @@ async def generate_joint_recommendation(
     combined_conf = compute_combined_confidence(css_conf, srp_conf)
 
     # 5. Fetch historical cycle average to compute relative expected effects
-    hist_avg = await get_historical_cycle_average(
-        well_id=well_id, session=session, oil_price=oil_price
-    )
+    hist_avg = await get_historical_cycle_average(well_id=well_id, session=session, oil_price=oil_price)
 
     hist_oil = max(hist_avg.get("avg_oil_bbl", 2000.0), 100.0)
     rec_oil = float(opt_css.get("predicted_oil_bbl", 2500.0))
@@ -108,13 +106,8 @@ async def generate_joint_recommendation(
     rec_sor = float(opt_css.get("sor", 2.5))
     sor_delta_pct = round(((rec_sor - hist_sor) / hist_sor) * 100.0, 1)
 
-    hist_energy_bbl = round(
-        (opt_css["steam_cost"] + opt_css["energy_cost"]) / max(rec_oil, 1.0), 2
-    )
     # Energy delta compared to typical benchmark
-    energy_delta_pct = round(
-        ((opt_css["energy_cost_per_bbl"] - 22.0) / 22.0) * 100.0, 1
-    )
+    energy_delta_pct = round(((opt_css["energy_cost_per_bbl"] - 22.0) / 22.0) * 100.0, 1)
 
     risk_delta = round(coupled_risk_score - twin_state.rod_float_risk_score, 1)
 
@@ -140,9 +133,7 @@ async def generate_joint_recommendation(
             f"and fluid pound vulnerability."
         )
     else:
-        reasons.append(
-            f"Pump fillage is healthy at {twin_state.pump_fillage * 100:.1f}%."
-        )
+        reasons.append(f"Pump fillage is healthy at {twin_state.pump_fillage * 100:.1f}%.")
 
     # Rod float reasons
     if twin_state.rod_float_risk_score >= 60.0:

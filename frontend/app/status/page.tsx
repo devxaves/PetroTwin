@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import StatusIndicator from "@/components/StatusIndicator";
-import SystemPanel from "@/components/SystemPanel";
 import DataReadout from "@/components/DataReadout";
 import { fetchHealth, type HealthResponse } from "@/lib/api";
 
@@ -124,7 +123,7 @@ export default function StatusPage() {
                 <h1
                   className="text-sm font-bold text-slate-900 tracking-wide font-display"
                 >
-                  THERMOTWIN
+                  PETROTWIN
                 </h1>
                 <p className="text-[0.65rem] text-slate-400 font-mono tracking-widest uppercase">
                   Infrastructure Control
@@ -210,7 +209,7 @@ export default function StatusPage() {
                         {overallStatus === "ok" && "All Systems Operational"}
                         {overallStatus === "error" && "Connection Failure"}
                         {overallStatus === "warn" && "Partial Degradation"}
-                        {overallStatus === "loading" && "Initializing telemetry..."}
+                        {overallStatus === "loading" && "Initializing..."}
                       </div>
                       <div className="text-xs sm:text-sm text-slate-600 mt-1 font-sans font-medium">
                         {state.errorMessage ?? "All coupled microservices responding within nominal thresholds (<20ms)"}
@@ -358,7 +357,7 @@ export default function StatusPage() {
         {/* ── Bottom Bar ──────────────────────────────────────── */}
         <footer className="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between">
           <div className="text-[0.65rem] text-slate-400 font-mono uppercase tracking-wider">
-            ThermoTwin v0.1.0 &bull; Infrastructure Health Engine
+            PetroTwin v0.1.0 &bull; Infrastructure Health Engine
           </div>
           <div
             className="text-[0.65rem] text-slate-400 font-mono"

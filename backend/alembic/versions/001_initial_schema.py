@@ -57,9 +57,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["well_id"], ["wells.well_id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("well_id", "timestamp"),
     )
-    op.create_index(
-        op.f("ix_production_timestamp"), "production", ["timestamp"], unique=False
-    )
+    op.create_index(op.f("ix_production_timestamp"), "production", ["timestamp"], unique=False)
 
     # 3. Create 'css_cycles' table
     op.create_table(
@@ -81,9 +79,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["well_id"], ["wells.well_id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(
-        op.f("ix_css_cycles_well_id"), "css_cycles", ["well_id"], unique=False
-    )
+    op.create_index(op.f("ix_css_cycles_well_id"), "css_cycles", ["well_id"], unique=False)
 
     # 4. Create 'srp_telemetry' table (hypertable)
     op.create_table(
@@ -100,16 +96,10 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["well_id"], ["wells.well_id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("well_id", "timestamp"),
     )
-    op.create_index(
-        op.f("ix_srp_telemetry_timestamp"), "srp_telemetry", ["timestamp"], unique=False
-    )
+    op.create_index(op.f("ix_srp_telemetry_timestamp"), "srp_telemetry", ["timestamp"], unique=False)
 
     # 5. Create 'dynamometer_cards' table
-    json_col = (
-        postgresql.JSONB(astext_type=sa.Text())
-        if bind.dialect.name == "postgresql"
-        else sa.JSON()
-    )
+    json_col = postgresql.JSONB(astext_type=sa.Text()) if bind.dialect.name == "postgresql" else sa.JSON()
     op.create_table(
         "dynamometer_cards",
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
@@ -132,9 +122,7 @@ def upgrade() -> None:
         ["timestamp"],
         unique=False,
     )
-    op.create_index(
-        op.f("ix_dynamometer_cards_label"), "dynamometer_cards", ["label"], unique=False
-    )
+    op.create_index(op.f("ix_dynamometer_cards_label"), "dynamometer_cards", ["label"], unique=False)
 
     # 6. Create 'failures' table
     op.create_table(
@@ -150,19 +138,13 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_failures_well_id"), "failures", ["well_id"], unique=False)
-    op.create_index(
-        op.f("ix_failures_event_time"), "failures", ["event_time"], unique=False
-    )
+    op.create_index(op.f("ix_failures_event_time"), "failures", ["event_time"], unique=False)
 
     # 7. Convert tables to TimescaleDB hypertables if on PostgreSQL
     if bind.dialect.name == "postgresql":
+        op.execute("SELECT create_hypertable('production', 'timestamp', if_not_exists => TRUE, migrate_data => TRUE);")
         op.execute(
-            "SELECT create_hypertable('production', 'timestamp', "
-            "if_not_exists => TRUE, migrate_data => TRUE);"
-        )
-        op.execute(
-            "SELECT create_hypertable('srp_telemetry', 'timestamp', "
-            "if_not_exists => TRUE, migrate_data => TRUE);"
+            "SELECT create_hypertable('srp_telemetry', 'timestamp', if_not_exists => TRUE, migrate_data => TRUE);"
         )
 
 

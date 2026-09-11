@@ -17,6 +17,8 @@ from app.api.routes.health import router as health_router
 from app.api.routes.metrics import (
     REQUEST_COUNT,
     REQUEST_LATENCY,
+)
+from app.api.routes.metrics import (
     router as metrics_router,
 )
 from app.api.routes.twin import router as twin_router
@@ -30,6 +32,7 @@ from app.db.session import engine
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 if SENTRY_DSN:
     import sentry_sdk
+
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         traces_sample_rate=1.0,
@@ -43,7 +46,7 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["120/minute"])
 @asynccontextmanager
 async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
     """Verify database and Redis connectivity on startup. Fail loudly if unreachable."""
-    logger.info("ThermoTwin API starting up...")
+    logger.info("PetroTwin API starting up...")
     from sqlalchemy import text
 
     try:
@@ -52,35 +55,29 @@ async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
         logger.info("PostgreSQL database connection verified.")
     except Exception as exc:
         logger.error(f"Cannot connect to PostgreSQL at {settings.database_url}: {exc}")
-        raise RuntimeError(
-            f"Cannot connect to PostgreSQL at {settings.database_url}: {exc}"
-        ) from exc
+        raise RuntimeError(f"Cannot connect to PostgreSQL at {settings.database_url}: {exc}") from exc
 
     import redis.asyncio as aioredis
 
     if settings.redis_url and "localhost" not in settings.redis_url:
         try:
-            redis_client = aioredis.from_url(
-                settings.redis_url, decode_responses=True, socket_connect_timeout=3
-            )
+            redis_client = aioredis.from_url(settings.redis_url, decode_responses=True, socket_connect_timeout=3)
             await redis_client.ping()
             logger.info("Redis connection verified.")
             await redis_client.aclose()
         except Exception as exc:
-            logger.warning(
-                f"Redis unavailable at {settings.redis_url}: {exc}. Running in non-cached mode."
-            )
+            logger.warning(f"Redis unavailable at {settings.redis_url}: {exc}. Running in non-cached mode.")
     else:
         logger.info("No remote Redis instance configured. Running in non-cached mode.")
 
     yield
 
-    logger.info("ThermoTwin API shutting down...")
+    logger.info("PetroTwin API shutting down...")
     await engine.dispose()
 
 
 app = FastAPI(
-    title="ThermoTwin API",
+    title="PetroTwin API",
     description="Well-to-Surface Digital Twin for CSS + SRP Optimization",
     version="0.1.0",
     lifespan=lifespan,
@@ -112,17 +109,13 @@ async def metrics_and_logging_middleware(request: Request, call_next):
         status_code = str(response.status_code)
     except Exception as exc:
         status_code = "500"
-        logger.error(
-            f"Unhandled exception on {method} {endpoint}: {exc}", exc_info=True
-        )
+        logger.error(f"Unhandled exception on {method} {endpoint}: {exc}", exc_info=True)
         raise exc
     finally:
         duration = time.time() - start_time
         REQUEST_COUNT.labels(method=method, endpoint=endpoint, status=status_code).inc()
         REQUEST_LATENCY.labels(endpoint=endpoint).observe(duration)
-        logger.info(
-            f"Handled {method} {endpoint} -> {status_code} in {duration:.4f}s"
-        )
+        logger.info(f"Handled {method} {endpoint} -> {status_code} in {duration:.4f}s")
 
     return response
 

@@ -19,9 +19,7 @@ def test_rod_float_risk_monotonicity_variance():
             pump_fillage=0.85,
         )
         current_risk = res["risk_score"]
-        assert (
-            current_risk >= prev_risk
-        ), f"Monotonicity violated: var={var}, prev={prev_risk}, curr={current_risk}"
+        assert current_risk >= prev_risk, f"Monotonicity violated: var={var}, prev={prev_risk}, curr={current_risk}"
         prev_risk = current_risk
 
 
@@ -38,10 +36,7 @@ def test_rod_float_risk_monotonicity_load_spikes():
             pump_fillage=0.80,
         )
         current_risk = res["risk_score"]
-        msg = (
-            f"Monotonicity violated: spike={spike}, prev={prev_risk}, "
-            f"curr={current_risk}"
-        )
+        msg = f"Monotonicity violated: spike={spike}, prev={prev_risk}, curr={current_risk}"
         assert current_risk >= prev_risk, msg
         prev_risk = current_risk
 
@@ -60,9 +55,7 @@ def test_rod_float_risk_monotonicity_viscosity():
             pump_fillage=0.80,
         )
         current_risk = res["risk_score"]
-        assert (
-            current_risk >= prev_risk
-        ), f"Monotonicity violated: visc={visc}, prev={prev_risk}, curr={current_risk}"
+        assert current_risk >= prev_risk, f"Monotonicity violated: visc={visc}, prev={prev_risk}, curr={current_risk}"
         prev_risk = current_risk
 
 
@@ -80,10 +73,7 @@ def test_rod_float_risk_monotonicity_min_load_depression():
             pump_fillage=0.80,
         )
         current_risk = res["risk_score"]
-        msg = (
-            f"Monotonicity violated: min_load={m_load}, prev={prev_risk}, "
-            f"curr={current_risk}"
-        )
+        msg = f"Monotonicity violated: min_load={m_load}, prev={prev_risk}, curr={current_risk}"
         assert current_risk >= prev_risk, msg
         prev_risk = current_risk
 
@@ -119,7 +109,5 @@ def test_rod_float_risk_bounds_and_breakdown():
 
     # Verify explainability factor keys and weight sum
     assert set(worst["factor_breakdown"].keys()) == set(WEIGHTS.keys())
-    total_contribution = sum(
-        f["weighted_contribution"] for f in worst["factor_breakdown"].values()
-    )
+    total_contribution = sum(f["weighted_contribution"] for f in worst["factor_breakdown"].values())
     assert round(total_contribution, 1) == 100.0

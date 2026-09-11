@@ -136,9 +136,7 @@ def generate_dynamometer_card(
             elif eta < eta_hit + 0.15:
                 # Severe pound impact: rapid drop + rebound oscillation
                 phase = (eta - eta_hit) / 0.15
-                oscillation = (
-                    math.sin(phase * 4.0 * math.pi) * 2200.0 * math.exp(-2.5 * phase)
-                )
+                oscillation = math.sin(phase * 4.0 * math.pi) * 2200.0 * math.exp(-2.5 * phase)
                 base = peak_load_lbs - load_range * 0.9 * phase
                 load = base + oscillation
             else:

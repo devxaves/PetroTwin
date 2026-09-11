@@ -156,12 +156,9 @@ async def test_whatif_pareto_front_non_dominated():
 
             # Does point B dominate point A?
             # Higher oil is better, lower SOR is better.
-            b_dominates_a = (oil_b >= oil_a and sor_b <= sor_a) and (
-                oil_b > oil_a or sor_b < sor_a
-            )
+            b_dominates_a = (oil_b >= oil_a and sor_b <= sor_a) and (oil_b > oil_a or sor_b < sor_a)
             assert not b_dominates_a, (
-                f"Pareto violation! Point B (oil={oil_b}, sor={sor_b}) dominates "
-                f"Point A (oil={oil_a}, sor={sor_a})"
+                f"Pareto violation! Point B (oil={oil_b}, sor={sor_b}) dominates Point A (oil={oil_a}, sor={sor_a})"
             )
 
 

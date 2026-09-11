@@ -1,5 +1,5 @@
 /**
- * Base HTTP fetch wrapper with robust error handling for ThermoTwin.
+ * Base HTTP fetch wrapper with robust error handling for PetroTwin.
  */
 
 const rawApiBase =

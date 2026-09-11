@@ -1,5 +1,5 @@
 /**
- * ThermoTwin API Type Definitions.
+ * PetroTwin API Type Definitions.
  * Strictly aligned with Backend FastAPI / Pydantic schemas.
  */
 

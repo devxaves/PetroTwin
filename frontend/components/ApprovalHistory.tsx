@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { ApprovalResponse } from "@/lib/api/types";
-import { Clock, CheckCircle, XCircle, Edit3 } from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface ApprovalHistoryProps {
   approvals: ApprovalResponse[];

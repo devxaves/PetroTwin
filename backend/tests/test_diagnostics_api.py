@@ -97,9 +97,7 @@ async def test_post_classify_ambiguous_borderline_card_reflects_uncertainty():
     data = resp.json()
     # Ambiguous card should have non-trivial probability distributed across classes
     # and confidence must be realistically low (< 0.50)
-    assert (
-        data["confidence"] < 0.50
-    ), f"Expected calibrated uncertainty for borderline card, got {data['confidence']}"
+    assert data["confidence"] < 0.50, f"Expected calibrated uncertainty for borderline card, got {data['confidence']}"
 
 
 @pytest.mark.asyncio

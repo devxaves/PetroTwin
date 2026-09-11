@@ -116,17 +116,12 @@ async def list_wells(
     for well in wells:
         # Fetch latest production record for each well
         latest_prod_q = (
-            select(Production)
-            .where(Production.well_id == well.well_id)
-            .order_by(desc(Production.timestamp))
-            .limit(1)
+            select(Production).where(Production.well_id == well.well_id).order_by(desc(Production.timestamp)).limit(1)
         )
         prod_res = await session.execute(latest_prod_q)
         latest_prod = prod_res.scalar_one_or_none()
 
-        snapshot = (
-            ProductionSnapshot.model_validate(latest_prod) if latest_prod else None
-        )
+        snapshot = ProductionSnapshot.model_validate(latest_prod) if latest_prod else None
 
         results.append(
             WellSummary(
@@ -188,11 +183,7 @@ async def get_well_css_cycles(
     if not well:
         raise HTTPException(status_code=404, detail=f"Well '{well_id}' not found")
 
-    stmt = (
-        select(CSSCycle)
-        .where(CSSCycle.well_id == well_id)
-        .order_by(CSSCycle.cycle_id.asc())
-    )
+    stmt = select(CSSCycle).where(CSSCycle.well_id == well_id).order_by(CSSCycle.cycle_id.asc())
     res = await session.execute(stmt)
     cycles = res.scalars().all()
 

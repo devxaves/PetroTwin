@@ -13,7 +13,9 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import JSON
 
+from app.core.auth import User
 from app.db.base import Base
+from app.db.models.approvals import OperatorApproval
 
 # JSON type fallback for sqlite or postgresql
 JSONType = JSON().with_variant(JSONB, "postgresql")
@@ -38,18 +40,14 @@ class Well(Base):
     production_records: Mapped[list["Production"]] = relationship(
         "Production", back_populates="well", cascade="all, delete-orphan"
     )
-    css_cycles: Mapped[list["CSSCycle"]] = relationship(
-        "CSSCycle", back_populates="well", cascade="all, delete-orphan"
-    )
+    css_cycles: Mapped[list["CSSCycle"]] = relationship("CSSCycle", back_populates="well", cascade="all, delete-orphan")
     srp_telemetry_records: Mapped[list["SRPTelemetry"]] = relationship(
         "SRPTelemetry", back_populates="well", cascade="all, delete-orphan"
     )
     dynamometer_cards: Mapped[list["DynamometerCard"]] = relationship(
         "DynamometerCard", back_populates="well", cascade="all, delete-orphan"
     )
-    failures: Mapped[list["Failure"]] = relationship(
-        "Failure", back_populates="well", cascade="all, delete-orphan"
-    )
+    failures: Mapped[list["Failure"]] = relationship("Failure", back_populates="well", cascade="all, delete-orphan")
     operator_approvals: Mapped[list["OperatorApproval"]] = relationship(
         "OperatorApproval", back_populates="well", cascade="all, delete-orphan"
     )
@@ -60,12 +58,8 @@ class Production(Base):
 
     __tablename__ = "production"
 
-    well_id: Mapped[str] = mapped_column(
-        String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), primary_key=True
-    )
-    timestamp: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), primary_key=True, index=True
-    )
+    well_id: Mapped[str] = mapped_column(String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), primary_key=True)
+    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), primary_key=True, index=True)
     oil_rate_bopd: Mapped[float] = mapped_column(Float, nullable=False)
     water_rate_bwpd: Mapped[float] = mapped_column(Float, nullable=False)
     gas_rate: Mapped[float] = mapped_column(Float, nullable=False)
@@ -84,31 +78,19 @@ class CSSCycle(Base):
     __tablename__ = "css_cycles"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    well_id: Mapped[str] = mapped_column(
-        String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), index=True
-    )
+    well_id: Mapped[str] = mapped_column(String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), index=True)
     cycle_id: Mapped[int] = mapped_column(Integer, nullable=False)
-    injection_start: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
-    injection_end: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
+    injection_start: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    injection_end: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     steam_volume_t: Mapped[float] = mapped_column(Float, nullable=False)
     steam_rate: Mapped[float] = mapped_column(Float, nullable=False)
     steam_pressure: Mapped[float] = mapped_column(Float, nullable=False)
     steam_temperature_c: Mapped[float] = mapped_column(Float, nullable=False)
     steam_quality: Mapped[float] = mapped_column(Float, nullable=False)
-    soak_start: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
+    soak_start: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     soak_end: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    production_start: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
-    production_end: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
+    production_start: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    production_end: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     well: Mapped["Well"] = relationship("Well", back_populates="css_cycles")
 
@@ -118,12 +100,8 @@ class SRPTelemetry(Base):
 
     __tablename__ = "srp_telemetry"
 
-    well_id: Mapped[str] = mapped_column(
-        String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), primary_key=True
-    )
-    timestamp: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), primary_key=True, index=True
-    )
+    well_id: Mapped[str] = mapped_column(String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), primary_key=True)
+    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), primary_key=True, index=True)
     stroke_length_in: Mapped[float] = mapped_column(Float, nullable=False)
     spm: Mapped[float] = mapped_column(Float, nullable=False)
     vfd_frequency: Mapped[float] = mapped_column(Float, nullable=False)
@@ -141,15 +119,9 @@ class DynamometerCard(Base):
     __tablename__ = "dynamometer_cards"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    well_id: Mapped[str] = mapped_column(
-        String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), index=True
-    )
-    timestamp: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, index=True
-    )
-    card_points_json: Mapped[list[dict[str, Any]]] = mapped_column(
-        JSONType, nullable=False
-    )
+    well_id: Mapped[str] = mapped_column(String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), index=True)
+    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    card_points_json: Mapped[list[dict[str, Any]]] = mapped_column(JSONType, nullable=False)
     label: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
 
     well: Mapped["Well"] = relationship("Well", back_populates="dynamometer_cards")
@@ -161,12 +133,8 @@ class Failure(Base):
     __tablename__ = "failures"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    well_id: Mapped[str] = mapped_column(
-        String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), index=True
-    )
-    event_time: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, index=True
-    )
+    well_id: Mapped[str] = mapped_column(String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), index=True)
+    event_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
     failure_type: Mapped[str] = mapped_column(String(64), nullable=False)
     severity: Mapped[str] = mapped_column(String(32), nullable=False)
     downtime_hours: Mapped[float] = mapped_column(Float, nullable=False)
@@ -174,9 +142,6 @@ class Failure(Base):
 
     well: Mapped["Well"] = relationship("Well", back_populates="failures")
 
-
-from app.db.models.approvals import OperatorApproval
-from app.core.auth import User
 
 __all__ = [
     "Base",

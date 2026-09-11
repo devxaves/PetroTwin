@@ -208,24 +208,12 @@ async def seed_data() -> dict[str, int]:
             print(f"  [{idx}/{total_wells}] Seeded {wid} ({nc} cycles)")
 
         # 3. Query row counts
-        wells_count = (
-            await session.execute(select(func.count()).select_from(Well))
-        ).scalar() or 0
-        prod_count = (
-            await session.execute(select(func.count()).select_from(Production))
-        ).scalar() or 0
-        cycles_count = (
-            await session.execute(select(func.count()).select_from(CSSCycle))
-        ).scalar() or 0
-        srp_count = (
-            await session.execute(select(func.count()).select_from(SRPTelemetry))
-        ).scalar() or 0
-        dyno_count = (
-            await session.execute(select(func.count()).select_from(DynamometerCard))
-        ).scalar() or 0
-        fail_count = (
-            await session.execute(select(func.count()).select_from(Failure))
-        ).scalar() or 0
+        wells_count = (await session.execute(select(func.count()).select_from(Well))).scalar() or 0
+        prod_count = (await session.execute(select(func.count()).select_from(Production))).scalar() or 0
+        cycles_count = (await session.execute(select(func.count()).select_from(CSSCycle))).scalar() or 0
+        srp_count = (await session.execute(select(func.count()).select_from(SRPTelemetry))).scalar() or 0
+        dyno_count = (await session.execute(select(func.count()).select_from(DynamometerCard))).scalar() or 0
+        fail_count = (await session.execute(select(func.count()).select_from(Failure))).scalar() or 0
 
         counts = {
             "wells": wells_count,
@@ -240,12 +228,11 @@ async def seed_data() -> dict[str, int]:
         for table, count in counts.items():
             print(f"  - {table}: {count:,} rows")
 
+
 async def seed_if_empty() -> None:
     """Seed data only if database is currently empty."""
     async with async_session_factory() as session:
-        wells_count = (
-            await session.execute(select(func.count()).select_from(Well))
-        ).scalar() or 0
+        wells_count = (await session.execute(select(func.count()).select_from(Well))).scalar() or 0
         if wells_count > 0:
             print(f"Database already contains {wells_count} wells. Skipping seed.")
             return

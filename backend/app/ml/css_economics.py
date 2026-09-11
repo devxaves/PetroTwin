@@ -35,9 +35,7 @@ def steam_oil_ratio(cumulative_steam_cwe: float, cumulative_oil: float) -> float
     return round(steam_bbl / cumulative_oil, 2)
 
 
-def energy_cost_per_barrel(
-    steam_cost: float, energy_cost: float, oil_produced: float
-) -> float:
+def energy_cost_per_barrel(steam_cost: float, energy_cost: float, oil_produced: float) -> float:
     """
     Compute total thermal and electrical energy cost per barrel of oil produced.
 
@@ -102,7 +100,5 @@ def marginal_daily_value(
         Marginal net dollar value for the day.
     """
     marginal_revenue = daily_oil_bbl * oil_price
-    marginal_costs = (
-        daily_lift_cost + (daily_water_bbl * water_cost_per_bbl) + daily_risk_penalty
-    )
+    marginal_costs = daily_lift_cost + (daily_water_bbl * water_cost_per_bbl) + daily_risk_penalty
     return round(marginal_revenue - marginal_costs, 2)

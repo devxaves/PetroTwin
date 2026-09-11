@@ -34,27 +34,15 @@ router = APIRouter(prefix="/wells", tags=["what-if"])
 
 
 class WhatIfRequest(BaseModel):
-    steam_volume: float | None = Field(
-        None, description="Proposed steam volume in metric tonnes (1200 - 3800)"
-    )
-    injection_pressure: float | None = Field(
-        None, description="Proposed steam injection pressure in MPa (8.0 - 13.5)"
-    )
-    soak_time: int | None = Field(
-        None, description="Proposed soak duration in days (2 - 7)"
-    )
-    cutoff_days: int | None = Field(
-        None, description="Proposed production cutoff duration in days (40 - 150)"
-    )
-    spm: float | None = Field(
-        None, ge=2.0, le=16.0, description="Proposed pumping speed (SPM) (2.0 - 16.0)"
-    )
+    steam_volume: float | None = Field(None, description="Proposed steam volume in metric tonnes (1200 - 3800)")
+    injection_pressure: float | None = Field(None, description="Proposed steam injection pressure in MPa (8.0 - 13.5)")
+    soak_time: int | None = Field(None, description="Proposed soak duration in days (2 - 7)")
+    cutoff_days: int | None = Field(None, description="Proposed production cutoff duration in days (40 - 150)")
+    spm: float | None = Field(None, ge=2.0, le=16.0, description="Proposed pumping speed (SPM) (2.0 - 16.0)")
     stroke_length: float | None = Field(
         None, ge=40.0, le=220.0, description="Proposed polished rod stroke length in inches"
     )
-    oil_price: float | None = Field(
-        None, gt=0, description="Crude oil price in USD/bbl override"
-    )
+    oil_price: float | None = Field(None, gt=0, description="Crude oil price in USD/bbl override")
 
 
 class ComparisonMetric(BaseModel):
@@ -129,24 +117,12 @@ async def simulate_whatif_scenario(
     oil_price = payload.oil_price or DEFAULT_OIL_PRICE_PER_BBL
 
     # 3. Determine proposed inputs by overriding specified values
-    prop_steam_vol = (
-        payload.steam_volume if payload.steam_volume is not None else cur_steam_vol
-    )
-    prop_steam_pres = (
-        payload.injection_pressure
-        if payload.injection_pressure is not None
-        else cur_steam_pres
-    )
-    prop_soak_days = (
-        payload.soak_time if payload.soak_time is not None else cur_soak_days
-    )
-    prop_cutoff_days = (
-        payload.cutoff_days if payload.cutoff_days is not None else cur_cutoff_days
-    )
+    prop_steam_vol = payload.steam_volume if payload.steam_volume is not None else cur_steam_vol
+    prop_steam_pres = payload.injection_pressure if payload.injection_pressure is not None else cur_steam_pres
+    prop_soak_days = payload.soak_time if payload.soak_time is not None else cur_soak_days
+    prop_cutoff_days = payload.cutoff_days if payload.cutoff_days is not None else cur_cutoff_days
     prop_spm = payload.spm if payload.spm is not None else cur_spm
-    prop_stroke = (
-        payload.stroke_length if payload.stroke_length is not None else cur_stroke
-    )
+    prop_stroke = payload.stroke_length if payload.stroke_length is not None else cur_stroke
 
     # 4. Strict Envelope Validation (Reuses Prompt 4 constraints)
     try:
@@ -214,16 +190,10 @@ async def simulate_whatif_scenario(
         }
 
     comparison = {
-        "production_oil_bbl": make_metric(
-            cur_css_eval["predicted_oil_bbl"], prop_css_eval["predicted_oil_bbl"]
-        ),
-        "cumulative_oil_bbl": make_metric(
-            cur_css_eval["predicted_oil_bbl"], prop_css_eval["predicted_oil_bbl"]
-        ),
+        "production_oil_bbl": make_metric(cur_css_eval["predicted_oil_bbl"], prop_css_eval["predicted_oil_bbl"]),
+        "cumulative_oil_bbl": make_metric(cur_css_eval["predicted_oil_bbl"], prop_css_eval["predicted_oil_bbl"]),
         "sor": make_metric(cur_css_eval["sor"], prop_css_eval["sor"]),
-        "energy_cost_per_bbl": make_metric(
-            cur_css_eval["energy_cost_per_bbl"], prop_css_eval["energy_cost_per_bbl"]
-        ),
+        "energy_cost_per_bbl": make_metric(cur_css_eval["energy_cost_per_bbl"], prop_css_eval["energy_cost_per_bbl"]),
         "energy_intensity_usd_per_bbl": make_metric(
             cur_css_eval["energy_cost_per_bbl"], prop_css_eval["energy_cost_per_bbl"]
         ),
@@ -235,12 +205,8 @@ async def simulate_whatif_scenario(
             cur_coupled["pump"]["volumetric_efficiency"],
             prop_coupled["pump"]["volumetric_efficiency"],
         ),
-        "economic_value_usd": make_metric(
-            cur_css_eval["economic_value"], prop_css_eval["economic_value"]
-        ),
-        "net_economic_value_usd": make_metric(
-            cur_css_eval["economic_value"], prop_css_eval["economic_value"]
-        ),
+        "economic_value_usd": make_metric(cur_css_eval["economic_value"], prop_css_eval["economic_value"]),
+        "net_economic_value_usd": make_metric(cur_css_eval["economic_value"], prop_css_eval["economic_value"]),
     }
 
     return WhatIfResponse(
@@ -320,9 +286,25 @@ async def get_whatif_pareto(
     # Sweep objective weight w for Oil Production vs (1 - w) for (1 / SOR)
     # Target: 10 to 20 Pareto optimal points
     weights = [
-        0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40,
-        0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80,
-        0.85, 0.90, 0.95,
+        0.05,
+        0.10,
+        0.15,
+        0.20,
+        0.25,
+        0.30,
+        0.35,
+        0.40,
+        0.45,
+        0.50,
+        0.55,
+        0.60,
+        0.65,
+        0.70,
+        0.75,
+        0.80,
+        0.85,
+        0.90,
+        0.95,
     ]
 
     max_oil = max(c["predicted_oil_bbl"] for c in candidates)

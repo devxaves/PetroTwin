@@ -9,8 +9,6 @@ Pump Fillage -> Downstroke Drag -> Rod-Float Risk).
 
 from __future__ import annotations
 
-import pytest
-
 from app.twin.coupling import calculate_pump_efficiency, simulate_coupled_response
 from app.twin.recommendation_engine import compute_combined_confidence
 
@@ -55,9 +53,7 @@ def test_coupling_css_change_alters_srp_rod_float_risk() -> None:
     assert temp_b > temp_a, f"High steam should yield higher temperature ({temp_b} > {temp_a})"
     assert visc_b < visc_a, f"High steam should lower oil viscosity ({visc_b} < {visc_a})"
     assert risk_a != risk_b, "Identical SPM with different steam volume MUST NOT yield identical risk scores!"
-    assert risk_a > risk_b, (
-        f"Colder oil under low steam should have higher rod-float risk ({risk_a} > {risk_b})"
-    )
+    assert risk_a > risk_b, f"Colder oil under low steam should have higher rod-float risk ({risk_a} > {risk_b})"
 
 
 def test_coupling_spm_change_alters_rod_float_and_efficiency() -> None:
@@ -97,9 +93,7 @@ def test_coupling_spm_change_alters_rod_float_and_efficiency() -> None:
     eff_high = res_high_spm["pump"]["volumetric_efficiency"]
 
     assert risk_low != risk_high, "Different SPM with identical CSS MUST NOT yield identical risk scores!"
-    assert risk_high > risk_low, (
-        f"Higher SPM should increase downward rod drag and risk ({risk_high} > {risk_low})"
-    )
+    assert risk_high > risk_low, f"Higher SPM should increase downward rod drag and risk ({risk_high} > {risk_low})"
     assert eff_low != eff_high, "Different SPM MUST alter volumetric pump efficiency!"
 
 

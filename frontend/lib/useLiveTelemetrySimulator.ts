@@ -9,13 +9,13 @@ import type { WellTwinState } from "@/lib/api/types";
  */
 export function useLiveTelemetrySimulator(initialState?: WellTwinState, isLive = true) {
   const [liveState, setLiveState] = useState<WellTwinState | undefined>(initialState);
+  const [prevInitialState, setPrevInitialState] = useState(initialState);
   const [pulseCount, setPulseCount] = useState(0);
 
-  useEffect(() => {
-    if (initialState) {
-      setLiveState(initialState);
-    }
-  }, [initialState]);
+  if (initialState !== prevInitialState) {
+    setPrevInitialState(initialState);
+    setLiveState(initialState);
+  }
 
   useEffect(() => {
     if (!isLive || !initialState) return;

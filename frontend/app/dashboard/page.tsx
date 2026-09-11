@@ -13,15 +13,9 @@ import {
   Search,
   LayoutGrid,
   Table as TableIcon,
-  Thermometer,
   Droplets,
-  Gauge,
   RefreshCw,
-  Radio,
-  CheckCircle2,
   AlertTriangle,
-  TrendingUp,
-  ArrowUpRight,
 } from "lucide-react";
 
 type ViewMode = "table" | "grid";

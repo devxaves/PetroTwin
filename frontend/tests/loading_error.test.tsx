@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import FieldOverviewPage from "@/app/page";
+import FieldOverviewPage from "@/app/dashboard/page";
 import * as queries from "@/lib/api/queries";
 
 // Mock queries

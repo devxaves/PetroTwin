@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 /**
- * Playwright E2E Tests for ThermoTwin Landing Page (Prompt 8).
+ * Playwright E2E Tests for PetroTwin Landing Page (Prompt 8).
  *
  * Tests:
  * 1. Landing page loads, hero animation renders without errors

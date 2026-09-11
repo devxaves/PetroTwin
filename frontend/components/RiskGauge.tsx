@@ -21,18 +21,18 @@ export function RiskGauge({
 
   // Color classification based on 0-30 LOW, 30-60 MODERATE, 60-100 HIGH
   let statusColor = "text-emerald-600";
-  let statusBg = "bg-emerald-50 border-emerald-200 text-emerald-700";
+  let statusBg = "bg-emerald-50 border-emerald-200 text-emerald-700 text-emerald-400";
   let barColor = "bg-emerald-500";
   let resolvedLevel = level ?? (safeScore < 30 ? "LOW" : safeScore < 60 ? "MODERATE" : "HIGH");
 
   if (safeScore >= 60 || resolvedLevel === "HIGH") {
     statusColor = "text-rose-600";
-    statusBg = "bg-rose-50 border-rose-200 text-rose-700";
+    statusBg = "bg-rose-50 border-rose-200 text-rose-700 text-rose-400";
     barColor = "bg-rose-500";
     resolvedLevel = "HIGH";
   } else if (safeScore >= 30 || resolvedLevel === "MODERATE") {
     statusColor = "text-amber-600";
-    statusBg = "bg-amber-50 border-amber-200 text-amber-700";
+    statusBg = "bg-amber-50 border-amber-200 text-amber-700 text-amber-400";
     barColor = "bg-amber-500";
     resolvedLevel = "MODERATE";
   }

@@ -1,20 +1,13 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import type { CardPoint } from "@/lib/api/types";
 import {
-  Gauge,
   Eye,
   EyeOff,
   Play,
   Pause,
-  Layers,
-  Sparkles,
-  Zap,
-  Info,
   Activity,
-  CheckCircle2,
-  AlertTriangle,
 } from "lucide-react";
 
 interface DynamometerCardProps {
@@ -48,7 +41,7 @@ export function DynamometerCard({
   useEffect(() => {
     if (!isAnimatingStroke) return;
     let frameId: number;
-    let start = performance.now();
+    const start = performance.now();
     const duration = 5000; // 5s cycle for ~6 SPM
 
     const loop = (now: number) => {
@@ -130,12 +123,13 @@ export function DynamometerCard({
 
   // Downhole Pump Card (Calculated via Gibbs damped wave equation)
   const downholePoints = useMemo(() => {
-    return effectivePoints.map((p) => {
+    return effectivePoints.map((p, idx) => {
       // Downhole plunger displacement is shorter due to rod stretch (~92% stroke)
       const downholePos = Math.max(0, (p.position - 5) * 0.9);
       // Downhole load reflects direct fluid column weight on plunger (sharp square card)
       const isUp = p.load > 10000;
-      const downholeLoad = isUp ? 13400 + Math.random() * 200 : 2100 + Math.random() * 150;
+      const noise = Math.sin(idx * 0.4) * 80;
+      const downholeLoad = isUp ? 13400 + noise : 2100 + noise;
       return { position: downholePos, load: downholeLoad };
     });
   }, [effectivePoints]);
@@ -165,25 +159,31 @@ export function DynamometerCard({
   const plotWidth = width - paddingLeft - paddingRight;
   const plotHeight = height - paddingTop - paddingBottom;
 
-  const scaleX = (pos: number) =>
-    paddingLeft + ((pos - xMin) / (xMax - xMin || 1)) * plotWidth;
+  const scaleX = useCallback(
+    (pos: number) =>
+      paddingLeft + ((pos - xMin) / (xMax - xMin || 1)) * plotWidth,
+    [paddingLeft, xMin, xMax, plotWidth]
+  );
 
-  const scaleY = (load: number) =>
-    paddingTop + plotHeight - ((load - yMin) / (yMax - yMin || 1)) * plotHeight;
+  const scaleY = useCallback(
+    (load: number) =>
+      paddingTop + plotHeight - ((load - yMin) / (yMax - yMin || 1)) * plotHeight,
+    [paddingTop, plotHeight, yMin, yMax]
+  );
 
   // Surface Card Polyline String
   const pointsString = useMemo(() => {
     return effectivePoints
       .map((p) => `${scaleX(p.position).toFixed(1)},${scaleY(p.load).toFixed(1)}`)
       .join(" ");
-  }, [effectivePoints, xMin, xMax, yMin, yMax, plotWidth, plotHeight]);
+  }, [effectivePoints, scaleX, scaleY]);
 
   // Downhole Card Polyline String
   const downholeString = useMemo(() => {
     return downholePoints
       .map((p) => `${scaleX(p.position).toFixed(1)},${scaleY(p.load).toFixed(1)}`)
       .join(" ");
-  }, [downholePoints, xMin, xMax, yMin, yMax, plotWidth, plotHeight]);
+  }, [downholePoints, scaleX, scaleY]);
 
   // Nominal baseline envelope
   const referenceEnvelopeString = useMemo(() => {
@@ -204,7 +204,7 @@ export function DynamometerCard({
       pts.push({ x: scaleX(pos), y: scaleY(load) });
     }
     return pts.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
-  }, [minPos, maxPos, minLoad, maxLoad]);
+  }, [minPos, maxPos, minLoad, maxLoad, scaleX, scaleY]);
 
   // Mechanical vitals
   const pprl = Math.round(maxLoad);
@@ -236,6 +236,17 @@ export function DynamometerCard({
   const yTickValues = Array.from({ length: yTicks + 1 }, (_, i) =>
     yMin + (i * (yMax - yMin)) / yTicks
   );
+
+  if (patternMode === "active" && (!cardPoints || cardPoints.length === 0)) {
+    return (
+      <div
+        data-testid="dyna-card-empty"
+        className="p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs flex items-center justify-center text-slate-500 font-mono text-sm"
+      >
+        No dynamometer card points available
+      </div>
+    );
+  }
 
   return (
     <div
@@ -591,7 +602,7 @@ export function DynamometerCard({
             fontSize="12"
             fontWeight="bold"
           >
-            Polished Rod Travel Displacement (inches)
+            Polished Rod Position (inches)
           </text>
           <text
             transform={`rotate(-90 20 ${paddingTop + plotHeight / 2})`}
@@ -602,7 +613,7 @@ export function DynamometerCard({
             fontSize="12"
             fontWeight="bold"
           >
-            Surface Rod Tension (lbf)
+            Polished Rod Load (lbs)
           </text>
         </svg>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, use } from "react";
 import { Header } from "@/components/Header";
 import {
   useWellTwinState,
@@ -18,7 +18,7 @@ import {
   WhatIfTab,
 } from "@/components/well";
 import type { WellTab } from "@/components/well";
-import { Thermometer, Flame, Gauge, AlertCircle, AlertTriangle } from "lucide-react";
+import { Thermometer, Flame, Gauge, AlertCircle } from "lucide-react";
 
 /**
  * Individual Well Digital Twin page.
@@ -38,12 +38,7 @@ export default function WellTwinPage({ params }: WellPageProps) {
   const wellId = resolvedParams.well_id;
 
   // Active tab & stream toggle
-  const [activeTab, setActiveTab] = useState<WellTab>("overview");
-  const [isLiveStream, setIsLiveStream] = useState(true);
-  const [presetSpm, setPresetSpm] = useState<number | undefined>(undefined);
-
-  // Synchronize tab from URL search parameters on client mount
-  useEffect(() => {
+  const [activeTab, setActiveTab] = useState<WellTab>(() => {
     if (typeof window !== "undefined") {
       const search = new URLSearchParams(window.location.search);
       const tabParam = search.get("tab") as WellTab | null;
@@ -51,10 +46,13 @@ export default function WellTwinPage({ params }: WellPageProps) {
         tabParam &&
         ["overview", "diagnostics", "optimizer", "whatif"].includes(tabParam)
       ) {
-        setActiveTab(tabParam);
+        return tabParam;
       }
     }
-  }, []);
+    return "overview";
+  });
+  const [isLiveStream, setIsLiveStream] = useState(true);
+  const [presetSpm, setPresetSpm] = useState<number | undefined>(undefined);
 
   const handleTabChange = (tab: WellTab) => {
     setActiveTab(tab);
@@ -246,7 +244,7 @@ export default function WellTwinPage({ params }: WellPageProps) {
                       : "bg-emerald-50 text-emerald-800 border-emerald-200"
                   }`}
                 >
-                  {isHighRisk ? "HIGH RISK" : isModRisk ? "MODERATE" : "NOMINAL"}
+                  {riskLevel} RISK
                 </span>
               </div>
             </div>

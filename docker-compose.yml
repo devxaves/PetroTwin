@@ -2,15 +2,15 @@ services:
   postgres:
     image: timescale/timescaledb:latest-pg16
     environment:
-      POSTGRES_USER: thermotwin
-      POSTGRES_PASSWORD: thermotwin
-      POSTGRES_DB: thermotwin
+      POSTGRES_USER: petrotwin
+      POSTGRES_PASSWORD: petrotwin
+      POSTGRES_DB: petrotwin
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/home/postgres/pgdata/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U thermotwin -d thermotwin"]
+      test: ["CMD-SHELL", "pg_isready -U petrotwin -d petrotwin"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -32,7 +32,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql+asyncpg://thermotwin:thermotwin@postgres:5432/thermotwin
+      DATABASE_URL: postgresql+asyncpg://petrotwin:petrotwin@postgres:5432/petrotwin
       REDIS_URL: redis://redis:6379/0
       CORS_ORIGINS: '["http://localhost:3000","http://frontend:3000"]'
     volumes:

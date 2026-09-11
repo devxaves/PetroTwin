@@ -1,1 +1,1 @@
-"""ThermoTwin Machine Learning package for dynamometer diagnostics."""
+"""PetroTwin Machine Learning package for dynamometer diagnostics."""

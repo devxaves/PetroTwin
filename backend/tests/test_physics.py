@@ -21,10 +21,7 @@ def test_viscosity_strictly_monotonic_decreasing():
     for i in range(len(viscosities) - 1):
         t1, t2 = temps[i], temps[i + 1]
         mu1, mu2 = viscosities[i], viscosities[i + 1]
-        assert mu1 > mu2, (
-            f"Monotonicity violation: at {t1} C, mu={mu1} cP; "
-            f"at {t2} C, mu={mu2} cP (expected mu1 > mu2)"
-        )
+        assert mu1 > mu2, f"Monotonicity violation: at {t1} C, mu={mu1} cP; at {t2} C, mu={mu2} cP (expected mu1 > mu2)"
 
 
 def test_viscosity_reference_point():
@@ -44,9 +41,7 @@ def test_pump_fillage_bounds():
     for q_in in test_inflows:
         for disp in test_displacements:
             f = pump_fillage(q_in, disp)
-            assert (
-                0.0 <= f <= 1.0
-            ), f"Fillage out of bounds: fillage({q_in}, {disp}) = {f}"
+            assert 0.0 <= f <= 1.0, f"Fillage out of bounds: fillage({q_in}, {disp}) = {f}"
 
 
 def test_oil_production_rate_non_negative():
@@ -62,9 +57,7 @@ def test_oil_production_rate_non_negative():
         for spm in spms:
             for stroke in strokes:
                 q = oil_production_rate(f, spm, stroke)
-                assert (
-                    q >= 0.0
-                ), f"Negative oil production: rate({f}, {spm}, {stroke}) = {q}"
+                assert q >= 0.0, f"Negative oil production: rate({f}, {spm}, {stroke}) = {q}"
                 if f == 0.0 or spm == 0.0 or stroke == 0.0:
                     assert q == 0.0
 

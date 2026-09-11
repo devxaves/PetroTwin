@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 /**
- * Playwright End-to-End Test for ThermoTwin Operator Workflow Tree.
+ * Playwright End-to-End Test for PetroTwin Operator Workflow Tree.
  *
  * Steps required by Prompt 6:
  * 1. Load field overview, confirm at least one well shows non-zero risk

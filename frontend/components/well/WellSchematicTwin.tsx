@@ -38,7 +38,7 @@ export function WellSchematicTwin({ wellId, twinState }: WellSchematicTwinProps)
     if (!isPlaying) return;
     const cycleDurationMs = (60 / Math.max(1, spm)) * 1000;
     let animationFrameId: number;
-    let startTime = performance.now();
+    const startTime = performance.now();
 
     const animate = (now: number) => {
       const elapsed = (now - startTime) % cycleDurationMs;
