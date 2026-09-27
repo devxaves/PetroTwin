@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Activity, Database, Radio } from "lucide-react";
 import { useWells } from "@/lib/api/queries";
-import { PetroTwinLogo } from "@/components/PetroTwinLogo";
+import { formatISTTime } from "@/lib/formatDate";
 
 interface HeaderProps {
   wellId?: string;
@@ -18,21 +19,11 @@ export function Header({ wellId }: HeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState<string>("");
 
+  // Live IST clock — replaces the old UTC clock
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setCurrentTime(
-        now.toLocaleTimeString("en-US", {
-          timeZone: "UTC",
-          hour12: false,
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        }) + " UTC"
-      );
-    };
-    updateTime();
-    const timer = setInterval(updateTime, 1000);
+    const tick = () => setCurrentTime(formatISTTime(new Date(), true));
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -49,7 +40,17 @@ export function Header({ wellId }: HeaderProps) {
         {/* Brand & Left Navigation */}
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <PetroTwinLogo size={38} className="group-hover:scale-105 transition duration-200" />
+            {/* Real logo.jpg */}
+            <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-slate-200 p-0.5 shadow-xs group-hover:scale-105 transition duration-200">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-contain"
+                priority
+              />
+            </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-base tracking-tight text-slate-900 font-['Space_Grotesk']">
@@ -148,13 +149,14 @@ export function Header({ wellId }: HeaderProps) {
           </nav>
         </div>
 
-        {/* Telemetry Status & Clock */}
+        {/* Telemetry Status & IST Clock */}
         <div className="flex items-center gap-3 font-mono text-xs">
           <div className="hidden lg:flex items-center gap-2 text-slate-600 text-xs bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
             <Radio className="w-4 h-4 text-orange-500 animate-pulse" />
             <span className="font-bold text-slate-800">PAD 4</span>
             <span className="text-slate-300">|</span>
-            <span className="text-slate-900 font-bold">{currentTime || "LIVE"}</span>
+            {/* IST clock — was UTC */}
+            <span className="text-slate-900 font-bold">{currentTime || "—"}</span>
           </div>
 
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-900 shadow-2xs font-bold text-xs">

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
 import { useWells } from "@/lib/api/queries";
+import { formatISTTime, formatISTDateTime } from "@/lib/formatDate";
 import {
   Activity,
   Flame,
@@ -48,7 +49,16 @@ const PAD4_PHASE_MAP: Record<string, { type: "injection" | "soak" | "production"
 };
 
 export default function FieldOverviewPage() {
-  const { data: wells, isLoading, isError, error, refetch, isFetching } = useWells();
+  const { data: wells, isLoading, isError, error, refetch, isFetching, dataUpdatedAt } = useWells();
+
+  // Live IST clock
+  const [nowIST, setNowIST] = useState("");
+  useEffect(() => {
+    const tick = () => setNowIST(formatISTTime(new Date(), true));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   // Filter and view states
   const [searchQuery, setSearchQuery] = useState("");
@@ -174,9 +184,14 @@ export default function FieldOverviewPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-xl border border-slate-200/80 shadow-xs text-xs font-mono text-slate-600">
+            {/* Live IST clock */}
+            <div className="hidden sm:flex items-center gap-2 bg-white px-3 py-2 rounded-xl border border-slate-200/80 shadow-xs text-xs font-mono text-slate-600">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>TELEMETRY: <strong className="text-slate-900">SYNCHRONIZED (5s)</strong></span>
+              <span className="text-slate-900 font-bold">{nowIST}</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-xl border border-slate-200/80 shadow-xs text-xs font-mono text-slate-600">
+              <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+              <span>SYNC: <strong className="text-slate-900">{dataUpdatedAt ? formatISTTime(new Date(dataUpdatedAt), true) : "—"}</strong></span>
             </div>
             <button
               type="button"
@@ -610,6 +625,11 @@ export default function FieldOverviewPage() {
                                       {(prod.water_cut * 100).toFixed(0)}%
                                     </span>
                                   </div>
+                                  {prod.timestamp && (
+                                    <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                                      {formatISTTime(prod.timestamp, false)}
+                                    </div>
+                                  )}
                                 </div>
                               ) : (
                                 <span className="text-slate-400 font-mono font-bold">—</span>
@@ -853,6 +873,30 @@ export default function FieldOverviewPage() {
             )}
           </>
         )}
+
+        {/* Footer */}
+        <footer className="mt-6 pt-4 pb-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-6 h-6 rounded-lg overflow-hidden bg-white border border-slate-200 p-0.5 shadow-xs">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+              PetroTwin
+            </span>
+            <span className="text-[10px] text-slate-400 font-mono">
+              &bull; PAD 4 Fleet Surveillance &bull; Cold Lake
+            </span>
+          </div>
+          <div className="text-[10px] font-mono text-slate-400">
+            Timezone: IST (UTC+05:30) &bull; Last sync: {dataUpdatedAt ? formatISTDateTime(new Date(dataUpdatedAt)) : "—"}
+          </div>
+        </footer>
       </main>
     </div>
   );
