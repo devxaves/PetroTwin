@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Flame } from "lucide-react";
 import { HeroDynamometer } from "@/components/landing/HeroDynamometer";
 import { DynamometerCard } from "@/components/DynamometerCard";
@@ -101,8 +102,15 @@ export default function LandingPage() {
       <nav className={styles.landingNav} data-testid="landing-nav">
         <div className={styles.landingNavInner}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-600 shadow-xs">
-              <Flame className="w-5 h-5 fill-current" />
+            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center shadow-xs overflow-hidden p-1">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={36}
+                height={36}
+                className="w-full h-full object-contain"
+                priority
+              />
             </div>
             <span
               className="font-bold text-base tracking-tight text-slate-900 font-display"
@@ -446,8 +454,14 @@ export default function LandingPage() {
         data-testid="final-cta-section"
       >
         <div className="max-w-3xl mx-auto p-10 md:p-14 rounded-3xl bg-linear-to-b from-orange-500/10 via-white to-white border border-orange-200 shadow-sm flex flex-col items-center">
-          <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center mb-4 shadow-md shadow-orange-500/30">
-            <Flame className="w-6 h-6 fill-current" />
+          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center mb-4 shadow-md overflow-hidden p-2">
+            <Image
+              src="/logo.jpg"
+              alt="PetroTwin Logo"
+              width={64}
+              height={64}
+              className="w-full h-full object-contain"
+            />
           </div>
           <h2
             className="text-3xl sm:text-4xl font-black text-slate-900 mb-3 font-display"
@@ -472,11 +486,19 @@ export default function LandingPage() {
       <footer className={styles.footer} data-testid="landing-footer">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <Flame className="w-4 h-4 text-orange-600 fill-current" />
+            <div className="w-6 h-6 rounded-md bg-white border border-slate-200/90 flex items-center justify-center overflow-hidden p-0.5 shadow-2xs">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain"
+              />
+            </div>
             <span
               className="text-xs font-bold text-slate-700 uppercase tracking-wider font-display"
             >
-              ThermoTwin
+              PetroTwin
             </span>
           </div>
           <span className="text-xs text-slate-400 font-mono">

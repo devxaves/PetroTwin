@@ -7,8 +7,10 @@ Under no circumstances does any endpoint here dispatch external control signals.
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 from typing import Any
+
+from app.core.timezone import IST
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
@@ -98,7 +100,7 @@ async def record_operator_approval(
         recommendation_snapshot_json=payload.recommendation_snapshot,
         operator_decision=decision_clean,
         operator_notes=payload.operator_notes,
-        decided_at=datetime.now(UTC),
+        decided_at=datetime.now(IST),
         outcome_recorded_at=None,
     )
     session.add(record)

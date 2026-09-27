@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, use } from "react";
+import Image from "next/image";
 import { Header } from "@/components/Header";
 import {
   useWellTwinState,
@@ -21,6 +22,7 @@ import { ComparisonTable } from "@/components/ComparisonTable";
 import { ParetoChart } from "@/components/ParetoChart";
 import { ExplainabilityPanel } from "@/components/ExplainabilityPanel";
 import { ApprovalHistory } from "@/components/ApprovalHistory";
+import { formatISTDate, formatISTDateTime, formatISTDateRange } from "@/lib/formatDate";
 import {
   Activity,
   Gauge,
@@ -273,7 +275,7 @@ export default function WellTwinPage({ params }: WellPageProps) {
                   <table className="w-full text-left font-mono text-xs">
                     <thead>
                       <tr className="border-b border-slate-200 text-[10px] text-slate-500 uppercase bg-slate-50">
-                        <th className="py-3 px-3.5 font-semibold">Timestamp</th>
+                        <th className="py-3 px-3.5 font-semibold">Timestamp (IST)</th>
                         <th className="py-3 px-3.5 text-right font-semibold">Oil Rate (BOPD)</th>
                         <th className="py-3 px-3.5 text-right font-semibold">Water Rate (BWPD)</th>
                         <th className="py-3 px-3.5 text-right font-semibold">Water Cut</th>
@@ -285,7 +287,7 @@ export default function WellTwinPage({ params }: WellPageProps) {
                       {productionHistory.slice(-10).reverse().map((r, i) => (
                         <tr key={i} className="hover:bg-orange-50/30 transition-colors">
                           <td className="py-2.5 px-3.5 text-slate-600">
-                            {new Date(r.timestamp).toLocaleDateString()}
+                            {formatISTDateTime(r.timestamp)}
                           </td>
                           <td className="py-2.5 px-3.5 text-right font-bold text-orange-600">
                             {r.oil_rate_bopd.toFixed(1)}
@@ -319,9 +321,9 @@ export default function WellTwinPage({ params }: WellPageProps) {
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
                   <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800 font-display">
-                    CSS Operational Cycles Timeline
+                    CSS Operational Cycles Timeline (IST)
                   </h3>
-                  <span className="text-xs text-slate-400">Historical cyclic steam injection runs</span>
+                  <span className="text-xs text-slate-400">Historical cyclic steam injection runs (Indian Standard Time)</span>
                 </div>
                 <span className="text-[11px] font-mono text-slate-500 bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
                   {cssCycles?.length ?? 0} Recorded Cycles
@@ -346,6 +348,9 @@ export default function WellTwinPage({ params }: WellPageProps) {
                       </div>
                       <div className="text-[10px] text-slate-400">
                         Quality: {(c.steam_quality * 100).toFixed(0)}%
+                      </div>
+                      <div className="text-[10px] text-slate-500 border-t border-slate-200/60 pt-1 mt-0.5">
+                        {formatISTDateRange(c.injection_start, c.production_end)}
                       </div>
                     </div>
                   ))}
@@ -867,6 +872,30 @@ export default function WellTwinPage({ params }: WellPageProps) {
             </div>
           </div>
         )}
+
+        {/* Footer */}
+        <footer className="mt-8 pt-4 pb-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-5 h-5 rounded-md overflow-hidden bg-white border border-slate-200 p-0.5 shadow-2xs">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={20}
+                height={20}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-display">
+              PetroTwin
+            </span>
+            <span className="text-[10px] text-slate-400 font-mono">
+              &bull; Well Digital Twin &bull; {wellId}
+            </span>
+          </div>
+          <div className="text-[10px] font-mono text-slate-400">
+            Field Timezone: IST (UTC+05:30) &bull; CSS Thermal &amp; SRP Diagnostics
+          </div>
+        </footer>
       </main>
     </div>
   );

@@ -4,7 +4,9 @@ FastAPI router for SRP dynamometer card diagnostics and rod-float risk evaluatio
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
+
+from app.core.timezone import IST
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
@@ -232,7 +234,7 @@ async def classify_raw_card(
     return DiagnosticReport(
         well_id=well_id,
         card_id=None,
-        timestamp=datetime.now(UTC),
+        timestamp=datetime.now(IST),
         ground_truth_label=None,
         ml_prediction=cls_result["ml_prediction"],
         baseline_prediction=cls_result["baseline_prediction"],

@@ -5,6 +5,7 @@ services:
       POSTGRES_USER: thermotwin
       POSTGRES_PASSWORD: thermotwin
       POSTGRES_DB: thermotwin
+      TZ: Asia/Kolkata
     ports:
       - "5432:5432"
     volumes:
@@ -35,6 +36,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://thermotwin:thermotwin@postgres:5432/thermotwin
       REDIS_URL: redis://redis:6379/0
       CORS_ORIGINS: '["http://localhost:3000","http://frontend:3000"]'
+      TZ: Asia/Kolkata
     volumes:
       - ./backend/app:/app/app
       - ./backend/alembic:/app/alembic
@@ -59,6 +61,7 @@ services:
       - "3000:3000"
     environment:
       NEXT_PUBLIC_API_URL: https://petrotwin-yhop.onrender.com
+      TZ: Asia/Kolkata
     depends_on:
       backend:
         condition: service_healthy

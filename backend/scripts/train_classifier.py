@@ -11,11 +11,13 @@ from __future__ import annotations
 
 import asyncio
 import sys
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
 
 # Ensure backend root is on sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from app.core.timezone import IST
 
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
@@ -164,7 +166,7 @@ def main():
         "feature_names": FEATURE_NAMES,
         "classes": all_labels,
         "version": "v1",
-        "trained_at": datetime.now(UTC).isoformat(),
+        "trained_at": datetime.now(IST).isoformat(),
         "metrics": {
             "train_wells": TRAIN_WELLS,
             "test_wells": TEST_WELLS,

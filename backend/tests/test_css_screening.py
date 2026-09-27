@@ -1,7 +1,9 @@
 """Unit tests for CSS well candidate screening rules."""
 
-from datetime import UTC, datetime
+from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
+
+from app.core.timezone import IST
 
 import pytest
 
@@ -58,7 +60,7 @@ async def test_screening_rule_critical_failure_rejects():
         failure_type="parted_rod_break",
         severity="critical",
         root_cause="Fatigue fracture",
-        event_time=datetime.now(UTC),
+        event_time=datetime.now(IST),
     )
     fail_mock.scalar_one_or_none.return_value = fake_failure
     session.execute.return_value = fail_mock

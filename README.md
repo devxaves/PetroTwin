@@ -44,7 +44,7 @@
 
 ### 1. Launch with Docker Compose
 ```bash
-docker-compose up --build -d
+docker compose up --build -d
 ```
 Service Endpoints:
 - **Frontend Dashboard**: `http://localhost:3000`

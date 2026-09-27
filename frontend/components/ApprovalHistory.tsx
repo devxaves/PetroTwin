@@ -3,6 +3,7 @@
 import React from "react";
 import type { ApprovalResponse } from "@/lib/api/types";
 import { Clock, CheckCircle, XCircle, Edit3 } from "lucide-react";
+import { formatISTDateTime } from "@/lib/formatDate";
 
 interface ApprovalHistoryProps {
   approvals: ApprovalResponse[];
@@ -62,7 +63,7 @@ export function ApprovalHistory({ approvals }: ApprovalHistoryProps) {
                     {appr.operator_decision}
                   </span>
                   <span className="text-slate-500 text-[11px]">
-                    {new Date(appr.decided_at).toLocaleString()}
+                    {formatISTDateTime(appr.decided_at)}
                   </span>
                 </div>
                 <span className="text-[10px] text-slate-400">ID #{appr.id}</span>

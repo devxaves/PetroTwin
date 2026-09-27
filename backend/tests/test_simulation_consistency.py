@@ -1,5 +1,7 @@
 import math
-from datetime import UTC, datetime
+from datetime import datetime
+
+from app.core.timezone import IST
 
 from app.simulation.viscosity_model import oil_viscosity_cp
 from app.simulation.well_simulator import simulate_well_history
@@ -12,7 +14,7 @@ def test_simulation_causal_temperature_viscosity_link():
     """
     history = simulate_well_history(
         well_id="TEST-WELL-001",
-        start_date=datetime(2023, 1, 1, tzinfo=UTC),
+        start_date=datetime(2023, 1, 1, tzinfo=IST),
         num_cycles=2,
         days_per_cycle=90,
         seed=42,
@@ -51,7 +53,7 @@ def test_simulation_cycle_progression_consistency():
     """
     history = simulate_well_history(
         well_id="TEST-WELL-002",
-        start_date=datetime(2023, 1, 1, tzinfo=UTC),
+        start_date=datetime(2023, 1, 1, tzinfo=IST),
         num_cycles=1,
         days_per_cycle=90,
         seed=100,
@@ -80,7 +82,7 @@ def test_simulation_generates_all_table_data():
     """Verify simulate_well_history populates all 5 expected entity collections."""
     history = simulate_well_history(
         well_id="TEST-WELL-003",
-        start_date=datetime(2023, 1, 1, tzinfo=UTC),
+        start_date=datetime(2023, 1, 1, tzinfo=IST),
         num_cycles=3,
         days_per_cycle=90,
         seed=200,

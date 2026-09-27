@@ -2,13 +2,14 @@ import os
 import json
 import logging
 import sys
-from datetime import datetime, UTC
+from datetime import datetime
+from app.core.timezone import IST
 
 class JSONFormatter(logging.Formatter):
     """Structured JSON formatter for production log aggregation."""
     def format(self, record: logging.LogRecord) -> str:
         log_entry = {
-            "timestamp": datetime.now(UTC).isoformat(),
+            "timestamp": datetime.now(IST).isoformat(),
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),

@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Activity, Flame, ShieldAlert, Layers } from "lucide-react";
+import Image from "next/image";
+import { Activity, ShieldAlert, Layers } from "lucide-react";
 
 interface HeaderProps {
   wellId?: string;
@@ -14,8 +15,15 @@ export function Header({ wellId }: HeaderProps) {
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-200/80 flex items-center justify-center text-orange-600 group-hover:border-orange-400 group-hover:scale-105 transition duration-200 shadow-xs">
-              <Flame className="w-4 h-4 fill-orange-500/20 text-orange-600" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden bg-white border border-slate-200/90 flex items-center justify-center p-0.5 group-hover:border-blue-400 group-hover:scale-105 transition duration-200 shadow-2xs">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={32}
+                height={32}
+                className="w-full h-full object-contain"
+                priority
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">

@@ -14,11 +14,13 @@ from __future__ import annotations
 import asyncio
 import math
 import sys
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
 
 # Ensure backend root is on sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from app.core.timezone import IST
 
 import numpy as np
 from sqlalchemy import select
@@ -199,7 +201,7 @@ def main():
         "model": residual_model,
         "feature_columns": FEATURE_COLUMNS,
         "version": "v1",
-        "trained_at": datetime.now(UTC).isoformat(),
+        "trained_at": datetime.now(IST).isoformat(),
         "metrics": {
             "train_wells": TRAIN_WELLS,
             "test_wells": TEST_WELLS,

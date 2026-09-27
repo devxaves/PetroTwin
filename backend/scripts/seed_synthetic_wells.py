@@ -1,10 +1,12 @@
 import asyncio
 import sys
-from datetime import UTC, date, datetime
+from datetime import date, datetime
 from pathlib import Path
 
 # Ensure backend root is on sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from app.core.timezone import IST
 
 from sqlalchemy import delete, func, select
 
@@ -124,7 +126,7 @@ async def seed_data() -> dict[str, int]:
     Seed 8 synthetic wells and their complete 18-month CSS histories.
     Idempotent: clears existing data first before reseeding.
     """
-    start_sim_date = datetime(2023, 5, 1, 0, 0, 0, tzinfo=UTC)
+    start_sim_date = datetime(2023, 5, 1, 0, 0, 0, tzinfo=IST)
 
     async with async_session_factory() as session:
         # 1. Clear existing data (in child-to-parent order for clean FK removal)

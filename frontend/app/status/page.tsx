@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import StatusIndicator from "@/components/StatusIndicator";
 import SystemPanel from "@/components/SystemPanel";
 import DataReadout from "@/components/DataReadout";
 import { fetchHealth, type HealthResponse } from "@/lib/api";
+import { formatISTTime, formatISTDate } from "@/lib/formatDate";
 
 type ConnectionState = "loading" | "connected" | "error";
 
@@ -19,12 +21,7 @@ interface SystemState {
 const POLL_INTERVAL_MS = 5000;
 
 function formatTimestamp(date: Date): string {
-  return date.toLocaleTimeString("en-US", {
-    hour12: false,
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  return formatISTTime(date, true);
 }
 
 function formatUptime(startTime: Date): string {
@@ -114,17 +111,21 @@ export default function StatusPage() {
           <div className="flex items-center gap-4">
             {/* Logo mark */}
             <div className="flex items-center gap-3">
-              <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold bg-orange-50 border border-orange-200 text-orange-600 shadow-inner"
-                style={{ fontFamily: "var(--font-data)" }}
-              >
-                TT
+              <div className="w-8 h-8 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center p-0.5 shadow-xs overflow-hidden">
+                <Image
+                  src="/logo.jpg"
+                  alt="PetroTwin Logo"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
+                  priority
+                />
               </div>
               <div>
                 <h1
                   className="text-sm font-bold text-slate-900 tracking-wide font-display"
                 >
-                  THERMOTWIN
+                  PETROTWIN
                 </h1>
                 <p className="text-[0.65rem] text-slate-400 font-mono tracking-widest uppercase">
                   Infrastructure Control
@@ -162,7 +163,7 @@ export default function StatusPage() {
             </p>
           </div>
           <div className="text-right">
-            <div className="text-[10px] uppercase font-mono text-slate-400 font-semibold mb-0.5">Last Poll</div>
+            <div className="text-[10px] uppercase font-mono text-slate-400 font-semibold mb-0.5">Last Poll (IST)</div>
             <div
               className="text-xs font-mono font-bold text-slate-700 bg-white px-2.5 py-1 rounded border border-slate-200"
               data-testid="last-checked"
@@ -357,17 +358,24 @@ export default function StatusPage() {
 
         {/* ── Bottom Bar ──────────────────────────────────────── */}
         <footer className="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between">
-          <div className="text-[0.65rem] text-slate-400 font-mono uppercase tracking-wider">
-            ThermoTwin v0.1.0 &bull; Infrastructure Health Engine
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded overflow-hidden bg-white border border-slate-200/80 p-0.5 shadow-2xs">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={16}
+                height={16}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-[0.65rem] text-slate-400 font-mono uppercase tracking-wider">
+              PetroTwin v0.1.0 &bull; Infrastructure Health Engine
+            </span>
           </div>
           <div
             className="text-[0.65rem] text-slate-400 font-mono"
           >
-            {new Date().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "2-digit",
-            })}
+            {formatISTDate(new Date())} (IST)
           </div>
         </footer>
       </main>

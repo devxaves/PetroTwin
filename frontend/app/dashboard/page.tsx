@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Header } from "@/components/Header";
 import { useWells } from "@/lib/api/queries";
 import { RiskGauge } from "@/components/RiskGauge";
@@ -230,6 +231,30 @@ export default function FieldOverviewPage() {
             </div>
           )}
         </div>
+
+        {/* Footer */}
+        <footer className="mt-6 pt-4 pb-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-5 h-5 rounded-md overflow-hidden bg-white border border-slate-200 p-0.5 shadow-2xs">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={20}
+                height={20}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider font-display">
+              PetroTwin
+            </span>
+            <span className="text-[10px] text-slate-400 font-mono">
+              &bull; Heavy Oil Digital Twin Fleet Control
+            </span>
+          </div>
+          <div className="text-[10px] font-mono text-slate-400">
+            Field Timezone: IST (UTC+05:30) &bull; Baghewala Field Heavy Oil Pilot
+          </div>
+        </footer>
       </main>
     </div>
   );

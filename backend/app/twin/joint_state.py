@@ -8,8 +8,10 @@ and hybrid production forecast models.
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 from typing import Any
+
+from app.core.timezone import IST
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field
@@ -137,7 +139,7 @@ async def get_well_twin_state(
     steam_press = float(cycle.steam_pressure) if cycle else 11.0
     soak_days = 4
 
-    now = datetime.now(UTC)
+    now = datetime.now(IST)
     if cycle:
         if cycle.injection_start <= now <= cycle.injection_end:
             phase = "injection"

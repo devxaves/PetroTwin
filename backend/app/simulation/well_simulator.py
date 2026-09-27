@@ -1,7 +1,9 @@
 import math
 import random
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from typing import Any
+
+from app.core.timezone import IST, to_ist
 
 from app.simulation.dynamometer_generator import (
     VALID_LABELS,
@@ -38,7 +40,7 @@ def simulate_well_history(
 
     Args:
         well_id: Unique string identifier of the well.
-        start_date: Start datetime of history (UTC).
+        start_date: Start datetime of history (IST).
         num_cycles: Number of CSS cycles to simulate (3 to 6).
         days_per_cycle: Average duration of each cycle in days.
         seed: Random seed for deterministic simulation.
@@ -59,7 +61,7 @@ def simulate_well_history(
     dyno_records: list[dict[str, Any]] = []
     failure_records: list[dict[str, Any]] = []
 
-    current_time = start_date.astimezone(UTC)
+    current_time = to_ist(start_date)
 
     # Base reservoir properties for this well
     t_base = rng.uniform(42.0, 48.0)  # ambient reservoir temperature (C)

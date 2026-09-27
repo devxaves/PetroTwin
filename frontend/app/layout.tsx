@@ -22,9 +22,14 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ThermoTwin — Heavy Oil Digital Twin & Optimization",
+  title: "PetroTwin — Heavy Oil Digital Twin & Optimization",
   description:
     "Industrial digital twin for Cyclic Steam Stimulation (CSS) and Sucker Rod Pumping (SRP) optimization.",
+  icons: {
+    icon: "/logo.jpg",
+    shortcut: "/logo.jpg",
+    apple: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({
