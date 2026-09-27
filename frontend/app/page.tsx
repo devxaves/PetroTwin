@@ -11,7 +11,6 @@ import {
   Building2,
   Gauge,
   Thermometer,
-  Radio,
   Lock,
   Scale,
   AlertTriangle,
@@ -63,17 +62,7 @@ const SAMPLE_COMPARISON = {
   pump_volumetric_efficiency: { current: 82.0, proposed: 86.5, delta: 4.5, delta_pct: 5.5 },
 };
 
-// ── Live Fleet Telemetry Snapshot Data (Baghewala Thermal Asset) ─────
-const FLEET_TELEMETRY = [
-  { well_id: "WELL-001", pad: "Pad A", depth: "485m", cycle: "CSS Cycle 4", rate: "42.8 bbl/d", spm: "6.2 SPM", sor: "2.85", status: "NORMAL", risk: "LOW (18%)", statusColor: "emerald" },
-  { well_id: "WELL-002", pad: "Pad A", depth: "492m", cycle: "Soak Day 3", rate: "Soaking", spm: "0.0 SPM", sor: "—", status: "SOAKING", risk: "LOW (14%)", statusColor: "sky" },
-  { well_id: "WELL-003", pad: "Pad B", depth: "510m", cycle: "CSS Cycle 5", rate: "29.1 bbl/d", spm: "8.8 SPM", sor: "3.42", status: "ROD FLOAT", risk: "HIGH (82%)", statusColor: "rose" },
-  { well_id: "WELL-004", pad: "Pad B", depth: "478m", cycle: "CSS Cycle 3", rate: "38.4 bbl/d", spm: "5.5 SPM", sor: "2.61", status: "OPTIMIZED", risk: "LOW (21%)", statusColor: "emerald" },
-  { well_id: "WELL-005", pad: "Pad C", depth: "504m", cycle: "CSS Cycle 2", rate: "31.2 bbl/d", spm: "7.1 SPM", sor: "3.10", status: "NORMAL", risk: "MED (38%)", statusColor: "amber" },
-  { well_id: "WELL-006", pad: "Pad C", depth: "490m", cycle: "Injection", rate: "Steam Inflow", spm: "0.0 SPM", sor: "—", status: "INJECTING", risk: "LOW (11%)", statusColor: "sky" },
-  { well_id: "WELL-007", pad: "Pad D", depth: "515m", cycle: "CSS Cycle 4", rate: "36.7 bbl/d", spm: "6.0 SPM", sor: "2.79", status: "NORMAL", risk: "LOW (22%)", statusColor: "emerald" },
-  { well_id: "WELL-008", pad: "Pad D", depth: "480m", cycle: "CSS Cycle 6", rate: "22.5 bbl/d", spm: "7.4 SPM", sor: "3.65", status: "ADVISORY", risk: "MED (46%)", statusColor: "amber" },
-];
+
 
 // ── Scroll-reveal hook ────────────────────────────────────────────────
 function useScrollReveal() {
@@ -181,43 +170,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ── LIVE FLEET TELEMETRY TICKER STRIP ──────────────────── */}
-      <div id="fleet-ticker" className={styles.fleetTicker}>
-        <div className={styles.fleetTickerInner}>
-          <div className="flex items-center gap-2 font-mono text-xs font-bold text-slate-700 shrink-0 pr-2 border-r border-slate-200">
-            <Radio className="w-4 h-4 text-orange-500 animate-pulse" />
-            <span className="uppercase tracking-wider">Baghewala Asset Real-time Telemetry:</span>
-          </div>
-          {FLEET_TELEMETRY.map((w) => (
-            <Link
-              key={w.well_id}
-              href={`/wells/${w.well_id}`}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-orange-50/80 border border-slate-200 hover:border-orange-300 text-xs transition group shrink-0 shadow-2xs"
-            >
-              <span className="font-mono font-black text-slate-900 group-hover:text-orange-600">
-                {w.well_id}
-              </span>
-              <span className="text-slate-400">&bull;</span>
-              <span className="text-slate-600 font-medium">{w.cycle}</span>
-              <span className="text-slate-400">&bull;</span>
-              <span className="font-mono text-slate-700 font-semibold">{w.spm}</span>
-              <span
-                className={`text-[10px] font-mono font-black px-2 py-0.5 rounded-full ${
-                  w.statusColor === "emerald"
-                    ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                    : w.statusColor === "sky"
-                    ? "bg-sky-50 text-sky-800 border border-sky-200"
-                    : w.statusColor === "rose"
-                    ? "bg-rose-50 text-rose-800 border border-rose-200 animate-pulse"
-                    : "bg-amber-50 text-amber-800 border border-amber-200"
-                }`}
-              >
-                {w.status}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
+
 
       {/* ── 1. HERO ──────────────────────────────────────────── */}
       <section className={styles.hero} data-testid="hero-section">
