@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "thermotwin-backend"
+name = "petrotwin-backend"
 version = "0.1.0"
-description = "ThermoTwin — Well-to-Surface Digital Twin Backend"
-authors = ["ThermoTwin Team"]
+description = "PetroTwin — Well-to-Surface Digital Twin Backend"
+authors = ["PetroTwin Team"]
 readme = "README.md"
 packages = [{include = "app"}]
 

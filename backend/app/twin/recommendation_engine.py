@@ -1,4 +1,4 @@
-"""Combined Recommendation Engine & Explainability for ThermoTwin.
+"""Combined Recommendation Engine & Explainability for PetroTwin.
 
 Synthesizes reservoir thermal optimization (Prompt 4) with SRP mechanical diagnostics
 and rod-float risk mitigation (Prompt 3) into an actionable, explainable joint
@@ -108,9 +108,6 @@ async def generate_joint_recommendation(
     rec_sor = float(opt_css.get("sor", 2.5))
     sor_delta_pct = round(((rec_sor - hist_sor) / hist_sor) * 100.0, 1)
 
-    hist_energy_bbl = round(
-        (opt_css["steam_cost"] + opt_css["energy_cost"]) / max(rec_oil, 1.0), 2
-    )
     # Energy delta compared to typical benchmark
     energy_delta_pct = round(
         ((opt_css["energy_cost_per_bbl"] - 22.0) / 22.0) * 100.0, 1

@@ -242,6 +242,7 @@ async def seed_data() -> dict[str, int]:
         for table, count in counts.items():
             print(f"  - {table}: {count:,} rows")
 
+
 async def seed_if_empty() -> None:
     """Seed data only if database is currently empty."""
     async with async_session_factory() as session:

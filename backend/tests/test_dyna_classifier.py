@@ -40,10 +40,9 @@ def test_ml_classifier_beats_baseline_on_held_out_wells():
     base_acc = metrics["baseline_accuracy"]
 
     # Strict assertion: ML must beat baseline
-    assert ml_acc > base_acc, (
-        f"ML accuracy ({ml_acc * 100:.2f}%) did not beat baseline "
-        f"({base_acc * 100:.2f}%)"
-    )
+    assert (
+        ml_acc > base_acc
+    ), f"ML accuracy ({ml_acc * 100:.2f}%) did not beat baseline ({base_acc * 100:.2f}%)"
     # ML accuracy on the held-out test wells should be >= 95%
     assert ml_acc >= 0.95, f"Expected >= 95% test accuracy, got {ml_acc * 100:.2f}%"
 

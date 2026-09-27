@@ -1,10 +1,10 @@
 from pathlib import Path
 
 import pytest
-from alembic.config import Config
 from sqlalchemy import inspect, text
 
 from alembic import command
+from alembic.config import Config
 from app.core.config import settings
 from app.db.session import engine
 

@@ -1,4 +1,4 @@
-line-length = 88
+line-length = 120
 target-version = "py312"
 
 [lint]
@@ -15,7 +15,10 @@ select = [
 ]
 ignore = [
     "B008",  # do not perform function call in argument defaults (FastAPI Depends)
+    "E501",  # line too long (handled by black)
+    "SIM102", # nested if statements
 ]
 
 [lint.isort]
 known-first-party = ["app"]
+

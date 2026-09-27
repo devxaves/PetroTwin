@@ -17,6 +17,8 @@ from app.api.routes.health import router as health_router
 from app.api.routes.metrics import (
     REQUEST_COUNT,
     REQUEST_LATENCY,
+)
+from app.api.routes.metrics import (
     router as metrics_router,
 )
 from app.api.routes.twin import router as twin_router
@@ -30,6 +32,7 @@ from app.db.session import engine
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 if SENTRY_DSN:
     import sentry_sdk
+
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         traces_sample_rate=1.0,
@@ -43,7 +46,7 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["120/minute"])
 @asynccontextmanager
 async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
     """Verify database and Redis connectivity on startup. Fail loudly if unreachable."""
-    logger.info("ThermoTwin API starting up...")
+    logger.info("PetroTwin API starting up...")
     from sqlalchemy import text
 
     try:
@@ -75,12 +78,12 @@ async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
 
     yield
 
-    logger.info("ThermoTwin API shutting down...")
+    logger.info("PetroTwin API shutting down...")
     await engine.dispose()
 
 
 app = FastAPI(
-    title="ThermoTwin API",
+    title="PetroTwin API",
     description="Well-to-Surface Digital Twin for CSS + SRP Optimization",
     version="0.1.0",
     lifespan=lifespan,
@@ -120,9 +123,7 @@ async def metrics_and_logging_middleware(request: Request, call_next):
         duration = time.time() - start_time
         REQUEST_COUNT.labels(method=method, endpoint=endpoint, status=status_code).inc()
         REQUEST_LATENCY.labels(endpoint=endpoint).observe(duration)
-        logger.info(
-            f"Handled {method} {endpoint} -> {status_code} in {duration:.4f}s"
-        )
+        logger.info(f"Handled {method} {endpoint} -> {status_code} in {duration:.4f}s")
 
     return response
 

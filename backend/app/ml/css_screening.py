@@ -222,8 +222,7 @@ async def screen_well_for_css(
         or water_cut > WATER_CUT_MARGINAL_THRESHOLD
     ):
         reasons.append(
-            f"Moderate incremental recovery ({predicted_oil:.0f} bbl) with "
-            f"elevated water cut ({water_cut * 100:.1f}%)."
+            f"Moderate incremental recovery ({predicted_oil:.0f} bbl) with elevated water cut ({water_cut * 100:.1f}%)."
         )
         classification = "marginal"
         can_stimulate = True

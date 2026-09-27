@@ -1,4 +1,4 @@
-"""Seed demo accounts for ThermoTwin.
+"""Seed demo accounts for PetroTwin.
 
 DEMO CREDENTIALS — rotate before any real production deployment!
 - engineer_demo / EngineerPass2026!  (Role: engineer)
@@ -13,6 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from sqlalchemy import select
+
 from app.core.auth import User, get_password_hash
 from app.db.session import async_session_factory
 
@@ -28,6 +29,7 @@ DEMO_USERS = [
         "role": "approver",
     },
 ]
+
 
 async def seed_users():
     async with async_session_factory() as session:
@@ -47,6 +49,7 @@ async def seed_users():
                 print(f"Demo user already exists: {u['username']}")
         await session.commit()
     print("Seed complete.")
+
 
 if __name__ == "__main__":
     asyncio.run(seed_users())

@@ -17,8 +17,8 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.auth import User, require_role
 from app.api.routes.metrics import APPROVALS_RECORDED
+from app.core.auth import User, require_role
 from app.db.models import OperatorApproval, Well
 from app.db.session import get_session
 

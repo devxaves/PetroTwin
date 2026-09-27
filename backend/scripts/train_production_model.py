@@ -188,8 +188,7 @@ def main():
         f"HYBRID (PHYSICS + ML RESIDUAL) ERROR: MAE = {hyb_mae:.3f} bopd | RMSE = {hyb_rmse:.3f} bopd"
     )
     print(
-        f"ERROR REDUCTION OVER PHYSICS-ALONE:  MAE: -{mae_pct_improve:.1f}% | "
-        f"RMSE: -{rmse_pct_improve:.1f}%"
+        f"ERROR REDUCTION OVER PHYSICS-ALONE:  MAE: -{mae_pct_improve:.1f}% | RMSE: -{rmse_pct_improve:.1f}%"
     )
     print("-" * 70)
 

@@ -38,10 +38,7 @@ def test_rod_float_risk_monotonicity_load_spikes():
             pump_fillage=0.80,
         )
         current_risk = res["risk_score"]
-        msg = (
-            f"Monotonicity violated: spike={spike}, prev={prev_risk}, "
-            f"curr={current_risk}"
-        )
+        msg = f"Monotonicity violated: spike={spike}, prev={prev_risk}, curr={current_risk}"
         assert current_risk >= prev_risk, msg
         prev_risk = current_risk
 
@@ -80,10 +77,7 @@ def test_rod_float_risk_monotonicity_min_load_depression():
             pump_fillage=0.80,
         )
         current_risk = res["risk_score"]
-        msg = (
-            f"Monotonicity violated: min_load={m_load}, prev={prev_risk}, "
-            f"curr={current_risk}"
-        )
+        msg = f"Monotonicity violated: min_load={m_load}, prev={prev_risk}, curr={current_risk}"
         assert current_risk >= prev_risk, msg
         prev_risk = current_risk
 

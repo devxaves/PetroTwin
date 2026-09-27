@@ -93,27 +93,32 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
 
   return (
     <div
-      className="rounded-xl bg-white border border-slate-200/80 shadow-xs overflow-hidden"
+      className="rounded-3xl bg-white border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] overflow-hidden"
       data-testid="comparison-table-container"
     >
-      <div className="p-3.5 bg-slate-50/80 border-b border-slate-200/80 flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 font-display">
-          Baseline vs. Proposed Operational Comparison
-        </span>
-        <span className="text-[11px] font-mono text-slate-400 bg-white px-2 py-0.5 rounded border border-slate-200">
+      <div className="p-4 sm:p-5 bg-slate-50/90 border-b border-slate-200/90 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h4 className="text-sm sm:text-base font-extrabold uppercase tracking-wider text-slate-900 font-['Space_Grotesk']">
+            Baseline vs. Proposed Operational Comparison
+          </h4>
+          <span className="text-xs text-slate-600 font-sans mt-0.5 block font-medium">
+            Coupled reservoir and mechanical subsystem evaluation matrix
+          </span>
+        </div>
+        <span className="text-xs font-mono font-extrabold text-emerald-800 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">
           Coupled Solver Engine
         </span>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left font-mono text-xs" data-testid="comparison-table">
+        <table className="w-full text-left font-mono text-xs sm:text-sm" data-testid="comparison-table">
           <thead>
-            <tr className="border-b border-slate-200 text-[11px] text-slate-500 uppercase bg-slate-100/50">
-              <th className="py-3 px-4 font-semibold">Metric</th>
-              <th className="py-3 px-4 text-right font-semibold">Current Baseline</th>
-              <th className="py-3 px-4 text-right font-semibold">Proposed Scenario</th>
-              <th className="py-3 px-4 text-right font-semibold">Delta</th>
-              <th className="py-3 px-4 text-right font-semibold">Impact</th>
+            <tr className="border-b border-slate-200 text-xs text-slate-700 uppercase font-extrabold bg-slate-100/80 tracking-wider">
+              <th className="py-4 px-5">Metric</th>
+              <th className="py-4 px-5 text-right">Current Baseline</th>
+              <th className="py-4 px-5 text-right">Proposed Scenario</th>
+              <th className="py-4 px-5 text-right">Delta</th>
+              <th className="py-4 px-5 text-right">Impact</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -123,13 +128,13 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
                 ? row.delta < 0
                 : row.delta > 0;
 
-              let deltaColor = "text-slate-500";
-              let badgeColor = "bg-slate-100 text-slate-600 border border-slate-200";
+              let deltaColor = "text-slate-600";
+              let badgeColor = "bg-slate-100 text-slate-700 border border-slate-200";
               if (!isZero) {
-                deltaColor = isFavorable ? "text-emerald-600" : "text-rose-600";
+                deltaColor = isFavorable ? "text-emerald-700" : "text-rose-700";
                 badgeColor = isFavorable
-                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80"
-                  : "bg-rose-50 text-rose-700 border border-rose-200/80";
+                  ? "bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold"
+                  : "bg-rose-50 text-rose-800 border border-rose-300 font-bold";
               }
 
               return (
@@ -138,35 +143,35 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
                   className="hover:bg-orange-50/30 transition-colors"
                   data-testid={`row-${row.metricKey}`}
                 >
-                  <td className="py-3.5 px-4 font-sans text-slate-800 font-medium">
+                  <td className="py-4 px-5 font-sans text-slate-900 font-bold text-xs sm:text-sm">
                     {row.label}
                   </td>
-                  <td className="py-3.5 px-4 text-right text-slate-600">
+                  <td className="py-4 px-5 text-right text-slate-700 font-semibold">
                     {row.current.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}{" "}
-                    <span className="text-[10px] text-slate-400">{row.unit}</span>
+                    <span className="text-xs text-slate-500 font-medium">{row.unit}</span>
                   </td>
                   <td
-                    className="py-3.5 px-4 text-right font-bold text-slate-900"
+                    className="py-4 px-5 text-right font-black text-slate-900 text-sm sm:text-base"
                     data-testid={`proposed-${row.metricKey}`}
                   >
                     {row.proposed.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}{" "}
-                    <span className="text-[10px] text-slate-500">{row.unit}</span>
+                    <span className="text-xs text-slate-600 font-medium">{row.unit}</span>
                   </td>
                   <td
-                    className={`py-3.5 px-4 text-right font-bold ${deltaColor}`}
+                    className={`py-4 px-5 text-right font-black ${deltaColor}`}
                     data-testid={`delta-${row.metricKey}`}
                   >
                     <div className="flex items-center justify-end gap-1">
                       {isZero ? (
-                        <Minus className="w-3.5 h-3.5 text-slate-400" />
+                        <Minus className="w-4 h-4 text-slate-400" />
                       ) : row.delta > 0 ? (
-                        <ArrowUp className="w-3.5 h-3.5" data-testid="arrow-up" />
+                        <ArrowUp className="w-4 h-4" data-testid="arrow-up" />
                       ) : (
-                        <ArrowDown className="w-3.5 h-3.5" data-testid="arrow-down" />
+                        <ArrowDown className="w-4 h-4" data-testid="arrow-down" />
                       )}
                       <span>
                         {row.delta > 0 ? "+" : ""}
@@ -176,9 +181,9 @@ export function ComparisonTable({ comparison }: ComparisonTableProps) {
                       </span>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 text-right">
+                  <td className="py-4 px-5 text-right">
                     <span
-                      className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide ${badgeColor}`}
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-extrabold tracking-wide ${badgeColor}`}
                       data-testid={`badge-${row.metricKey}`}
                     >
                       {isZero

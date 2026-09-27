@@ -211,7 +211,9 @@ def simulate_well_history(
             # Causal Link 6: Dynamometer card class based on physical conditions
             # Card is captured periodically (e.g. every 2 days)
             if day % 2 == 0:
-                is_terminal_window = (cycle_num == num_cycles) and (day >= prod_days - 6)
+                is_terminal_window = (cycle_num == num_cycles) and (
+                    day >= prod_days - 6
+                )
                 if is_terminal_window and terminal_condition:
                     card_label = terminal_condition
                     if card_label == "normal":

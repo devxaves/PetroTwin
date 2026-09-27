@@ -38,10 +38,7 @@ def test_simulation_causal_temperature_viscosity_link():
 
     correlation = cov / math.sqrt(var_temp * var_visc)
 
-    msg = (
-        "Expected strong negative correlation between temp and viscosity, "
-        f"got {correlation:.3f}"
-    )
+    msg = f"Expected strong negative correlation between temp and viscosity, got {correlation:.3f}"
     assert correlation < -0.80, msg
 
 

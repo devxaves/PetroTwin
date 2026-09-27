@@ -157,12 +157,10 @@ def upgrade() -> None:
     # 7. Convert tables to TimescaleDB hypertables if on PostgreSQL
     if bind.dialect.name == "postgresql":
         op.execute(
-            "SELECT create_hypertable('production', 'timestamp', "
-            "if_not_exists => TRUE, migrate_data => TRUE);"
+            "SELECT create_hypertable('production', 'timestamp', if_not_exists => TRUE, migrate_data => TRUE);"
         )
         op.execute(
-            "SELECT create_hypertable('srp_telemetry', 'timestamp', "
-            "if_not_exists => TRUE, migrate_data => TRUE);"
+            "SELECT create_hypertable('srp_telemetry', 'timestamp', if_not_exists => TRUE, migrate_data => TRUE);"
         )
 
 

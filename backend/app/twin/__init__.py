@@ -1,4 +1,4 @@
-"""ThermoTwin Digital Twin Package.
+"""PetroTwin Digital Twin Package.
 
 Couples reservoir thermal dynamics with sucker-rod pumping surface kinematics,
 providing unified joint state estimation, coupled physical simulation,

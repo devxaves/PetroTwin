@@ -21,10 +21,9 @@ def test_viscosity_strictly_monotonic_decreasing():
     for i in range(len(viscosities) - 1):
         t1, t2 = temps[i], temps[i + 1]
         mu1, mu2 = viscosities[i], viscosities[i + 1]
-        assert mu1 > mu2, (
-            f"Monotonicity violation: at {t1} C, mu={mu1} cP; "
-            f"at {t2} C, mu={mu2} cP (expected mu1 > mu2)"
-        )
+        assert (
+            mu1 > mu2
+        ), f"Monotonicity violation: at {t1} C, mu={mu1} cP; at {t2} C, mu={mu2} cP (expected mu1 > mu2)"
 
 
 def test_viscosity_reference_point():

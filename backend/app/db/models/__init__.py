@@ -13,7 +13,9 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import JSON
 
+from app.core.auth import User
 from app.db.base import Base
+from app.db.models.approvals import OperatorApproval
 
 # JSON type fallback for sqlite or postgresql
 JSONType = JSON().with_variant(JSONB, "postgresql")
@@ -174,9 +176,6 @@ class Failure(Base):
 
     well: Mapped["Well"] = relationship("Well", back_populates="failures")
 
-
-from app.db.models.approvals import OperatorApproval
-from app.core.auth import User
 
 __all__ = [
     "Base",

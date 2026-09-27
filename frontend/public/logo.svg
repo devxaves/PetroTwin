@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 54" width="220" height="54">
+  <defs>
+    <linearGradient id="logoFlameGrad" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="logoBeamGrad" x1="24" y1="12" x2="38" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon Mark (0, 3, 48, 48) -->
+  <g transform="translate(0, 3)">
+    <rect width="48" height="48" rx="12" fill="#0f172a"/>
+    <rect x="1" y="1" width="46" height="46" rx="11" stroke="#ea580c" stroke-opacity="0.35" stroke-width="1.5" fill="none"/>
+    <path d="M18 10C18 10 11 18 11 25C11 31 15.5 36 21.5 36C24 36 26.3 35 28 33.3C25.5 32.1 24 29.7 24 27C24 23.5 26.8 21 28.5 18.5C26 14.5 18 10 18 10Z" fill="url(#logoFlameGrad)"/>
+    <path d="M28 11L37 21L31 24.5L38 35H32.5L27.5 28.5L30 23.5L24.5 17.5L28 11Z" fill="url(#logoBeamGrad)"/>
+    <circle cx="26" cy="27" r="2.2" fill="#ffffff" stroke="#0f172a" stroke-width="1"/>
+  </g>
+
+  <!-- Typography -->
+  <text x="60" y="32" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-weight="900" font-size="24" fill="#0f172a" letter-spacing="-0.03em">Petro<tspan fill="#ea580c">Twin</tspan></text>
+  <text x="61" y="45" font-family="'JetBrains Mono', monospace, sans-serif" font-weight="700" font-size="8.5" fill="#64748b" letter-spacing="0.12em">DIGITAL TWIN E&amp;P</text>
+</svg>

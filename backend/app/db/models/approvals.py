@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from app.db.models import Well
 
 from sqlalchemy import (
     DateTime,
@@ -25,7 +28,10 @@ class OperatorApproval(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     well_id: Mapped[str] = mapped_column(
-        String(64), ForeignKey("wells.well_id", ondelete="CASCADE"), index=True, nullable=False
+        String(64),
+        ForeignKey("wells.well_id", ondelete="CASCADE"),
+        index=True,
+        nullable=False,
     )
     recommendation_snapshot_json: Mapped[dict[str, Any]] = mapped_column(
         JSONType, nullable=False
@@ -39,4 +45,4 @@ class OperatorApproval(Base):
         DateTime(timezone=True), nullable=True
     )
 
-    well: Mapped["Well"] = relationship("Well", back_populates="operator_approvals")
+    well: Mapped[Well] = relationship("Well", back_populates="operator_approvals")

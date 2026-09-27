@@ -120,8 +120,7 @@ def get_recommended_adjustment(risk_score: float, current_spm: float) -> dict[st
             "target_spm": target_spm,
             "spm_reduction_pct": reduction_pct,
             "warning": (
-                "Severe rod float risk detected. Rod compression may cause buckling, "
-                "coupling wear, or fatigue parting."
+                "Severe rod float risk detected. Rod compression may cause buckling, coupling wear, or fatigue parting."
             ),
         }
     elif risk_score >= 30.0:
@@ -130,8 +129,7 @@ def get_recommended_adjustment(risk_score: float, current_spm: float) -> dict[st
         return {
             "action": "MODERATE_SPM_REDUCTION",
             "rule": (
-                "30 <= Risk <= 60 (MODERATE): Reduce SPM by 10-15% and inspect "
-                "downstroke load"
+                "30 <= Risk <= 60 (MODERATE): Reduce SPM by 10-15% and inspect downstroke load"
             ),
             "current_spm": round(current_spm, 2),
             "target_spm": target_spm,
@@ -181,10 +179,9 @@ def calculate_rod_float_risk(
     """
     # 1. Resolve viscosity
     if viscosity_cp is None:
-        if temperature_c is not None:
-            viscosity_cp = oil_viscosity_cp(temperature_c)
-        else:
-            viscosity_cp = 1500.0  # nominal default
+        viscosity_cp = (
+            oil_viscosity_cp(temperature_c) if temperature_c is not None else 1500.0
+        )  # nominal default
 
     # 2. Compute normalized factor values in [0, 1]
     f_min_load = normalize_min_load_depression(min_load, baseline_min_load)

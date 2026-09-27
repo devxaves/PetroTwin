@@ -34,7 +34,6 @@ from app.simulation.inflow_and_pump_model import (
     oil_production_rate,
     pump_fillage,
 )
-from app.simulation.viscosity_model import oil_viscosity_cp
 
 
 def calculate_pump_efficiency(
@@ -114,9 +113,7 @@ def simulate_coupled_response(
     v_norm = (spm * stroke_length_in) / (8.0 * 120.0)
     visc_ratio = visc_cp / 1500.0  # reference 1500 cP
     stokes_drag_drag_penalty = 600.0 * (visc_ratio * v_norm - 1.0)
-    effective_min_load = max(
-        1000.0, min_load_lbf - max(0.0, stokes_drag_drag_penalty)
-    )
+    effective_min_load = max(1000.0, min_load_lbf - max(0.0, stokes_drag_drag_penalty))
 
     # 4. Prompt 3 Rod Float Risk Calculation
     rod_float_assessment = calculate_rod_float_risk(

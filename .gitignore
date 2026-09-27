@@ -1,12 +1,28 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Testing and linting
 .pytest_cache/
+.ruff_cache/
 .coverage
 htmlcov/
+
+# Node & Next.js
 node_modules/
 .next/
 dist/
+out/
 build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment
 .env.local
+
+# OS & Editor
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/

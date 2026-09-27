@@ -1,4 +1,4 @@
-"""Joint state model for ThermoTwin.
+"""Joint state model for PetroTwin.
 
 Unifies downhole reservoir thermodynamics and sucker rod pumping mechanical telemetry
 into a single coherent WellTwinState representation, built from real calls into
@@ -41,14 +41,16 @@ class WellTwinState(BaseModel):
         ..., description="Current heavy crude oil dynamic viscosity in centipoise (cP)"
     )
     css_cycle_phase: str = Field(
-        ..., description="Active operational cycle phase: injection, soak, production, or idle"
+        ...,
+        description="Active operational cycle phase: injection, soak, production, or idle",
     )
     cycle_number: int = Field(..., description="Current or target CSS cycle number")
     pump_fillage: float = Field(
         ..., description="Downhole pump liquid barrel fillage ratio in [0.0, 1.0]"
     )
     rod_float_risk_score: float = Field(
-        ..., description="Continuous 0-100 hydrodynamic rod-float risk score from Prompt 3"
+        ...,
+        description="Continuous 0-100 hydrodynamic rod-float risk score from Prompt 3",
     )
     rod_float_risk_level: str = Field(
         ..., description="Risk tier: LOW, MODERATE, or HIGH"
@@ -59,8 +61,12 @@ class WellTwinState(BaseModel):
     dynamometer_confidence: float = Field(
         ..., description="Confidence of dynamometer card classifier [0.0, 1.0]"
     )
-    current_spm: float = Field(..., description="Operating stroke rate in strokes per minute")
-    stroke_length_in: float = Field(..., description="Polished rod stroke length in inches")
+    current_spm: float = Field(
+        ..., description="Operating stroke rate in strokes per minute"
+    )
+    stroke_length_in: float = Field(
+        ..., description="Polished rod stroke length in inches"
+    )
     predicted_production_trajectory: dict[str, Any] = Field(
         ..., description="Forecast trajectory from Prompt 4 hybrid production model"
     )

@@ -1,5 +1,5 @@
 /**
- * Typed API client for ThermoTwin backend.
+ * Typed API client for PetroTwin backend.
  *
  * Uses the NEXT_PUBLIC1_API_URL env var in production,
  * falls back to localhost:8000 for local dev.

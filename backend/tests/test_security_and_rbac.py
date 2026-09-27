@@ -1,9 +1,12 @@
-from unittest.mock import ANY, AsyncMock, MagicMock
+from unittest.mock import AsyncMock
+
 import pytest
-from httpx import AsyncClient, ASGITransport
-from app.main import app
-from app.core.auth import create_access_token, User, get_current_user
+from httpx import ASGITransport, AsyncClient
+
+from app.core.auth import User, get_current_user
 from app.db.session import get_session
+from app.main import app
+
 
 @pytest.mark.asyncio
 async def test_adversarial_sqli_well_id_injection():
@@ -33,6 +36,7 @@ async def test_adversarial_sqli_well_id_injection():
             assert mock_session.get.call_count == len(malicious_ids)
     finally:
         app.dependency_overrides.pop(get_session, None)
+
 
 @pytest.mark.asyncio
 async def test_approvals_rbac_engineer_forbidden():
@@ -66,6 +70,7 @@ async def test_approvals_rbac_engineer_forbidden():
     finally:
         app.dependency_overrides.pop(get_current_user, None)
 
+
 @pytest.mark.asyncio
 async def test_metrics_endpoint_accessible():
     """Verify Prometheus scrape endpoint returns metrics format."""
@@ -73,4 +78,4 @@ async def test_metrics_endpoint_accessible():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         resp = await client.get("/metrics")
         assert resp.status_code == 200
-        assert "thermotwin_http_requests_total" in resp.text
+        assert "petrotwin_http_requests_total" in resp.text
