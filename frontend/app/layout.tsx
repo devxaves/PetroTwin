@@ -26,9 +26,12 @@ export const metadata: Metadata = {
   description:
     "Industrial digital twin for Cyclic Steam Stimulation (CSS) and Sucker Rod Pumping (SRP) optimization.",
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: [
+      { url: "/logo.jpg", type: "image/jpeg" },
+      { url: "/favicon.ico", type: "image/x-icon" },
+    ],
+    shortcut: "/logo.jpg",
+    apple: "/logo.jpg",
   },
 };
 
