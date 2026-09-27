@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
-  Flame,
   ShieldCheck,
   Activity,
   FileCheck2,
@@ -24,7 +24,6 @@ import { HeroDynamometer } from "@/components/landing/HeroDynamometer";
 import { DynamometerCard } from "@/components/DynamometerCard";
 import { ParetoChart } from "@/components/ParetoChart";
 import { ComparisonTable } from "@/components/ComparisonTable";
-import { PetroTwinLogo } from "@/components/PetroTwinLogo";
 import styles from "./landing.module.css";
 
 // ── Static data for the "How it works" component renders ──────────────
@@ -135,7 +134,16 @@ export default function LandingPage() {
       <nav className={styles.landingNav} data-testid="landing-nav">
         <div className={styles.landingNavInner}>
           <div className="flex items-center gap-3.5">
-            <PetroTwinLogo size={38} />
+            <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-slate-200 p-0.5 shadow-xs">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-contain"
+                priority
+              />
+            </div>
             <div>
               <span
                 className="font-extrabold text-lg tracking-tight text-slate-900 font-['Space_Grotesk'] block"
@@ -902,8 +910,14 @@ export default function LandingPage() {
         data-testid="final-cta-section"
       >
         <div className="max-w-3xl mx-auto p-8 sm:p-14 rounded-3xl bg-gradient-to-b from-orange-500/10 via-white to-white border border-orange-200 shadow-sm flex flex-col items-center">
-          <div className="w-14 h-14 rounded-2xl bg-orange-500 text-white flex items-center justify-center mb-5 shadow-lg shadow-orange-500/30">
-            <Flame className="w-7 h-7 fill-current" />
+          <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 overflow-hidden mb-5 shadow-lg shadow-orange-500/20 p-1">
+            <Image
+              src="/logo.jpg"
+              alt="PetroTwin Logo"
+              width={56}
+              height={56}
+              className="w-full h-full object-contain"
+            />
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-3 font-['Space_Grotesk'] tracking-tight">
@@ -943,7 +957,15 @@ export default function LandingPage() {
       <footer className={styles.footer} data-testid="landing-footer">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-3">
-            <PetroTwinLogo size={36} />
+            <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-slate-200 p-0.5 shadow-xs shrink-0">
+              <Image
+                src="/logo.jpg"
+                alt="PetroTwin Logo"
+                width={40}
+                height={40}
+                className="w-full h-full object-contain"
+              />
+            </div>
             <div>
               <span className="text-base font-extrabold text-slate-900 uppercase tracking-wider font-['Space_Grotesk'] block">
                 PetroTwin
