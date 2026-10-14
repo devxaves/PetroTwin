@@ -25,9 +25,28 @@ class Settings(BaseSettings):
                 "postgresql+asyncpg://"
             ):
                 v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
-            # asyncpg expects ssl= instead of sslmode=
-            if "sslmode=" in v:
-                v = v.replace("sslmode=", "ssl=")
+
+            # Sanitize query parameters for asyncpg (strip channel_binding, convert sslmode to ssl)
+            try:
+                import urllib.parse
+
+                u = urllib.parse.urlsplit(v)
+                if u.query:
+                    q = urllib.parse.parse_qsl(u.query, keep_blank_values=True)
+                    unsupported_params = {"channel_binding", "gssencmode", "target_session_attrs"}
+                    new_q = []
+                    for k, val in q:
+                        if k in unsupported_params:
+                            continue
+                        elif k == "sslmode":
+                            new_q.append(("ssl", "require" if val in ("require", "verify-ca", "verify-full") else val))
+                        else:
+                            new_q.append((k, val))
+                    v = urllib.parse.urlunsplit(
+                        (u.scheme, u.netloc, u.path, urllib.parse.urlencode(new_q), u.fragment)
+                    )
+            except Exception:
+                pass
         return v
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
