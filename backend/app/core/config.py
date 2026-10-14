@@ -18,13 +18,16 @@ class Settings(BaseSettings):
     @classmethod
     def clean_database_url(cls, v: str) -> str:
         if isinstance(v, str):
-            v = v.strip()
+            v = v.strip().strip("'\"")
             if v.startswith("postgres://"):
                 v = v.replace("postgres://", "postgresql+asyncpg://", 1)
             elif v.startswith("postgresql://") and not v.startswith(
                 "postgresql+asyncpg://"
             ):
                 v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
+            # asyncpg expects ssl= instead of sslmode=
+            if "sslmode=" in v:
+                v = v.replace("sslmode=", "ssl=")
         return v
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}

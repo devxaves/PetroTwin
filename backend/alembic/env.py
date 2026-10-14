@@ -54,6 +54,16 @@ def do_run_migrations(connection: Connection) -> None:
 
 async def run_async_migrations() -> None:
     """Run migrations in 'online' mode with an async engine."""
+    from urllib.parse import urlparse
+
+    target_url = config.get_main_option("sqlalchemy.url", "")
+    parsed = urlparse(target_url)
+    print(
+        f"[Alembic] Connecting to database host: {parsed.hostname}:{parsed.port or 5432} "
+        f"(db: {parsed.path.lstrip('/')})",
+        flush=True,
+    )
+
     connectable = async_engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
