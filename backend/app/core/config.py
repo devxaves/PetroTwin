@@ -31,6 +31,10 @@ class Settings(BaseSettings):
                 import urllib.parse
 
                 u = urllib.parse.urlsplit(v)
+                path = u.path
+                if (not path or path == "/") and "neon.tech" in u.netloc:
+                    path = "/neondb"
+
                 if u.query:
                     q = urllib.parse.parse_qsl(u.query, keep_blank_values=True)
                     unsupported_params = {"channel_binding", "gssencmode", "target_session_attrs"}
@@ -43,7 +47,11 @@ class Settings(BaseSettings):
                         else:
                             new_q.append((k, val))
                     v = urllib.parse.urlunsplit(
-                        (u.scheme, u.netloc, u.path, urllib.parse.urlencode(new_q), u.fragment)
+                        (u.scheme, u.netloc, path, urllib.parse.urlencode(new_q), u.fragment)
+                    )
+                else:
+                    v = urllib.parse.urlunsplit(
+                        (u.scheme, u.netloc, path, "", u.fragment)
                     )
             except Exception:
                 pass
